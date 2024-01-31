@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VRCSDKBase</name>
+    </assembly>
+    <members>
+        <member name="T:VRC.SDKBase.VRCPlayerApi">
+            <summary>
+            You can interact with Players in your world through the VRCPlayerApi. Each Player has a VRCPlayerApi Object, and your world fires the OnPlayerJoined / OnPlayerLeft events on any UdonBehaviours that listen for them when a player joins or leaves.
+            </summary>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayerCount">
+            <summary>
+            Gets the actual number of Players in the instance when it is called.
+            </summary>
+            <remarks>
+            Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/getting-players#getplayercount">Official Documentation</see> page for more information.
+            </remarks>
+            <returns>
+            The number of players in the instance.
+            </returns>
+        </member>
+    </members>
+</doc>
