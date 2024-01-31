@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.happyrobot33.vrcsdkdocumentation": {
+      "version": "file:com.happyrobot33.vrcsdkdocumentation",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.burst": {
       "version": "1.8.7",
       "depth": 1,
@@ -52,13 +58,6 @@
       "dependencies": {
         "com.unity.test-framework": "1.1.9"
       },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.ide.vscode": {
-      "version": "1.2.5",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {

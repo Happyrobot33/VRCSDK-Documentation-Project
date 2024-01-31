@@ -1,0 +1,15 @@
+{
+    "name": "com.happyrobot33.vrcsdkdocumentation",
+    "displayName": "VRChat SDK Documentation Project",
+    "version": "1.0.0",
+    "unity": "2019.4",
+    "description": "This package provides documentation for the VRChat SDK and UdonSharp.",
+    "author": {
+      "name": "Happyrobot33"
+    },
+    "vpmDependencies": {
+    },
+    "dependencies": {
+    }
+  }
+  
