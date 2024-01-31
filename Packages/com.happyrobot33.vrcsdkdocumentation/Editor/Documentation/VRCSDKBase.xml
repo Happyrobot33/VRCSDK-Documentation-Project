@@ -6,18 +6,95 @@
     <members>
         <member name="T:VRC.SDKBase.VRCPlayerApi">
             <summary>
-            You can interact with Players in your world through the VRCPlayerApi. Each Player has a VRCPlayerApi Object, and your world fires the OnPlayerJoined / OnPlayerLeft events on any UdonBehaviours that listen for them when a player joins or leaves.
+            You can interact with Players in your world through the VRCPlayerApi.
+            Each Player has a VRCPlayerApi Object.
+            The VRCPlayerApi Class also has static methods for getting various information about Players in the instance.
             </summary>
         </member>
         <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayerCount">
             <summary>
-            Gets the actual number of Players in the instance when it is called.
+            Gets the number of Players in the instance when it is called.
             </summary>
             <remarks>
             Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/getting-players#getplayercount">Official Documentation</see> page for more information.
             </remarks>
             <returns>
             The number of players in the instance.
+            </returns>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.IsValid">
+            <summary>
+            If a player has left since you saved a reference to them, this will return False.
+            </summary>
+            <remarks>
+            Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/#isvalid">Official Documentation</see> page for more information.
+            </remarks>
+            <returns>
+            True if the player is valid to use, false if it is not.
+            </returns>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.EnablePickups(System.Boolean)">
+            <summary>
+            Turn off the Player's ability to pickup and use VRCPickup objects in the world. This property is on by default, so you only need to use the method if you want to turn it off.
+            </summary>
+            <param name="enable"/>
+            <remarks>
+            Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/#enablepickups">Official Documentation</see> page for more information.
+            </remarks>
+        </member>
+        <member name="F:VRC.SDKBase.VRCPlayerApi.displayName">
+            <summary>
+            Get the name displayed for the Player (can be different than Username, which is used to log into VRChat and not exposed publicly)
+            </summary>
+            <remarks>
+            This value may return the string: "<![CDATA[&lt;uninitialized&gt;]]>" if the player is not valid.
+            Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/#get-displayname">Official Documentation</see> page for more information.
+            </remarks>
+        </member>
+        <member name="F:VRC.SDKBase.VRCPlayerApi.isLocal">
+            <summary>
+            Tells you whether the given Player is the local one.
+            </summary>
+            <remarks>
+            Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/#get-islocal">Official Documentation</see> page for more information.
+            </remarks>
+        </member>
+        <member name="F:VRC.SDKBase.VRCPlayerApi.isMaster">
+            <summary>
+            Tells you whether the given Player is the instance master.
+            </summary>
+            <remarks>
+            This is the player who either created the instance, or the one who inherited Master status when the last Master left.
+            Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/#get-ismaster">Official Documentation</see> page for more information.
+            </remarks>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.GetPickupInHand(VRC.SDKBase.VRC_Pickup.PickupHand)">
+            <summary>
+            Gets the pickup a Player is holding in the specified hand. Only works for the Local Player.
+            </summary>
+            <remarks>
+            Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/#getpickupinhand">Official Documentation</see> page for more information.
+            </remarks>
+            <param name="hand">
+            The hand to check for a pickup. <see cref="T:VRC.SDKBase.VRC_Pickup.PickupHand"/>. Any is not supported.
+            </param>
+            <returns>
+            The <see cref="T:VRC.SDKBase.VRC_Pickup"/> object the player is holding in the specified hand.
+            Returns null if no VRCPickup is found.
+            </returns>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.IsOwner(UnityEngine.GameObject)">
+            <summary>
+            Tells you whether a Player is the Owner of a given GameObject, important for Sync.
+            </summary>
+            <remarks>
+            Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/#isowner">Official Documentation</see> page for more information.
+            </remarks>
+            <param name="obj">
+            The GameObject to check ownership of.
+            </param>
+            <returns>
+            True if the player is the owner of the GameObject, false if they are not.
             </returns>
         </member>
     </members>
