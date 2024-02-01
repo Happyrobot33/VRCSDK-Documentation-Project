@@ -59,7 +59,7 @@
             Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/#get-islocal">Official Documentation</see> page for more information.
             </remarks>
         </member>
-        <member name="F:VRC.SDKBase.VRCPlayerApi.isMaster">
+        <member name="P:VRC.SDKBase.VRCPlayerApi.isMaster">
             <summary>
             Tells you whether the given Player is the instance master.
             </summary>
