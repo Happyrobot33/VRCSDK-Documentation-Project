@@ -1,6 +1,8 @@
 ﻿
 using UdonSharp;
+
 using UnityEngine;
+
 using VRC.SDKBase;
 using VRC.Udon;
 
@@ -15,18 +17,18 @@ public class TestUScript : UdonSharpBehaviour
     private void PlayerInteractions()
     {
         //get the first player
-        VRCPlayerApi[] players = new VRCPlayerApi[VRCPlayerApi.GetPlayerCount()];  
+        VRCPlayerApi[] players = new VRCPlayerApi[VRCPlayerApi.GetPlayerCount()];
         VRCPlayerApi.GetPlayers(players);
         VRCPlayerApi player = players[0];
         //these are listed as close as I can to the order they show up in the docs
-        d(player.IsValid());
+        player.IsValid();
         player.EnablePickups(true);
         d(player.displayName);
         d(player.isLocal);
         d(player.isMaster);
-        d(player.GetPickupInHand(VRC_Pickup.PickupHand.Left));
-        d(player.IsOwner(gameObject));
-        d(player.IsUserInVR());
+        player.GetPickupInHand(VRC_Pickup.PickupHand.Left);
+        player.IsOwner(gameObject);
+        player.IsUserInVR();
         player.PlayHapticEventInHand(VRC_Pickup.PickupHand.Left, 1, 1, 1);
         player.UseAttachedStation();
         player.UseLegacyLocomotion();
@@ -36,22 +38,80 @@ public class TestUScript : UdonSharpBehaviour
         player.CombatGetCurrentHitpoints();
         player.CombatGetDestructible();
         player.CombatSetCurrentHitpoints(1);
-        player.CombatSetDamageGraphic(1);
+        player.CombatSetDamageGraphic(gameObject);
         player.CombatSetMaxHitpoints(1);
         player.CombatSetRespawn(true, 1, transform);
         player.CombatSetup();
         #endregion
 
-        d(VRCPlayerApi.GetCurrentLanguage());
-        d(VRCPlayerApi.GetAvailableLanguages());
-        d(VRCPlayerApi.GetPlayerById(1));
+        VRCPlayerApi.GetCurrentLanguage();
+        VRCPlayerApi.GetAvailableLanguages();
+        VRCPlayerApi.GetPlayerById(1);
 
         //yes, both of these literally do THE EXACT SAME THING
         //kill me
         d(player.playerId);
-        d(VRCPlayerApi.GetPlayerId(player));
+        VRCPlayerApi.GetPlayerId(player);
         player.SetPlayerTag("tag");
         player.SetPlayerTag("tag", "tag value");
+
+        //player audio
+        player.SetVoiceGain(1);
+        player.SetVoiceDistanceNear(1);
+        player.SetVoiceDistanceFar(1);
+        player.SetVoiceVolumetricRadius(1);
+        player.SetVoiceLowpass(true);
+
+        //avatar audio
+        player.SetAvatarAudioGain(1);
+        player.SetAvatarAudioFarRadius(1);
+        player.SetAvatarAudioNearRadius(1);
+        player.SetAvatarAudioVolumetricRadius(1);
+        player.SetAvatarAudioForceSpatial(true);
+        player.SetAvatarAudioCustomCurve(true); //cant even really figure out what this is supposed to do
+
+        //avatar scaling
+        player.GetManualAvatarScalingAllowed();
+        player.SetManualAvatarScalingAllowed(true);
+        player.GetAvatarEyeHeightMinimumAsMeters();
+        player.SetAvatarEyeHeightMinimumByMeters(1);
+        player.GetAvatarEyeHeightMaximumAsMeters();
+        player.SetAvatarEyeHeightMaximumByMeters(1);
+        player.GetAvatarEyeHeightAsMeters();
+        player.SetAvatarEyeHeightByMeters(1);
+        player.SetAvatarEyeHeightByMultiplier(1);
+
+        //player forces
+        player.GetWalkSpeed();
+        player.SetWalkSpeed(1);
+        player.GetRunSpeed();
+        player.SetRunSpeed(1);
+        player.GetStrafeSpeed();
+        player.SetStrafeSpeed(1);
+        player.GetJumpImpulse();
+        player.SetJumpImpulse(1);
+        player.GetGravityStrength();
+        player.SetGravityStrength(1);
+        player.Immobilize(true);
+
+        //player positions
+        player.GetPosition();
+        player.GetRotation();
+        player.GetBonePosition(HumanBodyBones.Head);
+        player.GetBoneRotation(HumanBodyBones.Head);
+        player.GetTrackingData(VRCPlayerApi.TrackingDataType.Head);
+        player.GetVelocity();
+        player.SetVelocity(Vector3.zero);
+        player.IsPlayerGrounded();
+        player.TeleportTo(transform.position, transform.rotation);
+        player.TeleportTo(transform.position, transform.rotation, VRC_SceneDescriptor.SpawnOrientation.AlignRoomWithSpawnPoint);
+        player.TeleportTo(transform.position, transform.rotation, VRC_SceneDescriptor.SpawnOrientation.AlignRoomWithSpawnPoint, true);
+    }
+
+    //player collisions TODO: See if XML docs are generated for this
+    public override void OnPlayerTriggerEnter(VRCPlayerApi player)
+    {
+        d(player.displayName + " entered trigger");
     }
 
 
