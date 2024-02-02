@@ -53,6 +53,7 @@ public class TestUScript : UdonSharpBehaviour
         d(player.playerId);
         VRCPlayerApi.GetPlayerId(player);
         player.SetPlayerTag("tag");
+        player.GetPlayerTag("tag");
         player.SetPlayerTag("tag", "tag value");
         player.ClearPlayerTags();
         //WHAT THE FUCK VRC DEVS, WHY ARE THESE INSTANCE METHODS AND NOT STATIC ONES!!!!!!!!!!!

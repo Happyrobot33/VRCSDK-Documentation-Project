@@ -6,96 +6,399 @@
     <members>
         <member name="T:VRC.SDKBase.VRCPlayerApi">
             <summary>
-            You can interact with Players in your world through the VRCPlayerApi.
-            Each Player has a VRCPlayerApi Object.
-            The VRCPlayerApi Class also has static methods for getting various information about Players in the instance.
+                You can interact with Players in your world through the VRCPlayerApi.
+                Each Player has a VRCPlayerApi Object.
+                The VRCPlayerApi Class also has static methods for getting various information about
+                Players in the instance.
             </summary>
         </member>
         <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayerCount">
             <summary>
-            Gets the number of Players in the instance when it is called.
+                Gets the number of Players in the instance when it is called.
             </summary>
-            <remarks>
-            Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/getting-players#getplayercount">Official Documentation</see> page for more information.
-            </remarks>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/getting-players#getplayercount">Official
+                Documentation</see> page for more information. </remarks>
             <returns>
-            The number of players in the instance.
+                The number of players in the instance.
             </returns>
         </member>
         <member name="M:VRC.SDKBase.VRCPlayerApi.IsValid">
             <summary>
-            If a player has left since you saved a reference to them, this will return False.
+                If a player has left since you saved a reference to them, this will return False.
             </summary>
-            <remarks>
-            Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/#isvalid">Official Documentation</see> page for more information.
-            </remarks>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/#isvalid">Official
+                Documentation</see> page for more information. </remarks>
             <returns>
-            True if the player is valid to use, false if it is not.
+                True if the player is valid to use, false if it is not.
             </returns>
         </member>
         <member name="M:VRC.SDKBase.VRCPlayerApi.EnablePickups(System.Boolean)">
             <summary>
-            Turn off the Player's ability to pickup and use VRCPickup objects in the world. This property is on by default, so you only need to use the method if you want to turn it off.
+                Turn off the Player's ability to pickup and use VRCPickup objects in the world. This
+                property is on by default, so you only need to use the method if you want to turn it
+                off.
             </summary>
-            <param name="enable"/>
-            <remarks>
-            Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/#enablepickups">Official Documentation</see> page for more information.
-            </remarks>
+            <param name="enable" />
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/#enablepickups">Official
+                Documentation</see> page for more information. </remarks>
         </member>
         <member name="F:VRC.SDKBase.VRCPlayerApi.displayName">
             <summary>
-            Get the name displayed for the Player (can be different than Username, which is used to log into VRChat and not exposed publicly)
+                Get the name displayed for the Player (can be different than Username, which is used
+                to log into VRChat and not exposed publicly)
             </summary>
-            <remarks>
-            This value may return the string: "<![CDATA[&lt;uninitialized&gt;]]>" if the player is not valid.
-            Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/#get-displayname">Official Documentation</see> page for more information.
-            </remarks>
+            <remarks> This value may return the string: "<![CDATA[&lt;uninitialized&gt;]]>" if the player is not valid. Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/#get-displayname">Official
+                Documentation</see> page for more information. </remarks>
         </member>
         <member name="F:VRC.SDKBase.VRCPlayerApi.isLocal">
             <summary>
-            Tells you whether the given Player is the local one.
+                Tells you whether the given Player is the local one.
             </summary>
-            <remarks>
-            Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/#get-islocal">Official Documentation</see> page for more information.
-            </remarks>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/#get-islocal">Official
+                Documentation</see> page for more information. </remarks>
         </member>
         <member name="P:VRC.SDKBase.VRCPlayerApi.isMaster">
             <summary>
-            Tells you whether the given Player is the instance master.
+                Tells you whether the given Player is the instance master.
             </summary>
-            <remarks>
-            This is the player who either created the instance, or the one who inherited Master status when the last Master left.
-            Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/#get-ismaster">Official Documentation</see> page for more information.
-            </remarks>
+            <remarks> This is the player who either created the instance, or the one who inherited
+                Master status when the last Master left. Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/#get-ismaster">Official
+                Documentation</see> page for more information. </remarks>
         </member>
         <member name="M:VRC.SDKBase.VRCPlayerApi.GetPickupInHand(VRC.SDKBase.VRC_Pickup.PickupHand)">
             <summary>
-            Gets the pickup a Player is holding in the specified hand. Only works for the Local Player.
+                Gets the pickup a Player is holding in the specified hand. Only works for the Local
+                Player.
             </summary>
-            <remarks>
-            Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/#getpickupinhand">Official Documentation</see> page for more information.
-            </remarks>
-            <param name="hand">
-            The hand to check for a pickup. <see cref="T:VRC.SDKBase.VRC_Pickup.PickupHand"/>. Any is not supported.
-            </param>
-            <returns>
-            The <see cref="T:VRC.SDKBase.VRC_Pickup"/> object the player is holding in the specified hand.
-            Returns null if no VRCPickup is found.
-            </returns>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/#getpickupinhand">Official
+                Documentation</see> page for more information. </remarks>
+            <param name="hand"> The hand to check for a pickup. <see
+                    cref="T:VRC.SDKBase.VRC_Pickup.PickupHand" />. Any is not supported. </param>
+            <returns> The <see cref="T:VRC.SDKBase.VRC_Pickup" /> object the player is holding in
+                the specified hand. Returns null if no VRCPickup is found. </returns>
         </member>
         <member name="M:VRC.SDKBase.VRCPlayerApi.IsOwner(UnityEngine.GameObject)">
             <summary>
-            Tells you whether a Player is the Owner of a given GameObject, important for Sync.
+                Tells you whether a Player is the Owner of a given GameObject, important for Sync.
             </summary>
-            <remarks>
-            Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/#isowner">Official Documentation</see> page for more information.
-            </remarks>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/#isowner">Official
+                Documentation</see> page for more information. </remarks>
             <param name="obj">
-            The GameObject to check ownership of.
+                The GameObject to check ownership of.
             </param>
             <returns>
-            True if the player is the owner of the GameObject, false if they are not.
+                True if the player is the owner of the GameObject, false if they are not.
             </returns>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.IsUserInVR">
+            <summary>
+                Tells you whether a Player is using a VR headset.
+            </summary>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/#isuserinvr">Official
+                Documentation</see> page for more information. </remarks>
+            <returns>
+                True if the player is using a VR headset, false if they are not.
+            </returns>
+        </member>
+        <member
+            name="M:VRC.SDKBase.VRCPlayerApi.PlayHapticEventInHand(VRC.SDKBase.VRC_Pickup.PickupHand,System.Single,System.Single,System.Single)">
+            <summary>
+                Vibrate the Player's Haptic controllers if they have them.
+            </summary>
+            <remarks> The feeling can vary quite a bit between controllers. <br /> All 3 parameters
+                MUST be positive. <br /> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/#playhapticeventinhand">Official
+                Documentation</see> page for more information. </remarks>
+            <param name="hand"> The hand to vibrate. <see cref="T:VRC.SDKBase.VRC_Pickup.PickupHand" />
+                . </param>
+            <param name="duration">
+                The duration of the vibration in seconds.
+            </param>
+            <param name="amplitude">
+                The amplitude of the vibration. 0.0 to 1.0.
+            </param>
+            <param name="frequency">
+                The frequency of the vibration. 0.0 to 1.0.
+            </param>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.UseAttachedStation">
+            <summary>
+                Makes the player get into the Station which is on the same GameObject as this
+                UdonBehaviour.
+            </summary>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/#useattachedstation">Official
+                Documentation</see> page for more information. </remarks>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.UseLegacyLocomotion">
+            <summary> WARNING: This method is not recommended to be used.<br /> turns on legacy
+                locomotion for this player. </summary>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/#uselegacylocomotion">Official
+                Documentation</see> page for more information. </remarks>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints">
+            <summary>
+                NOT IMPLEMENTED AND NON-FUNCTIONAL! DO NOT USE!
+            </summary>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/#combat-system">Official
+                Documentation</see> page for more information. </remarks>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.CombatGetDestructible">
+            <inheritdoc cref="M:VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.CombatSetCurrentHitpoints(System.Single)">
+            <inheritdoc cref="M:VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.CombatSetDamageGraphic(UnityEngine.GameObject)">
+            <inheritdoc cref="M:VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.CombatSetMaxHitpoints(System.Single)">
+            <inheritdoc cref="M:VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
+        </member>
+        <member
+            name="M:VRC.SDKBase.VRCPlayerApi.CombatSetRespawn(System.Boolean,System.Single,UnityEngine.Transform)">
+            <inheritdoc cref="M:VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.CombatSetup">
+            <inheritdoc cref="M:VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.GetCurrentLanguage">
+            <summary>
+                Gets the selected language of the local user.
+            </summary>
+            <remarks> This feature isnt added to the client yet, so it currently is not useful. <br />
+                Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/#getcurrentlanguage">Official
+                Documentation</see> page for more information. </remarks>
+            <returns>
+                Currently returns a example string. Will throw an exception in clientsim currently.
+            </returns>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.GetAvailableLanguages">
+            <summary>
+                Gets all available languages a player can select.
+            </summary>
+            <remarks> This feature isnt added to the client yet, so it currently is not useful. <br />
+                Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/#getavailablelanguages">Official
+                Documentation</see> page for more information. </remarks>
+            <returns>
+                Currently returns a example string[]. Will throw an exception in clientsim
+                currently.
+            </returns>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayerCount">
+            <summary>
+                Gets the actual number of Players in the instance when it is called.
+            </summary>
+            <remarks> This will return the value BEFORE the current function update. For example, if
+                called in <see cref="TODO: ADD ON PLAYER LEAVE EVENT HERE">OnPlayerLeave</see>, it
+                will return the ammount of players in the instance right BEFORE that player left. <br />
+                Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/getting-players#getplayercount">Official
+                Documentation</see> page for more information. </remarks>
+            <returns>
+                The number of players in the instance.
+            </returns>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayers(VRC.SDKBase.VRCPlayerApi[])">
+            <summary> This is how you get all the Players in your world so you can go through them
+                in a For Loop and apply settings, make changes, look for a particular name, etc. To
+                use it, you first need to create a VRCPlayerApi Array.<br />
+                <br />
+                <example> This is
+                how the method should be used to get the full list of players in a instance. <br />
+                    <code>
+                VRCPlayerApi[] players = new VRCPlayerApi[VRCPlayerApi.GetPlayerCount()];<br />
+                VRCPlayerApi.GetPlayers(players);<br />
+                    </code>
+                </example>
+            </summary>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/getting-players#getplayers">Official
+                Documentation</see> page for more information. </remarks>
+            <returns>
+                The populated VRCPlayerApi Array.
+            </returns>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayerById(System.Int32)">
+            <summary>
+                Get a VRCPlayerApi object for the given player Id if it exists.
+            </summary>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/getting-players#getplayerbyid">Official
+                Documentation</see> page for more information. </remarks>
+            <param name="playerId">
+                The player Id to get the VRCPlayerApi object for.
+            </param>
+            <returns>
+                The VRCPlayerApi object for the given player Id if it exists, null otherwise.
+            </returns>
+        </member>
+        <member name="P:VRC.SDKBase.VRCPlayerApi.playerId">
+            <summary>
+                Get the cached PlayerId, calls GetPlayerId if it hasn't been cached yet.
+            </summary>
+            <remarks> Currently, this seems to behave identically to <see
+                    cref="M:VRC.SDKBase.VRCPlayerApi.GetPlayerId(VRC.SDKBase.VRCPlayerApi)" />. <br />
+                Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/getting-players#get-playerid">Official
+                Documentation</see> page for more information. </remarks>
+            <value>
+                The Network Id of the player. Always increments, even if the player leaves and
+                rejoins.
+            </value>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayerId(VRC.SDKBase.VRCPlayerApi)">
+            <summary>
+                Gets the Player's Network Id from the source.
+            </summary>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/getting-players#getplayerid">Official
+                Documentation</see> page for more information. </remarks>
+            <param name="player">
+                The player to get the Network Id for.
+            </param>
+            <returns>
+                The Network Id of the player. Always increments, even if the player leaves and
+                rejoins.
+            </returns>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.SetPlayerTag(System.String,System.String)">
+            <summary> Sets a string variable that you can look up later. <br />
+                <example>
+                    For example, you could set the "role" of a player in a cooking game to "chef" or
+                "customer". Then you could GetPlayerTag for "role" and get back either "chef" or
+                "customer".
+                </example>
+            </summary>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/getting-players#setplayertag--getplayertag">Official
+                Documentation</see> page for more information. </remarks>
+            <param name="tagName">
+                The name of the tag to set.
+            </param>
+            <param name="tagValue">
+                The value of the tag to set.
+            </param>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayerTag(System.String)">
+            <summary>
+                Gets the value of a tag that was set with SetPlayerTag.
+            </summary>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/getting-players#setplayertag--getplayertag">Official
+                Documentation</see> page for more information. </remarks>
+            <param name="tagName">
+                The name of the tag to set.
+            </param>
+            <returns>
+                The value of the tag as a string.
+            </returns>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.ClearPlayerTags">
+            <summary>
+                Remove all tags that you've set on this player.
+            </summary>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/getting-players#clearplayertags">Official
+                Documentation</see> page for more information. </remarks>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayersWithTag(System.String,System.String)">
+            <summary>
+                NOT CURRENTLY FUNCTIONAL! DO NOT USE, WILL THROW EXPOSURE EXCEPTION!
+            </summary>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/getting-players#getplayerswithtag">Official
+                Documentation</see> page for more information. </remarks>
+            <param name="tagName">
+                The name of the tag to get the players for.
+            </param>
+            <param name="tagValue"> The value of the tag to get the players for?????????<br />
+                Unknown if this is even what it does. </param>
+            <returns>
+                A list type of VRCPlayerApi objects that have the tag set.
+            </returns>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.SetVoiceGain(System.Single)">
+            <summary>
+                Add boost to the Player's voice in decibels.
+            </summary>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/player-audio#set-voice-gain">Official
+                Documentation</see> page for more information. </remarks>
+            <param name="gain">
+                in Decibels, Range 0-24. Default is 15.
+            </param>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.SetVoiceDistanceNear(System.Single)">
+            <summary>
+                The near radius, in meters, where volume begins to fall off. It is strongly
+                recommended to leave the Near value at zero for realism and effective spatialization
+                for user voices.
+            </summary>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/player-audio#set-voice-distance-near">Official
+                Documentation</see> page for more information. </remarks>
+            <param name="near">
+                in Meters, Range 0 - 1,000,000. Default is ???.
+            </param>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.SetVoiceDistanceFar(System.Single)">
+            <summary>
+                This sets the end of the range for hearing the user's voice. You can lower this to
+                make another player's voice not travel as far, all the way to 0 to effectively
+                'mute' the player.
+            </summary>
+            <remarks> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/player-audio#set-voice-distance-far">Official
+                Documentation</see> page for more information. </remarks>
+            <param name="far">
+                in Meters, Range 0 - 1,000,000. Default is 25.
+            </param>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.SetVoiceVolumetricRadius(System.Single)">
+            <summary>
+                A player's voice is normally simulated to
+                be a point source, however changing this value allows the source to appear to come
+                from a larger area.
+            </summary>
+            <remarks> This should be used carefully, and is mainly for distant audio sources that
+                need to sound "large" as you move past them. Keep this at zero unless you know what
+                you're doing. If you want a user's voice to sound like it is close no matter how far
+                it is, increase the Voice Distance Near range to a large value. <br /> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/player-audio#set-voice-volumetric-radius">Official
+                Documentation</see> page for more information. </remarks>
+            <param name="radius">
+                in Meters, Range is 0 - 1,000. Default is 0. The value for Volumetric Radius should
+                always be lower
+                than Voice Distance Far.
+            </param>
+        </member>
+        <member name="M:VRC.SDKBase.VRCPlayerApi.SetVoiceLowpass(System.Boolean)">
+            <summary>
+                Disables the low-pass filter on the player's voice.
+            </summary>
+            <remarks> When a voice is some distance off, it is passed through a low-pass filter to
+                help with understanding noisy worlds. You can disable this if you want to skip this
+                filter. For example, if you intend for a player to use their voice channel to play a
+                high-quality DJ mix, turning this filter off is advisable. <br /> Checkout the <see
+                    href="https://creators.vrchat.com/worlds/udon/players/player-audio#set-voice-lowpass">Official
+                Documentation</see> page for more information. </remarks>
+            <param name="enabled">
+                True to enable? the low-pass filter, false? to disable it.
+            </param>
         </member>
     </members>
 </doc>
