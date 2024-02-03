@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <members>
     <member name="T:VRC.SDKBase.Networking">
+        <docURL>https://creators.vrchat.com/worlds/udon/networking/</docURL>
         <summary>
             TEMPORARY TESTING TEXT, THIS IS NOT FINISHED
         </summary>

@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <members>
     <member name="T:VRC.SDKBase.VRCPlayerApi">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/</docURL>
         <summary>
             You can interact with Players in your world through the VRCPlayerApi.
             Each Player has a VRCPlayerApi Object.
@@ -9,84 +10,80 @@
         </summary>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayerCount">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/getting-players#getplayercount</docURL>
         <summary>
             Gets the number of Players in the instance when it is called.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/getting-players#getplayercount">Official
-            Documentation</see> page for more information. </remarks>
         <returns>
             The number of players in the instance.
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.IsValid">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/#isvalid</docURL>
         <summary>
             If a player has left since you saved a reference to them, this will return False.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/#isvalid">Official
-            Documentation</see> page for more information. </remarks>
         <returns>
             True if the player is valid to use, false if it is not.
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.EnablePickups(System.Boolean)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/#enablepickups</docURL>
         <summary>
             Turn off the Player's ability to pickup and use VRCPickup objects in the world. This
             property is on by default, so you only need to use the method if you want to turn it
             off.
         </summary>
         <param name="enable" />
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/#enablepickups">Official
-            Documentation</see> page for more information. </remarks>
     </member>
     <member name="F:VRC.SDKBase.VRCPlayerApi.displayName">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/#get-displayname</docURL>
         <summary>
             Get the name displayed for the Player (can be different than Username, which is used
             to log into VRChat and not exposed publicly)
         </summary>
-        <remarks> This value may return the string: "<![CDATA[&lt;uninitialized&gt;]]>" if the player is not valid. Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/#get-displayname">Official
-            Documentation</see> page for more information. </remarks>
+        <remarks> This value may return the string: "<![CDATA[&lt;uninitialized&gt;]]>" if the player is not valid.</remarks>
     </member>
     <member name="F:VRC.SDKBase.VRCPlayerApi.isLocal">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/#get-islocal</docURL>
         <summary>
             Tells you whether the given Player is the local one.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/#get-islocal">Official
-            Documentation</see> page for more information. </remarks>
     </member>
     <member name="P:VRC.SDKBase.VRCPlayerApi.isMaster">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/#get-ismaster</docURL>
         <summary>
             Tells you whether the given Player is the instance master.
         </summary>
         <remarks> This is the player who either created the instance, or the one who inherited
-            Master status when the last Master left. Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/#get-ismaster">Official
-            Documentation</see> page for more information. </remarks>
+            Master status when the last Master left.</remarks>
+    </member>
+    <member name="P:VRC.SDKBase.VRCPlayerApi.isInstanceOwner">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/networking/network-components#networking-properties</docURL>
+        <summary>
+            if the Local Player is the one who created the instance.
+        </summary>
+        <remarks>
+            Will be False when in Build &amp; Test and Unity Playmode.
+        </remarks>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetPickupInHand(VRC.SDKBase.VRC_Pickup.PickupHand)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/#getpickupinhand</docURL>
         <summary>
             Gets the pickup a Player is holding in the specified hand. Only works for the Local
             Player.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/#getpickupinhand">Official
-            Documentation</see> page for more information. </remarks>
         <param name="hand"> The hand to check for a pickup. <see
                 cref="T:VRC.SDKBase.VRC_Pickup.PickupHand" />. Any is not supported. </param>
         <returns> The <see cref="T:VRC.SDKBase.VRC_Pickup" /> object the player is holding in the
             specified hand. Returns null if no VRCPickup is found. </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.IsOwner(UnityEngine.GameObject)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/#isowner</docURL>
         <summary>
             Tells you whether a Player is the Owner of a given GameObject, important for Sync.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/#isowner">Official
-            Documentation</see> page for more information. </remarks>
         <param name="obj">
             The GameObject to check ownership of.
         </param>
@@ -95,25 +92,22 @@
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.IsUserInVR">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/#isuserinvr</docURL>
         <summary>
             Tells you whether a Player is using a VR headset.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/#isuserinvr">Official
-            Documentation</see> page for more information. </remarks>
         <returns>
             True if the player is using a VR headset, false if they are not.
         </returns>
     </member>
     <member
         name="M:VRC.SDKBase.VRCPlayerApi.PlayHapticEventInHand(VRC.SDKBase.VRC_Pickup.PickupHand,System.Single,System.Single,System.Single)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/#playhapticeventinhand</docURL>
         <summary>
             Vibrate the Player's Haptic controllers if they have them.
         </summary>
         <remarks> The feeling can vary quite a bit between controllers. <br /> All 3 parameters MUST
-            be positive. <br /> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/#playhapticeventinhand">Official
-            Documentation</see> page for more information. </remarks>
+            be positive. <br /></remarks>
         <param name="hand"> The hand to vibrate. <see cref="T:VRC.SDKBase.VRC_Pickup.PickupHand" />
             . </param>
         <param name="duration">
@@ -127,28 +121,22 @@
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.UseAttachedStation">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/#useattachedstation</docURL>
         <summary>
             Makes the player get into the Station which is on the same GameObject as this
             UdonBehaviour.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/#useattachedstation">Official
-            Documentation</see> page for more information. </remarks>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.UseLegacyLocomotion">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/#uselegacylocomotion</docURL>
         <summary> WARNING: This method is not recommended to be used.<br /> turns on legacy
             locomotion for this player. </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/#uselegacylocomotion">Official
-            Documentation</see> page for more information. </remarks>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/#combat-system</docURL>
         <summary>
             NOT IMPLEMENTED AND NON-FUNCTIONAL! DO NOT USE!
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/#combat-system">Official
-            Documentation</see> page for more information. </remarks>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.CombatGetDestructible">
         <inheritdoc cref="M:VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
@@ -170,45 +158,40 @@
         <inheritdoc cref="M:VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetCurrentLanguage">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/#getcurrentlanguage</docURL>
         <summary>
             Gets the selected language of the local user.
         </summary>
-        <remarks> This feature isnt added to the client yet, so it currently is not useful. <br />
-            Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/#getcurrentlanguage">Official
-            Documentation</see> page for more information. </remarks>
+        <remarks> This feature isnt added to the client yet, so it currently is not useful.</remarks>
         <returns>
             Currently returns a example string. Will throw an exception in clientsim currently.
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetAvailableLanguages">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/#getavailablelanguages</docURL>
         <summary>
             Gets all available languages a player can select.
         </summary>
-        <remarks> This feature isnt added to the client yet, so it currently is not useful. <br />
-            Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/#getavailablelanguages">Official
-            Documentation</see> page for more information. </remarks>
+        <remarks> This feature isnt added to the client yet, so it currently is not useful.</remarks>
         <returns>
             Currently returns a example string[]. Will throw an exception in clientsim
             currently.
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayerCount">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/getting-players#getplayercount</docURL>
         <summary>
             Gets the actual number of Players in the instance when it is called.
         </summary>
         <remarks> This will return the value BEFORE the current function update. For example, if
             called in <see cref="TODO: ADD ON PLAYER LEAVE EVENT HERE">OnPlayerLeave</see>, it will
-            return the ammount of players in the instance right BEFORE that player left. <br />
-            Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/getting-players#getplayercount">Official
-            Documentation</see> page for more information. </remarks>
+            return the ammount of players in the instance right BEFORE that player left.</remarks>
         <returns>
             The number of players in the instance.
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayers(VRC.SDKBase.VRCPlayerApi[])">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/getting-players#getplayers</docURL>
         <summary> This is how you get all the Players in your world so you can go through them in a
             For Loop and apply settings, make changes, look for a particular name, etc. To use it,
             you first need to create a VRCPlayerApi Array.<br />
@@ -221,20 +204,15 @@
                 </code>
             </example>
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/getting-players#getplayers">Official
-            Documentation</see> page for more information. </remarks>
         <returns>
             The populated VRCPlayerApi Array.
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayerById(System.Int32)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/getting-players#getplayerbyid</docURL>
         <summary>
             Get a VRCPlayerApi object for the given player Id if it exists.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/getting-players#getplayerbyid">Official
-            Documentation</see> page for more information. </remarks>
         <param name="playerId">
             The player Id to get the VRCPlayerApi object for.
         </param>
@@ -243,26 +221,22 @@
         </returns>
     </member>
     <member name="P:VRC.SDKBase.VRCPlayerApi.playerId">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/getting-players#get-playerid</docURL>
         <summary>
             Get the cached PlayerId, calls GetPlayerId if it hasn't been cached yet.
         </summary>
         <remarks> Currently, this seems to behave identically to <see
-                cref="M:VRC.SDKBase.VRCPlayerApi.GetPlayerId(VRC.SDKBase.VRCPlayerApi)" />. <br />
-            Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/getting-players#get-playerid">Official
-            Documentation</see> page for more information. </remarks>
+                cref="M:VRC.SDKBase.VRCPlayerApi.GetPlayerId(VRC.SDKBase.VRCPlayerApi)" />.</remarks>
         <value>
             The Network Id of the player. Always increments, even if the player leaves and
             rejoins.
         </value>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayerId(VRC.SDKBase.VRCPlayerApi)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/getting-players#getplayerid</docURL>
         <summary>
             Gets the Player's Network Id from the source.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/getting-players#getplayerid">Official
-            Documentation</see> page for more information. </remarks>
         <param name="player">
             The player to get the Network Id for.
         </param>
@@ -272,6 +246,8 @@
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetPlayerTag(System.String,System.String)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/getting-players#setplayertag--getplayertag</docURL>
         <summary> Sets a string variable that you can look up later. <br />
                 <example>
                 For example, you could set the "role" of a player in a cooking game to "chef" or
@@ -279,9 +255,6 @@
             "customer".
             </example>
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/getting-players#setplayertag--getplayertag">Official
-            Documentation</see> page for more information. </remarks>
         <param name="tagName">
             The name of the tag to set.
         </param>
@@ -290,12 +263,11 @@
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayerTag(System.String)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/getting-players#setplayertag--getplayertag</docURL>
         <summary>
             Gets the value of a tag that was set with SetPlayerTag.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/getting-players#setplayertag--getplayertag">Official
-            Documentation</see> page for more information. </remarks>
         <param name="tagName">
             The name of the tag to set.
         </param>
@@ -304,20 +276,16 @@
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.ClearPlayerTags">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/getting-players#clearplayertags</docURL>
         <summary>
             Remove all tags that you've set on this player.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/getting-players#clearplayertags">Official
-            Documentation</see> page for more information. </remarks>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayersWithTag(System.String,System.String)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/getting-players#getplayerswithtag</docURL>
         <summary>
             NOT CURRENTLY FUNCTIONAL! DO NOT USE, WILL THROW EXPOSURE EXCEPTION!
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/getting-players#getplayerswithtag">Official
-            Documentation</see> page for more information. </remarks>
         <param name="tagName">
             The name of the tag to get the players for.
         </param>
@@ -328,43 +296,39 @@
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetVoiceGain(System.Single)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/player-audio#set-voice-gain</docURL>
         <summary>
             Add boost to the Player's voice in decibels.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-audio#set-voice-gain">Official
-            Documentation</see> page for more information. </remarks>
         <param name="gain">
             in Decibels, Range 0-24. Default is 15.
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetVoiceDistanceNear(System.Single)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/player-audio#set-voice-distance-near</docURL>
         <summary>
             The near radius, in meters, where volume begins to fall off. It is strongly
             recommended to leave the Near value at zero for realism and effective spatialization
             for user voices.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-audio#set-voice-distance-near">Official
-            Documentation</see> page for more information. </remarks>
         <param name="near">
             in Meters, Range 0 - 1,000,000. Default is ???.
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetVoiceDistanceFar(System.Single)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/player-audio#set-voice-distance-far</docURL>
         <summary>
             This sets the end of the range for hearing the user's voice. You can lower this to
             make another player's voice not travel as far, all the way to 0 to effectively
             'mute' the player.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-audio#set-voice-distance-far">Official
-            Documentation</see> page for more information. </remarks>
         <param name="far">
             in Meters, Range 0 - 1,000,000. Default is 25.
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetVoiceVolumetricRadius(System.Single)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-audio#set-voice-volumetric-radius</docURL>
         <summary>
             A player's voice is normally simulated to
             be a point source, however changing this value allows the source to appear to come
@@ -373,9 +337,7 @@
         <remarks> This should be used carefully, and is mainly for distant audio sources that need
             to sound "large" as you move past them. Keep this at zero unless you know what you're
             doing. If you want a user's voice to sound like it is close no matter how far it is,
-            increase the Voice Distance Near range to a large value. <br /> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-audio#set-voice-volumetric-radius">Official
-            Documentation</see> page for more information. </remarks>
+            increase the Voice Distance Near range to a large value.</remarks>
         <param name="radius">
             in Meters, Range is 0 - 1,000. Default is 0. The value for Volumetric Radius should
             always be lower
@@ -383,59 +345,58 @@
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetVoiceLowpass(System.Boolean)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/player-audio#set-voice-lowpass</docURL>
         <summary>
             Disables the low-pass filter on the player's voice.
         </summary>
         <remarks> When a voice is some distance off, it is passed through a low-pass filter to help
             with understanding noisy worlds. You can disable this if you want to skip this filter.
             For example, if you intend for a player to use their voice channel to play a
-            high-quality DJ mix, turning this filter off is advisable. <br /> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-audio#set-voice-lowpass">Official
-            Documentation</see> page for more information. </remarks>
+            high-quality DJ mix, turning this filter off is advisable.</remarks>
         <param name="enabled">
             True to enable? the low-pass filter, false? to disable it.
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetAvatarAudioGain(System.Single)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/player-audio/#setavataraudiogain</docURL>
         <summary>
             Set the Maximum Gain allowed on Avatar Audio.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-audio/#setavataraudiogain">Official
-            Documentation</see> page for more information. </remarks>
         <param name="gain">
             in Decibels, Range 0-10. Default is 10.
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetAvatarAudioFarRadius(System.Single)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-audio/#setavataraudiofarradius</docURL>
         <summary>
             This sets the maximum end of the range for hearing
             the avatar's audio.
         </summary>
         <remarks> You can lower this to make another player's avatar audio not travel as far, all
             the way to 0 to effectively 'mute' the player. Note that this is compared to the audio
-            source's maxDistance, and the smaller value is used. <br /> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-audio/#setavataraudiofarradius">Official
-            Documentation</see> page for more information. </remarks>
+            source's maxDistance, and the smaller value is used.</remarks>
         <param name="distance"> in Meters, Range 0 - <see
                 href="https://learn.microsoft.com/en-us/dotnet/api/system.single.maxvalue?view=net-8.0">
             Single.MaxValue</see>. Default is 40. </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetAvatarAudioFarRadius(System.Single)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-audio/#setavataraudionearradius</docURL>
         <summary>
             This sets the maximum start of the range for hearing
             the avatar's audio.
         </summary>
         <remarks> Increasing this value makes the avatar audio sources reach their maximum volume
             from a further distance. Note that this is compared to the audio source's maxDistance,
-            and the smaller value is used. <br /> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-audio/#setavataraudionearradius">Official
-            Documentation</see> page for more information. </remarks>
+            and the smaller value is used.</remarks>
         <param name="distance"> in Meters, Range 0 - <see
                 href="https://learn.microsoft.com/en-us/dotnet/api/system.single.maxvalue?view=net-8.0">
             Single.MaxValue</see>. Default is 0. </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetAvatarAudioVolumetricRadius(System.Single)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-audio/#setavataraudiovolumetricradius</docURL>
         <summary>
             Set the Volumetric Radius of the Avatar's Audio.
         </summary>
@@ -444,269 +405,466 @@
             be used carefully, and is mainly for distant audio sources that need to sound "large" as
             you move past them. Keep this at zero unless you know what you're doing. The value for
             Volumetric Radius should always be lower than <see
-                cref="M:VRC.SDKBase.VRCPlayerApi.SetAvatarAudioFarRadius(System.Single)" />. <br />
-            Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-audio/#setavataraudiovolumetricradius">Official
-            Documentation</see> page for more information. </remarks>
+                cref="M:VRC.SDKBase.VRCPlayerApi.SetAvatarAudioFarRadius(System.Single)" />.</remarks>
         <param name="distance"> in Meters, Range 0 - <see
                 href="https://learn.microsoft.com/en-us/dotnet/api/system.single.maxvalue?view=net-8.0">
             Single.MaxValue</see>. Default is 0. </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetAvatarAudioForceSpatial(System.Boolean)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-audio/#setavataraudioforcespatial</docURL>
         <summary>
             If this is on, then Spatialization is enabled for the source, and the spatialBlend
             is set to 1.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-audio/#setavataraudioforcespatial">Official
-            Documentation</see> page for more information. </remarks>
         <param name="force">
             True to enable spatialization, false to disable it. Default is false.
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetAvatarAudioCustomCurve(System.Boolean)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-audio/#setavataraudiocustomcurve</docURL>
         <summary>
             This sets whether the audio source should use a pre-configured custom curve??????
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-audio/#setavataraudiocustomcurve">Official
-            Documentation</see> page for more information. </remarks>
         <param name="allow">
             True to enable the custom curve, false to disable it. Default is false.
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetManualAvatarScalingAllowed">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-avatar-scaling#getmanualavatarscalingallowed</docURL>
         <summary>
             Checks if the local player is allowed to control their avatar scale.
         </summary>
-        <remarks> Only works on the local player. <br /> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-avatar-scaling#getmanualavatarscalingallowed">Official
-            Documentation</see> page for more information. </remarks>
         <returns>
             if the local player is in the player-controlled avatar scaling mode, or false if
             they're in the world-authoritative avatar scaling mode.
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetManualAvatarScalingAllowed(System.Boolean)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-avatar-scaling#setmanualavatarscalingallowed</docURL>
         <summary>
             Toggles between player-controlled and world-authoritative scaling modes.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-avatar-scaling#setmanualavatarscalingallowed">Official
-            Documentation</see> page for more information. </remarks>
         <param name="enabled">
             true sets the player-controlled mode, and false sets the world-authoritative mode.
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetAvatarEyeHeightMinimumAsMeters">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-avatar-scaling#getavatareyeheightminimumasmeters</docURL>
         <summary>
             Returns the minimum eye height in meters that the local player is permitted to scale
             themselves to in the player-controlled avatar scaling mode.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-avatar-scaling#getavatareyeheightminimumasmeters">Official
-            Documentation</see> page for more information. </remarks>
         <returns>
             Greater than or equal to 0.2 meters.
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetAvatarEyeHeightMinimumByMeters(System.Single)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-avatar-scaling#setavatareyeheightminimumbymeters</docURL>
         <summary>
             Sets the minimum height in meters that the local player is permitted to scale
             themselves to in the player-controlled avatar scaling mode.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-avatar-scaling#setavatareyeheightminimumbymeters">Official
-            Documentation</see> page for more information. </remarks>
         <param name="scaleMeters">
             Must be greater than or equal to 0.2 meters.
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetAvatarEyeHeightMaximumAsMeters">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-avatar-scaling#getavatareyeheightmaximumasmeters</docURL>
         <summary>
             Returns the maximum eye height that the local player is permitted to scale
             themselves to in the player-controlled avatar scaling mode.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-avatar-scaling#getavatareyeheightmaximumasmeters">Official
-            Documentation</see> page for more information. </remarks>
         <returns>
             The maximum avatar eye height in meters.
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetAvatarEyeHeightMaximumByMeters(System.Single)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-avatar-scaling#setavatareyeheightmaximumbymeters</docURL>
         <summary>
             Sets the maximum eye height in meters that the local player is permitted to scale
             themselves to in the player-controlled avatar scaling mode.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-avatar-scaling#setavatareyeheightmaximumbymeters">Official
-            Documentation</see> page for more information. </remarks>
         <param name="scaleMeters">
             Must be less or equal to 5 meters.
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetAvatarEyeHeightAsMeters">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-avatar-scaling#getavatareyeheightasmeters</docURL>
         <summary>
             Returns the configured eye height for the target player's avatar. This function
             works for the local player and remote players.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-avatar-scaling#getavatareyeheightasmeters">Official
-            Documentation</see> page for more information. </remarks>
         <returns>
             The avatar eye height in meters.
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetAvatarEyeHeightByMeters(System.Single)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-avatar-scaling#setavatareyeheightbymeters</docURL>
         <summary>
             Sets the eye height for the target player's avatar in meters. This function only
             works for the local player.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-avatar-scaling#setavatareyeheightbymeters">Official
-            Documentation</see> page for more information. </remarks>
         <param name="scaleMeters">
             The avatar eye height in meters.
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetAvatarEyeHeightByMultiplier(System.Single)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-avatar-scaling#setavatareyeheightbymultiplier</docURL>
         <summary>
             Sets the eye height using a multiplier of the target player's avatar eye height at
             its prefab scale. This function only works for the local player.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-avatar-scaling#setavatareyeheightbymultiplier">Official
-            Documentation</see> page for more information. </remarks>
         <param name="scaleMultiplier">
             The avatar eye height as a multiple of the target player's avatar eye height at its
             prefab scale.
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetWalkSpeed">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-forces#getwalkspeed--setwalkspeed</docURL>
         <summary>
             The speed at which a Player can walk around your world.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getwalkspeed--setwalkspeed">Official
-            Documentation</see> page for more information. </remarks>
         <returns>
             The walk speed of the player.
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetWalkSpeed(System.Single)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-forces#getwalkspeed--setwalkspeed</docURL>
         <summary>
             The speed at which a Player can walk around your world.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getwalkspeed--setwalkspeed">Official
-            Documentation</see> page for more information. </remarks>
         <param name="speed">
             The walk speed of the player. Set this below your Run Speed. Default is 2.
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetRunSpeed">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-forces#getrunspeed--setrunspeed</docURL>
         <summary>
             The speed at which a Player can run around your world.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getrunspeed--setrunspeed">Official
-            Documentation</see> page for more information. </remarks>
         <returns>
             The run speed of the player.
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetRunSpeed(System.Single)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-forces#getrunspeed--setrunspeed</docURL>
         <summary>
             The speed at which a Player can run around your world.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getrunspeed--setrunspeed">Official
-            Documentation</see> page for more information. </remarks>
         <param name="speed">
             The run speed of the player. Set this above your walk Speed. Default is 4.
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetStrafeSpeed">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-forces#getstrafespeed--setstrafespeed</docURL>
         <summary>
             The speed at which a Player can strafe around your world.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getstrafespeed--setstrafespeed">Official
-            Documentation</see> page for more information. </remarks>
         <returns>
             The strafe speed of the player.
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetStrafeSpeed(System.Single)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-forces#getstrafespeed--setstrafespeed</docURL>
         <summary>
             The speed at which a Player can strafe around your world. Players speed when strafing is
             not affected by running.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getstrafespeed--setstrafespeed">Official
-            Documentation</see> page for more information. </remarks>
         <param name="speed">
             The strafe speed of the player. Recommended to be set to the same as Walk Speed. Default
             is 2.
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetJumpImpulse">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-forces#getjumpimpulse--setjumpimpulse</docURL>
         <summary>
             How much force applied when a player jumps.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getjumpimpulse--setjumpimpulse">Official
-            Documentation</see> page for more information. </remarks>
         <returns>
             The jump impulse of the player. Default is 0.
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetJumpImpulse(System.Single)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-forces#getjumpimpulse--setjumpimpulse</docURL>
         <summary>
             How much force applied when a player jumps. Set this if you want to
             enable jump in your world. The default VRCWorld prefab sets this to 3.
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getjumpimpulse--setjumpimpulse">Official
-            Documentation</see> page for more information. </remarks>
         <param name="impulse">
             The jump impulse of the player. Default is 0.
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetGravityStrength">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-forces#getgravitystrength--setgravitystrength</docURL>
         <summary>
             Multiplier for the Gravity force of the world (set to Earth's default).
         </summary>
-        <remarks> Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getgravitystrength--setgravitystrength">Official
-            Documentation</see> page for more information. </remarks>
         <returns>
             The gravity strength of the player. Default is 1.
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.SetGravityStrength(System.Single)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/players/player-forces#getgravitystrength--setgravitystrength</docURL>
         <summary>
             Multiplier for the Gravity force of the world (set to Earth's default).
         </summary>
         <remarks> Don't change Unity's Physics.Gravity in your project, get and set it here instead
-            if you are trying to affect the player. <br />Checkout the <see
-                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getgravitystrength--setgravitystrength">Official
-            Documentation</see> page for more information. </remarks>
+            if you are trying to affect the player.</remarks>
         <param name="strength">
             The gravity strength of the player. Default is 1.
         </param>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.Immobilize(System.Boolean)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/player-forces#immobilize</docURL>
         <summary>
             Keeps a Player stuck in place, turning off their Locomotion.
         </summary>
-        <remarks> Note that VR
-            Players may be able to move their viewpoint around a bit anyways, but their Avatar will
-            stay in place. <br />Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/player-forces#immobilize">Official Documentation</see> page for
-            more information. </remarks>
+        <remarks> Note that VR Players may be able to move their viewpoint around a bit anyways, but
+            their Avatar will stay in place.</remarks>
         <param name="immobile">
             True to immobilize the player, false to unimmobilize them.
         </param>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.GetPosition">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/player-positions#getposition</docURL>
+        <summary>
+            Gets the position of the Player in world space.
+        </summary>
+        <returns>
+            The position of the player in world space.
+        </returns>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.GetRotation">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/player-positions#getrotation</docURL>
+        <summary>
+            Gets the rotation of the Player in world space.
+        </summary>
+        <returns>
+            The rotation of the player in world space.
+        </returns>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.GetBonePosition(UnityEngine.HumanBodyBones)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/player-positions#getboneposition</docURL>
+        <summary>
+            Gets the position of the specified Bone in the Player's Avatar, or Vector3.Zero (0,0,0)
+            if the bone does not exist.
+        </summary>
+        <remarks> Note that Avatars may not have all the same bones in the places you expect, so be
+            careful making assumptions about attributes like a player's height, pose etc based on
+            the position of bones.<br /></remarks>
+        <param name="tt"> The bone to get the position of. see <see
+                cref="UnityEngine.HumanBodyBones" /> for a list of all bones you can check for. </param>
+        <returns>
+            The position of the specified bone in the player's avatar in world space. Vector3.Zero
+            (0,0,0) if the
+            bone does not exist.
+        </returns>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.GetBoneRotation(UnityEngine.HumanBodyBones)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/player-positions#getbonerotation</docURL>
+        <summary>
+            Gets the rotation of the specified Bone in the Player's Avatar, or Quaternion.Identity
+            (0,0,0,1) if the bone does not exist.
+        </summary>
+        <remarks> Note that Avatars may not have all the same bones in the places you expect, so be
+            careful making assumptions about attributes like a player's height, pose etc based on
+            the rotation of bones.</remarks>
+        <param name="tt"> The bone to get the rotation of. see <see
+                cref="UnityEngine.HumanBodyBones" /> for a list of all bones you can check for. </param>
+        <returns>
+            The rotation of the specified bone in the player's avatar in world space.
+            Quaternion.Identity (0,0,0,1) if the bone does not exist.
+        </returns>
+    </member>
+    <member
+        name="M:VRC.SDKBase.VRCPlayerApi.GetTrackingData(VRC.SDKBase.VRCPlayerApi.TrackingDataType)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/player-positions#gettrackingdata</docURL>
+        <summary>
+            Gets a struct called TrackingData, which contains separate Position and Rotation data.
+        </summary>
+        <remarks> This is the suggested way to get position and rotation data for a Player's head
+            and hands. This returns data from the TrackingManager for a Local Player (ie the data
+            coming from their headset / trackers) and from the RightHand, LeftHand and Head bones
+            for a Remote Player. Origin returns the center of the local VR user's playspace, while
+            returning the player's position for local Desktop users and all remote users. AvatarRoot
+            returns data for the root transform of the avatar (the same transform that the player
+            capsule is attached to). For users in Fully-Body Tracking, AvatarRoot will not rotate
+            with the head facing direction. If you need data reflecting the general forward facing
+            direction of a Player, consider using GetRotation instead.</remarks>
+        <param name="tt"> The type of tracking data to get. <see
+                cref="VRC.SDKBase.VRCPlayerApi.TrackingDataType" />
+        </param>
+        <returns>
+            The tracking data for the specified type. IMPORTANT WARNING: The returned tracking data
+            will contain bone position/rotation
+            if used on remote players when asking for things like controller position! The tracking
+            data is only correct if used on the local player.
+        </returns>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.GetVelocity">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/player-positions#getvelocity</docURL>
+        <summary>
+            Get the speed and direction of the player's movement.
+        </summary>
+        <remarks></remarks>
+        <returns>
+            The velocity vector of the player in world space.
+        </returns>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.SetVelocity(UnityEngine.Vector3)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/player-positions#setvelocity</docURL>
+        <summary>
+            Set the speed and direction of the player's movement.
+        </summary>
+        <remarks> If SetVelocity is called on the local player, their 'IsGrounded' property is set
+            to false since they are not in direct control of their movements while this is
+            happening.</remarks>
+        <param name="velocity">
+            The velocity vector to set the player to.
+        </param>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.IsPlayerGrounded">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/player-positions#isplayergrounded</docURL>
+        <summary>
+            Get whether the player is touching the ground, which enables Jump.
+        </summary>
+        <remarks> This value is not reliable if the player is in a station</remarks>
+        <returns>
+            True if the player is touching the ground, false if they are not.
+        </returns>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.TeleportTo(UnityEngine.Vector3,UnityEngine.Quaternion)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/player-positions#teleportto</docURL>
+        <summary>
+            Send a player to a new spot and specified rotation, unless a Station does not allow it.
+        </summary>
+        <param name="teleportPos">
+            The position to teleport the player to in world space.
+        </param>
+        <param name="teleportRot">
+            The rotation to teleport the player to in world space.
+        </param>
+    </member>
+    <member
+        name="M:VRC.SDKBase.VRCPlayerApi.TeleportTo(UnityEngine.Vector3,UnityEngine.Quaternion,VRC.SDKBase.VRC_SceneDescriptor.SpawnOrientation)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/player-positions#teleportto</docURL>
+        <summary>
+            Send a player to a new spot and specified rotation, unless a Station does not allow it.
+        </summary>
+        <param name="teleportPos">
+            The position to teleport the player to in world space.
+        </param>
+        <param name="teleportRot">
+            The rotation to teleport the player to in world space.
+        </param>
+        <param name="teleportOrientation"> How to align players with the destination position and
+            rotation. <see
+                cref="VRC.SDKBase.VRC_SceneDescriptor.SpawnOrientation" />
+        </param>
+    </member>
+    <member
+        name="M:VRC.SDKBase.VRCPlayerApi.TeleportTo(UnityEngine.Vector3,UnityEngine.Quaternion,VRC.SDKBase.VRC_SceneDescriptor.SpawnOrientation,System.Boolean)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/player-positions#teleportto</docURL>
+        <summary>
+            Send a player to a new spot and specified rotation, unless a Station does not allow it.
+        </summary>
+        <param name="teleportPos">
+            The position to teleport the player to in world space.
+        </param>
+        <param name="teleportRot">
+            The rotation to teleport the player to in world space.
+        </param>
+        <param name="teleportOrientation"> How to align players with the destination position and
+            rotation. <see
+                cref="VRC.SDKBase.VRC_SceneDescriptor.SpawnOrientation" />
+        </param>
+        <param name="lerpOnRemote">
+            Whether to interpolate the player's movement. If true, the teleportation is
+            instantaneous
+            and incurs and additional network bandwidth cost. If false, the teleportation is treated
+            as
+            normal player movement.
+        </param>
+    </member>
+    <member name="T:VRC.SDKBase.VRCPlayerApi.TrackingDataType">
+        <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#trackingdatatype</docURL>
+        <summary>
+            The specific type of tracking data to get, IE hand position, head position, etc.
+        </summary>
+        <remarks>IMPORTANT NOTE: If relating to a remote player, the value will be from the players
+            bones, NOT their actual tracking data</remarks>
+    </member>
+    <member name="F:VRC.SDKBase.VRCPlayerApi.TrackingDataType.Head">
+        <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#trackingdatatype</docURL>
+        <summary>
+            The player's head tracking data
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRCPlayerApi.TrackingDataType.LeftHand">
+        <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#trackingdatatype</docURL>
+        <summary>
+            The player's left hand tracking data
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRCPlayerApi.TrackingDataType.RightHand">
+        <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#trackingdatatype</docURL>
+        <summary>
+            The player's right hand tracking data
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRCPlayerApi.TrackingDataType.Origin">
+        <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#trackingdatatype</docURL>
+        <summary>
+            Origin returns the center of the local VR user's playspace, while returning the player's
+            position for local Desktop users and all remote users.
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRCPlayerApi.TrackingDataType.AvatarRoot">
+        <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#trackingdatatype</docURL>
+        <summary>
+            AvatarRoot returns data for the root transform of the avatar (the same transform that
+            the player capsule is attached to). For users in Fully-Body Tracking, AvatarRoot will
+            not rotate with the head facing direction. If you need data reflecting the general
+            forward facing direction of a Player, consider using GetRotation instead.
+        </summary>
+    </member>
+    <member name="T:VRC.SDKBase.VRCPlayerApi.TrackingData">
+        <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#trackingdata</docURL>
+        <summary>
+            A struct containing separate Position and Rotation data relating to a player's tracking
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRCPlayerApi.TrackingData.position">
+        <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#trackingdata</docURL>
+        <summary>
+            The position of the player's tracking data
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRCPlayerApi.TrackingData.rotation">
+        <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#trackingdata</docURL>
+        <summary>
+            The rotation of the player's tracking data
+        </summary>
     </member>
 </members>

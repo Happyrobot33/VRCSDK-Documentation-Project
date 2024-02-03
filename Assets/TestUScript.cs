@@ -113,14 +113,14 @@ public class TestUScript : UdonSharpBehaviour
         player.TeleportTo(transform.position, transform.rotation, VRC_SceneDescriptor.SpawnOrientation.AlignRoomWithSpawnPoint);
         player.TeleportTo(transform.position, transform.rotation, VRC_SceneDescriptor.SpawnOrientation.AlignRoomWithSpawnPoint, true);
 
-
-
-        //TODO: Document these manually by finding their relevant pages in the docs
         d(player.isInstanceOwner);
         d(VRCPlayerApi.TrackingDataType.Head);
+        VRCPlayerApi.TrackingData td = player.GetTrackingData(VRCPlayerApi.TrackingDataType.Head);
+        d(td.position);
+        d(td.rotation);
     }
 
-    //player collisions TODO: See if XML docs are generated for this
+    //player collisions TODO: See if XML docs are displayed properly for overloads
     public override void OnPlayerTriggerEnter(VRCPlayerApi player)
     {
         d(player.displayName + " entered trigger");
