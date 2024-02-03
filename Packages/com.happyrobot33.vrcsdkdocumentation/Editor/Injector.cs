@@ -158,9 +158,6 @@ public class Injector : AssetPostprocessor
             return listNode;
         }
     }
-
-
-    private static List<Doc> s_docs = new List<Doc>();
     private static List<string> s_includesToCheck = new List<string>();
  
     /*
@@ -178,7 +175,7 @@ public class Injector : AssetPostprocessor
         const string basePackagePath = "Packages/com.happyrobot33.vrcsdkdocumentation";
 
         //parse the xml
-        XmlDocument xmlDoc = new XmlDocument();
+        XmlDocument xmlDoc = new();
         xmlDoc.LoadXml(content);
 
         //get the include item groups, which are under the Project node
@@ -239,9 +236,11 @@ public class Injector : AssetPostprocessor
                 string assemblyPath = System.IO.Path.GetDirectoryName(includePath);
 
                 //create a new doc object
-                Doc newDoc = new Doc();
-                newDoc.AssemblyName = assemblyName;
-                newDoc.DllPath = includePath;
+                Doc newDoc = new()
+                {
+                    AssemblyName = assemblyName,
+                    DllPath = includePath
+                };
 
                 //now loop over the files in the folder, and add them to the doc object
                 string[] files = System.IO.Directory.GetFiles(basePackagePath + "/Editor/Documentation/" + assemblyName, "*.xml");
