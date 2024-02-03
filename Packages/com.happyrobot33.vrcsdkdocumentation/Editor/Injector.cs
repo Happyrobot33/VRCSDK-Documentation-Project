@@ -174,7 +174,6 @@ public class Injector : AssetPostprocessor
 
     public static string OnGeneratedCSProject(string path, string content)
     {
-        Debug.Log("OnGeneratedCSProject");
         //check if the assembly matches ones in the documentation folder in our package
         const string basePackagePath = "Packages/com.happyrobot33.vrcsdkdocumentation";
 
