@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Xml;
 using System.IO;
 
+//TODO: Make the VSCode compatibility features optional and controllable in the unity editor preferences section
+
 public class Injector : AssetPostprocessor
 {
     /*
@@ -68,6 +70,11 @@ public class Injector : AssetPostprocessor
                 }
             }
         }
+
+        /*TODO: Make each assembly a folder, and then each class in the assembly can be a individual XML file in that folder
+        This would make it significantly nicer to edit individual classes, and would make it easier to manage the documentation
+        */
+
 
         //loop through for each file
         for (int f = 0; f < files.Length; f++)
