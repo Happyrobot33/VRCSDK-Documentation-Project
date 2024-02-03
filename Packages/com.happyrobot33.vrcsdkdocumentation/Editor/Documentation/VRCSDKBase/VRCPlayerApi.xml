@@ -583,4 +583,130 @@
             prefab scale.
         </param>
     </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.GetWalkSpeed">
+        <summary>
+            The speed at which a Player can walk around your world.
+        </summary>
+        <remarks> Checkout the <see
+                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getwalkspeed--setwalkspeed">Official
+            Documentation</see> page for more information. </remarks>
+        <returns>
+            The walk speed of the player.
+        </returns>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.SetWalkSpeed(System.Single)">
+        <summary>
+            The speed at which a Player can walk around your world.
+        </summary>
+        <remarks> Checkout the <see
+                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getwalkspeed--setwalkspeed">Official
+            Documentation</see> page for more information. </remarks>
+        <param name="speed">
+            The walk speed of the player. Set this below your Run Speed. Default is 2.
+        </param>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.GetRunSpeed">
+        <summary>
+            The speed at which a Player can run around your world.
+        </summary>
+        <remarks> Checkout the <see
+                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getrunspeed--setrunspeed">Official
+            Documentation</see> page for more information. </remarks>
+        <returns>
+            The run speed of the player.
+        </returns>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.SetRunSpeed(System.Single)">
+        <summary>
+            The speed at which a Player can run around your world.
+        </summary>
+        <remarks> Checkout the <see
+                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getrunspeed--setrunspeed">Official
+            Documentation</see> page for more information. </remarks>
+        <param name="speed">
+            The run speed of the player. Set this above your walk Speed. Default is 4.
+        </param>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.GetStrafeSpeed">
+        <summary>
+            The speed at which a Player can strafe around your world.
+        </summary>
+        <remarks> Checkout the <see
+                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getstrafespeed--setstrafespeed">Official
+            Documentation</see> page for more information. </remarks>
+        <returns>
+            The strafe speed of the player.
+        </returns>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.SetStrafeSpeed(System.Single)">
+        <summary>
+            The speed at which a Player can strafe around your world. Players speed when strafing is
+            not affected by running.
+        </summary>
+        <remarks> Checkout the <see
+                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getstrafespeed--setstrafespeed">Official
+            Documentation</see> page for more information. </remarks>
+        <param name="speed">
+            The strafe speed of the player. Recommended to be set to the same as Walk Speed. Default
+            is 2.
+        </param>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.GetJumpImpulse">
+        <summary>
+            How much force applied when a player jumps.
+        </summary>
+        <remarks> Checkout the <see
+                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getjumpimpulse--setjumpimpulse">Official
+            Documentation</see> page for more information. </remarks>
+        <returns>
+            The jump impulse of the player. Default is 0.
+        </returns>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.SetJumpImpulse(System.Single)">
+        <summary>
+            How much force applied when a player jumps. Set this if you want to
+            enable jump in your world. The default VRCWorld prefab sets this to 3.
+        </summary>
+        <remarks> Checkout the <see
+                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getjumpimpulse--setjumpimpulse">Official
+            Documentation</see> page for more information. </remarks>
+        <param name="impulse">
+            The jump impulse of the player. Default is 0.
+        </param>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.GetGravityStrength">
+        <summary>
+            Multiplier for the Gravity force of the world (set to Earth's default).
+        </summary>
+        <remarks> Checkout the <see
+                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getgravitystrength--setgravitystrength">Official
+            Documentation</see> page for more information. </remarks>
+        <returns>
+            The gravity strength of the player. Default is 1.
+        </returns>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.SetGravityStrength(System.Single)">
+        <summary>
+            Multiplier for the Gravity force of the world (set to Earth's default).
+        </summary>
+        <remarks> Don't change Unity's Physics.Gravity in your project, get and set it here instead
+            if you are trying to affect the player. <br />Checkout the <see
+                href="https://creators.vrchat.com/worlds/udon/players/player-forces#getgravitystrength--setgravitystrength">Official
+            Documentation</see> page for more information. </remarks>
+        <param name="strength">
+            The gravity strength of the player. Default is 1.
+        </param>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.Immobilize(System.Boolean)">
+        <summary>
+            Keeps a Player stuck in place, turning off their Locomotion.
+        </summary>
+        <remarks> Note that VR
+            Players may be able to move their viewpoint around a bit anyways, but their Avatar will
+            stay in place. <br />Checkout the <see href="https://creators.vrchat.com/worlds/udon/players/player-forces#immobilize">Official Documentation</see> page for
+            more information. </remarks>
+        <param name="immobile">
+            True to immobilize the player, false to unimmobilize them.
+        </param>
+    </member>
 </members>
