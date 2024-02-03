@@ -3,7 +3,13 @@
     <member name="T:VRC.SDKBase.Networking">
         <docURL>https://creators.vrchat.com/worlds/udon/networking/</docURL>
         <summary>
-            TEMPORARY TESTING TEXT, THIS IS NOT FINISHED
+            Networking is a class that provides a set of static methods relating to the networking of UdonBehaviours.
+        </summary>
+    </member>
+    <member name="P:VRC.SDKBase.Networking.IsClogged">
+        <docURL>https://creators.vrchat.com/worlds/udon/networking/network-components#networking-properties</docURL>
+        <summary>
+            returns true if there is too much data trying to get out. You can use this to hold off some operations or adjust your logic.
         </summary>
     </member>
 </members>

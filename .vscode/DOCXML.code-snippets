@@ -20,7 +20,7 @@
 		"scope": "xml",
 		"prefix": "method",
 		"body": [
-			"<member name=\"M:VRC.SDKBase.VRCPlayerApi.${1:Method Name}\">",
+			"<member name=\"M:VRC.SDKBase.Networking.??\">",
 			"	<docURL></docURL>",
 			"	<summary>",
 			"	??",
@@ -42,13 +42,11 @@
 		"scope": "xml",
 		"prefix": "property",
 		"body": [
-			"<member name=\"P:VRC.SDKBase.VRCPlayerApi.${1:Property Name}\">",
+			"<member name=\"P:VRC.SDKBase.Networking.??\">",
+			"	<docURL></docURL>",
 			"	<summary>",
-			"		${2:summary}",
+			"		??",
 			"	</summary>",
-			"	<remarks>",
-			"	Checkout the <see href=\"${3:Documentation link}\">Official Documentation</see> page for more information.",
-			"	</remarks>",
 			"</member>",
 		],
 		"description": "Property Template"

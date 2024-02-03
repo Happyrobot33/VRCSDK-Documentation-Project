@@ -13,6 +13,12 @@ public class TestUScript : UdonSharpBehaviour
 
     }
 
+    private void NetworkingInteractions()
+    {
+        VRCPlayerApi local = Networking.LocalPlayer;
+        d(Networking.IsClogged);
+    }
+
     //contains all the player interactions
     private void PlayerInteractions()
     {
