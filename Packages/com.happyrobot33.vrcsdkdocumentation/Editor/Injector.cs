@@ -60,8 +60,43 @@ public class Injector : AssetPostprocessor
             ClassDocs.Add(newXmlDoc);
         }
 
+        private static string determineMemberID(XmlNode member)
+        {
+            //get the member name string
+            string memberName = member.Attributes["name"].Value;
+
+            //parse the first string to determine member type
+            switch (memberName[0])
+            {
+                case 'T':
+                    return "Type";
+                case 'F':
+                    return "Field";
+                case 'P':
+                    return "Property";
+                case 'M':
+                    return "Method";
+                case 'E':
+                    return "Event";
+                default:
+                    return null;
+            }
+        }
+
         private static XmlNode ProcessMember(XmlDocument classDoc, XmlNode memberNode)
         {
+            //check if a summary node exists
+            XmlNode summary = memberNode.SelectSingleNode("summary");
+
+            //if it doesnt, add it
+            if (summary == null)
+            {
+                //create the summary node
+                summary = classDoc.CreateElement("summary");
+                //append the summary node to the member
+                memberNode.AppendChild(summary);
+            }
+
             //check if a remarks node exists
             XmlNode remarks = memberNode.SelectSingleNode("remarks");
 
@@ -110,18 +145,6 @@ public class Injector : AssetPostprocessor
             //append a new line and then the information to the github page, keeping any < and > characters
             remarks.InnerXml += "<br/>" + githubInfo;
 
-            //process the parameters into the main summary, since VSCode doesnt render param tags by default in hover
-            XmlNode summary = memberNode.SelectSingleNode("summary");
-
-            //if no summary exists, create one
-            if (summary == null)
-            {
-                //create the summary node
-                summary = classDoc.CreateElement("summary");
-                //append the summary node to the member
-                memberNode.AppendChild(summary);
-            }
-
             XmlNodeList paramNodes = memberNode.SelectNodes("param");
             if (paramNodes.Count > 0)
             {
@@ -143,6 +166,55 @@ public class Injector : AssetPostprocessor
                     XmlNode description = classDoc.CreateElement("description");
                     listItem.AppendChild(description);
                     description.InnerXml = paramDescription;
+                }
+            }
+
+            //check if this member has any known canny posts
+            XmlNode cannyPosts = memberNode.SelectSingleNode("cannyPosts");
+
+            if (cannyPosts != null)
+            {
+                //get all the canny posts in it
+                XmlNodeList cannyPostNodes = cannyPosts.SelectNodes("cannyPost");
+
+                //if ANY canny posts exist, append to the top of the summary a warning to make sure they understand any possible bugs
+                const string cannyWarning = "This {0} has known issues, check the listed cannys for more information, as its behaviour may not work as documented/expected.";
+                //determine member type
+                string memberType = determineMemberID(memberNode);
+                //append the warning to the summary
+                summary.InnerXml = string.Format(cannyWarning, memberType) + "<br/><br/>" + summary.InnerXml;
+
+                //create list
+                XmlNode listNode = CreateDocList(classDoc, summary, "Canny Post", "Description");
+
+                //loop through each canny post
+                for (int c = 0; c < cannyPostNodes.Count; c++)
+                {
+                    //get the canny post
+                    XmlNode cannyPost = cannyPostNodes[c];
+
+                    //get the url
+                    string url = cannyPost.Attributes["url"].Value;
+
+                    //get the description
+                    string description = cannyPost.InnerXml;
+
+                    //create a list item
+                    XmlNode listItem = classDoc.CreateElement("item");
+                    listNode.AppendChild(listItem);
+                    //create a term
+                    XmlNode term = classDoc.CreateElement("term");
+                    listItem.AppendChild(term);
+                    //nest the url into a see tag
+                    XmlNode seeNode = classDoc.CreateElement("see");
+                    term.AppendChild(seeNode);
+                    seeNode.Attributes.Append(classDoc.CreateAttribute("href"));
+                    seeNode.Attributes["href"].Value = url;
+                    seeNode.InnerXml = string.Format("Canny Post #{0}", c + 1);
+                    //create a description
+                    XmlNode descriptionNode = classDoc.CreateElement("description");
+                    listItem.AppendChild(descriptionNode);
+                    descriptionNode.InnerXml = description;
                 }
             }
 

@@ -16,7 +16,19 @@ public class TestUScript : UdonSharpBehaviour
     private void NetworkingInteractions()
     {
         VRCPlayerApi local = Networking.LocalPlayer;
+        d(Networking.IsNetworkSettled);
         d(Networking.IsClogged);
+        d(Networking.IsInstanceOwner);
+        d(Networking.IsMaster);
+        d(Networking.IsOwner(gameObject));
+        d(Networking.IsOwner(local, gameObject));
+        d(Networking.GetOwner(gameObject).displayName);
+        Networking.SetOwner(local, gameObject);
+        d(Networking.GetNetworkDateTime());
+        d(Networking.GetServerTimeInSeconds());
+        d(Networking.GetServerTimeInMilliseconds());
+        d(Networking.SimulationTime(gameObject));
+        d(Networking.SimulationTime(local));
     }
 
     //contains all the player interactions

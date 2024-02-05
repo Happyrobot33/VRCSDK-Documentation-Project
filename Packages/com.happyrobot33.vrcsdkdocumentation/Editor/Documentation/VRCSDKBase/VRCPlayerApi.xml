@@ -62,7 +62,7 @@
         <docURL>
             https://creators.vrchat.com/worlds/udon/networking/network-components#networking-properties</docURL>
         <summary>
-            if the Local Player is the one who created the instance.
+            if the Player is the one who created the instance.
         </summary>
         <remarks>
             Will be False when in Build &amp; Test and Unity Playmode.

@@ -3,13 +3,32 @@
     <member name="T:VRC.SDKBase.Networking">
         <docURL>https://creators.vrchat.com/worlds/udon/networking/</docURL>
         <summary>
-            Networking is a class that provides a set of static methods relating to the networking of UdonBehaviours.
+            Networking is a class that provides a set of static methods relating to the networking
+            of UdonBehaviours.
         </summary>
     </member>
     <member name="P:VRC.SDKBase.Networking.IsClogged">
-        <docURL>https://creators.vrchat.com/worlds/udon/networking/network-components#networking-properties</docURL>
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/networking/network-components#networking-properties</docURL>
         <summary>
-            returns true if there is too much data trying to get out. You can use this to hold off some operations or adjust your logic.
+            returns true if there is too much data trying to get out. You can use this to hold off
+            some operations or adjust your logic.
         </summary>
+    </member>
+    <member name="P:VRC.SDKBase.Networking.IsInstanceOwner">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/networking/network-components#networking-properties</docURL>
+        <cannyPosts>
+            <cannyPost
+                url="https://feedback.vrchat.com/bug-reports/p/networkingisinstanceowner-true-for-all-users">This
+                property is currently broken, and will always return true! use <see
+                    cref="P:VRC.SDKBase.VRCPlayerApi.isInstanceOwner" /> instead.</cannyPost>
+        </cannyPosts>
+        <summary>
+            if the local Player is the one who created the instance.
+        </summary>
+        <remarks>
+            Will be False when in Build &amp; Test and Unity Playmode.
+        </remarks>
     </member>
 </members>

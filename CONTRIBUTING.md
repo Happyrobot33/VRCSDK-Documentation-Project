@@ -17,6 +17,19 @@ This tag is used to specify the URL of the documentation for the current file. I
 ```
 The injector script will format this accordingly when it pre-processes the XML file. The injector will throw a warning if this tag is missing, so it should be included on all documented members.
 
+## cannyPosts
+Defines a list of canny posts to show in the docs, in a list
+### cannyPost
+Defines a canny post. Set the `url` attribute to the URL of the canny post, and set the inner text to a short description of the issue/post.
+```xml
+<cannyPosts>
+            <cannyPost
+                url="https://feedback.vrchat.com/bug-reports/p/networkingisinstanceowner-true-for-all-users">This
+                property is currently broken, and will always return true! use <see
+                    cref="P:VRC.SDKBase.VRCPlayerApi.isInstanceOwner" /> instead.</cannyPost>
+        </cannyPosts>
+```
+
 ## General tips
 ### Trying to use < or \> in XML
 You might find alot of tips on how to use these characters, but most wont work due to bugs in VSCodes intellisense renderer. Here is the method ive found that works:
