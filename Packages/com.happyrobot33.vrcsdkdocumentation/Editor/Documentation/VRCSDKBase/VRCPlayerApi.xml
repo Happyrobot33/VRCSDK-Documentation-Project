@@ -670,9 +670,10 @@
             Gets the position of the specified Bone in the Player's Avatar, or Vector3.Zero (0,0,0)
             if the bone does not exist.
         </summary>
-        <remarks> Note that Avatars may not have all the same bones in the places you expect, so be
-            careful making assumptions about attributes like a player's height, pose etc based on
-            the position of bones.<br /></remarks>
+        <remarks> Warning! This information can be frustrum-culled on remote players and may not be
+            accurate if the local player cannot see the remote player. Note that Avatars may not
+            have all the same bones in the places you expect, so be careful making assumptions about
+            attributes like a player's height, pose etc based on the position of bones.<br /></remarks>
         <param name="tt"> The bone to get the position of. see <see
                 cref="UnityEngine.HumanBodyBones" /> for a list of all bones you can check for. </param>
         <returns>
@@ -687,9 +688,15 @@
             Gets the rotation of the specified Bone in the Player's Avatar, or Quaternion.Identity
             (0,0,0,1) if the bone does not exist.
         </summary>
-        <remarks> Note that Avatars may not have all the same bones in the places you expect, so be
-            careful making assumptions about attributes like a player's height, pose etc based on
-            the rotation of bones.</remarks>
+        <remarks> Warning! This information can be frustrum-culled on remote players and may not be
+            accurate if the local player cannot see the remote player. Note that Avatars may not
+            have all the same bones in the places you expect, so be careful making assumptions about
+            attributes like a player's height, pose etc based on the rotation of bones. Things like
+            wrist rotation, or forward axis's of a hand have no set standard, so for one avatar it
+            may be +X, for another it may be -Z. The only reliable rotation is from <see
+                cref="M:VRC.SDKBase.VRCPlayerApi.GetTrackingData(VRC.SDKBase.VRCPlayerApi.TrackingDataType)"></see>,
+            however this only works on local players, so may require a more complex setup depending
+            on your application.</remarks>
         <param name="tt"> The bone to get the rotation of. see <see
                 cref="UnityEngine.HumanBodyBones" /> for a list of all bones you can check for. </param>
         <returns>
@@ -703,7 +710,9 @@
         <summary>
             Gets a struct called TrackingData, which contains separate Position and Rotation data.
         </summary>
-        <remarks> This is the suggested way to get position and rotation data for a Player's head
+        <remarks> Warning! This information can be frustrum-culled on remote players and may not be
+            accurate if the local player cannot see the remote player. This is the suggested way to
+            get position and rotation data for a Player's head
             and hands. This returns data from the TrackingManager for a Local Player (ie the data
             coming from their headset / trackers) and from the RightHand, LeftHand and Head bones
             for a Remote Player. Origin returns the center of the local VR user's playspace, while
