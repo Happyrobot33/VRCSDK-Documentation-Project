@@ -262,7 +262,7 @@ public class Injector : AssetPostprocessor
             return listNode;
         }
     }
-    private static List<string> s_includesToCheck = new List<string>();
+    private static readonly List<string> IncludesToCheck = new List<string>();
 
     /*
     public static string OnGeneratedSlnSolution(string path, string content)
@@ -312,14 +312,14 @@ public class Injector : AssetPostprocessor
                 //is in packages
                 bool isInPackages = includePath.Contains("Packages");
 
-                if (isDLL && isInPackages && !s_includesToCheck.Contains(includePath))
+                if (isDLL && isInPackages && !IncludesToCheck.Contains(includePath))
                 {
-                    s_includesToCheck.Add(includePath);
+                    IncludesToCheck.Add(includePath);
                 }
             }
         }
 
-        foreach (string includePath in s_includesToCheck)
+        foreach (string includePath in IncludesToCheck)
         {
             //check if we have a folder for the assembly
             string assemblyName = System.IO.Path.GetFileNameWithoutExtension(includePath);
