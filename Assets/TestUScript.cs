@@ -20,15 +20,17 @@ public class TestUScript : UdonSharpBehaviour
         d(Networking.IsClogged);
         d(Networking.IsInstanceOwner);
         d(Networking.IsMaster);
-        d(Networking.IsOwner(gameObject));
-        d(Networking.IsOwner(local, gameObject));
-        d(Networking.GetOwner(gameObject).displayName);
+        Networking.IsOwner(gameObject);
+        Networking.IsOwner(local, gameObject);
+        Networking.GetOwner(gameObject);
         Networking.SetOwner(local, gameObject);
-        d(Networking.GetNetworkDateTime());
-        d(Networking.GetServerTimeInSeconds());
-        d(Networking.GetServerTimeInMilliseconds());
-        d(Networking.SimulationTime(gameObject));
-        d(Networking.SimulationTime(local));
+        Networking.GetNetworkDateTime();
+        Networking.GetServerTimeInSeconds();
+        Networking.GetServerTimeInMilliseconds();
+        Networking.SimulationTime(gameObject);
+        Networking.SimulationTime(local);
+        Networking.IsObjectReady(gameObject);
+        Networking.GetUniqueName(gameObject);
     }
 
     //contains all the player interactions

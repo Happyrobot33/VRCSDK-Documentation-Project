@@ -7,6 +7,14 @@
             of UdonBehaviours.
         </summary>
     </member>
+    <member name="P:VRC.SDKBase.Networking.IsNetworkSettled">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/networking/network-components#networking-properties</docURL>
+        <summary>
+            returns true once all the data in the instance has been deserialized and applied, and
+            it's ready for use.
+        </summary>
+    </member>
     <member name="P:VRC.SDKBase.Networking.IsClogged">
         <docURL>
             https://creators.vrchat.com/worlds/udon/networking/network-components#networking-properties</docURL>
@@ -30,5 +38,23 @@
         <remarks>
             Will be False when in Build &amp; Test and Unity Playmode.
         </remarks>
+    </member>
+    <member name="P:VRC.SDKBase.Networking.IsMaster">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/networking/network-components#networking-properties</docURL>
+        <summary>
+            Tells you whether the local Player is the instance master.
+        </summary>
+        <remarks> This is the player who either created the instance, or the one who inherited
+            Master status when the last Master left.</remarks>
+    </member>
+    <member name="P:VRC.SDKBase.Networking.LocalPlayer">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/networking/network-components#networking-properties</docURL>
+        <summary> returns the <see cref="T:VRC.SDKBase.VRCPlayerApi"></see> object of the local
+            player. </summary>
+        <remarks> Will be null in the editor, unless using a client emulator - use <see
+                cref="M:VRC.SDKBase.VRCPlayerApi.IsValid"></see> to easily branch your logic on
+            this.</remarks>
     </member>
 </members>

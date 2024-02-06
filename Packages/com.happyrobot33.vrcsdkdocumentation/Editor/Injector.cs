@@ -1,10 +1,11 @@
+//#define MINIFY_OUTPUT //comment this line to not minify the xml output
+
 using System;
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 //xml
 using System.Xml;
-using System.IO;
 
 //TODO: Make the VSCode compatibility features optional and controllable in the unity editor preferences section
 
@@ -118,6 +119,8 @@ public class Injector : AssetPostprocessor
             {
                 //get the url
                 string url = docURL.InnerText;
+                //strip any whitespace
+                url = url.Trim();
                 //if it is empty, throw a warning
                 if (url == "")
                 {
@@ -275,6 +278,26 @@ public class Injector : AssetPostprocessor
 
     public static string OnGeneratedCSProject(string path, string content)
     {
+        #if MINIFY_OUTPUT
+        //Setup the xml writer settings to minify, keeping whitespace but removing newlines
+        XmlWriterSettings settings = new()
+        {
+            Indent = false,
+            NewLineChars = "",
+            NewLineHandling = NewLineHandling.Replace,
+            NewLineOnAttributes = false,
+        };
+        #else
+        //Setup the xml writer settings to be indented
+        XmlWriterSettings settings = new()
+        {
+            Indent = true,
+            NewLineChars = "\n",
+            NewLineHandling = NewLineHandling.Replace,
+            NewLineOnAttributes = false,
+        };
+        #endif
+
         //check if the assembly matches ones in the documentation folder in our package
         const string basePackagePath = "Packages/com.happyrobot33.vrcsdkdocumentation";
 
@@ -355,7 +378,10 @@ public class Injector : AssetPostprocessor
                 }
                 //generate the xml into the correct location
                 XmlDocument generatedDoc = newDoc.Generate();
-                generatedDoc.Save(includePath.Replace(".dll", ".xml"));
+
+                XmlWriter writer = XmlWriter.Create(includePath.Replace(".dll", ".xml"), settings);
+                generatedDoc.Save(writer);
+                writer.Close();
             }
         }
 
