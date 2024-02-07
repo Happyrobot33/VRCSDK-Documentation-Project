@@ -11,8 +11,8 @@ namespace Happyrobot33.VRCSDKDocumentationProject
 {
     public class Injector : AssetPostprocessor
     {
-        private static readonly List<string> pathsToCheck = new List<string>();
-        private static readonly List<string> pathsChecked = new List<string>();
+        private static readonly List<string> PathsToCheck = new List<string>();
+        private static readonly List<string> PathsChecked = new List<string>();
 
 
         private static int s_startTick = 0;
@@ -22,9 +22,8 @@ namespace Happyrobot33.VRCSDKDocumentationProject
             //save the start tick
             s_startTick = Environment.TickCount;
             //clear the excludes
-            pathsChecked.Clear();
-            pathsToCheck.Clear();
-            // TODO: process solution content
+            PathsChecked.Clear();
+            PathsToCheck.Clear();
             return content;
         }
 
@@ -91,17 +90,17 @@ namespace Happyrobot33.VRCSDKDocumentationProject
                     //is in packages
                     bool isInPackages = includePath.Contains("Packages");
 
-                    if (isDLL && isInPackages && !pathsToCheck.Contains(includePath) && !pathsChecked.Contains(includePath))
+                    if (isDLL && isInPackages && !PathsToCheck.Contains(includePath) && !PathsChecked.Contains(includePath))
                     {
-                        pathsToCheck.Add(includePath);
+                        PathsToCheck.Add(includePath);
                     }
 
                 }
             }
             //make sure no excludes are in the paths to check
-            pathsToCheck.RemoveAll((string path) => pathsChecked.Contains(path));
+            PathsToCheck.RemoveAll((string path) => PathsChecked.Contains(path));
 
-            foreach (string includePath in pathsToCheck)
+            foreach (string includePath in PathsToCheck)
             {
                 //check if we have a folder for the assembly
                 string assemblyName = System.IO.Path.GetFileNameWithoutExtension(includePath);
@@ -137,7 +136,7 @@ namespace Happyrobot33.VRCSDKDocumentationProject
                         {
                             //Debug.Log("Skipping " + assemblyName);
                             //add to the excludes list
-                            pathsChecked.Add(includePath);
+                            PathsChecked.Add(includePath);
                             continue;
                         }
                         else
