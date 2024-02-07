@@ -6,11 +6,11 @@ using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
+[UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class TestUScript : UdonSharpBehaviour
 {
     void Start()
     {
-
     }
 
     private void NetworkingInteractions()
@@ -27,6 +27,7 @@ public class TestUScript : UdonSharpBehaviour
         Networking.GetNetworkDateTime();
         Networking.GetServerTimeInSeconds();
         Networking.GetServerTimeInMilliseconds();
+        Networking.CalculateServerDeltaTime(0, 0);
         Networking.SimulationTime(gameObject);
         Networking.SimulationTime(local);
         Networking.IsObjectReady(gameObject);
