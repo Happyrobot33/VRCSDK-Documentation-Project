@@ -92,9 +92,9 @@ namespace Happyrobot33.VRCSDKDocumentationProject
 
                     if (isDLL && isInPackages && !PathsToCheck.Contains(includePath) && !PathsChecked.Contains(includePath))
                     {
+                        //Debug.Log("Adding " + includePath);
                         PathsToCheck.Add(includePath);
                     }
-
                 }
             }
             //make sure no excludes are in the paths to check
