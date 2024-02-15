@@ -1,0 +1,1 @@
+Install the package using the [install page](https://www.matthewherber.com/VRCSDK-Documentation-Project/) or [this direct link](vcc://vpm/addRepo?url=https://www.matthewherber.com/VRCSDK-Documentation-Project/index.json)
