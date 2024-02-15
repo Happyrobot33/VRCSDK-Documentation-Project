@@ -41,7 +41,7 @@ namespace Happyrobot33.VRCSDKDocumentationProject
         public XmlDocument Generate()
         {
             //create a new xml doc
-            XmlDocument xmldoc = new();
+            XmlDocument xmldoc = new XmlDocument();
 
             //populate it with the base information
             XmlNode doc = xmldoc.CreateElement("doc");

@@ -33,7 +33,7 @@ namespace Happyrobot33.VRCSDKDocumentationProject
             if (SettingsObject.GetSerializedSettings().FindProperty("m_minifyDocumentation").boolValue)
             {
                 //Setup the xml writer settings to minify, keeping whitespace but removing newlines
-                settings = new()
+                settings = new XmlWriterSettings
                 {
                     Indent = false,
                     NewLineChars = "",
@@ -44,7 +44,7 @@ namespace Happyrobot33.VRCSDKDocumentationProject
             else
             {
                 //Setup the xml writer settings to be indented
-                settings = new()
+                settings = new XmlWriterSettings
                 {
                     Indent = true,
                     NewLineChars = "\n",
@@ -57,7 +57,7 @@ namespace Happyrobot33.VRCSDKDocumentationProject
             const string basePackagePath = "Packages/com.happyrobot33.vrcsdkdocumentation";
 
             //parse the xml
-            XmlDocument xmlDoc = new();
+            XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(content);
 
             //get the include item groups, which are under the Project node
@@ -98,7 +98,7 @@ namespace Happyrobot33.VRCSDKDocumentationProject
                 }
             }
             //make sure no excludes are in the paths to check
-            PathsToCheck.RemoveAll((string path) => PathsChecked.Contains(path));
+            PathsToCheck.RemoveAll((string p) => PathsChecked.Contains(p));
 
             foreach (string includePath in PathsToCheck)
             {
@@ -126,7 +126,7 @@ namespace Happyrobot33.VRCSDKDocumentationProject
                     if (System.IO.File.Exists(xmlPath))
                     {
                         //load the xml to do a quick check on the tick count
-                        XmlDocument xml = new();
+                        XmlDocument xml = new XmlDocument();
                         xml.Load(xmlPath);
                         //check if the tick count matches
                         XmlNode tickNode = xml.SelectSingleNode("doc/tick");
@@ -151,7 +151,7 @@ namespace Happyrobot33.VRCSDKDocumentationProject
                     if (SettingsObject.GetSerializedSettings().FindProperty("m_generateDocumentation").boolValue)
                     {
                         //create a new doc object
-                        Doc newDoc = new(assemblyName, assemblyPath, s_startTick);
+                        Doc newDoc = new Doc(assemblyName, assemblyPath, s_startTick);
 
                         //now loop over the files in the folder, and add them to the doc object
                         string[] files = System.IO.Directory.GetFiles(basePackagePath + "/Editor/Documentation/" + assemblyName, "*.xml");
