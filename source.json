@@ -1,0 +1,13 @@
+{
+    "name":"VRChat SDK Documentation Project",
+    "id":"com.happyrobot33.vrcsdkdocumentation.repo",
+    "url":"https://www.matthewherber.com/VRCSDK-Documentation-Project/index.json",
+    "author":{
+        "name":"Happyrobot33"
+    },
+    "description":"This package provides automatic documentation for the VRChat SDK and UdonSharp.",
+    "bannerUrl":"banner.png",
+    "githubRepos": [
+        "happyrobot33/VRCSDK-Documentation-Project"
+    ]
+}
