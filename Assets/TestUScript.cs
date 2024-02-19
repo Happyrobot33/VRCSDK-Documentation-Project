@@ -5,12 +5,36 @@ using UnityEngine;
 
 using VRC.SDKBase;
 using VRC.Udon;
+using VRC.SDK3.Data;
 
 [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class TestUScript : UdonSharpBehaviour
 {
     void Start()
     {
+    }
+
+    private void DataTokenInteractions()
+    {
+
+    }
+
+    private void VRCJSONInteractions()
+    {
+        const string testjson = "{\"key\":\"value\"}";
+        bool success = false;
+        success = VRCJson.TryDeserializeFromJson(testjson, out DataToken result); //string input
+        success = VRCJson.TrySerializeToJson(result, JsonExportType.Beautify, out DataToken json); //string output
+    }
+
+    private void DataDictionaryInteractions()
+    {
+
+    }
+
+    private void DataListInteractions()
+    {
+
     }
 
     private void NetworkingInteractions()

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<members>
+    <member
+        name="M:VRC.SDK3.Data.VRCJson.TryDeserializeFromJson(System.String,VRC.SDK3.Data.DataToken@)">
+        <docURL>https://creators.vrchat.com/worlds/udon/data-containers/vrcjson/#json-functions</docURL>
+        <summary> Creates a DataList or DataDictionary from JSON string input. If successful, this
+            returns true and the result token will be either a DataDictionary or DataList. If not
+            successful, this returns false and puts an error explaining what the issue was in the
+            result token.
+        </summary>
+        <param name="source">
+            The JSON string to convert to json.
+        </param>
+        <param name="result">
+            The DataToken to populate with the deserialized data. Will be an error data token type
+            when there is a failure.
+        </param>
+        <returns>
+            True if the JSON was successfully deserialized, false otherwise.
+        </returns>
+    </member>
+    <member
+        name="M:VRC.SDK3.Data.VRCJson.TrySerializeToJson(VRC.SDK3.Data.DataToken,VRC.SDK3.Data.JsonExportType,VRC.SDK3.Data.DataToken@)">
+        <docURL>https://creators.vrchat.com/worlds/udon/data-containers/vrcjson/#json-functions</docURL>
+        <summary> Attempts to convert a DataDictionary or DataList into JSON string output. If
+            successful, this returns true and the result token will be a string with the final Json.
+            If not successful, this returns false and puts an error explaining what the issue was in
+            the result token.
+        </summary>
+        <param name="input">
+            The DataToken to convert to JSON.
+        </param>
+        <param name="jsonExportType">
+            The format to export the JSON in.
+        </param>
+        <param name="result">
+            The DataToken to populate with the serialized data. Will be an error data token type when
+            there is a failure. Convert this to a string to get the final JSON.
+        </param>
+        <returns>
+            True if the JSON was successfully converted, false otherwise.
+        </returns>
+    </member>
+</members>
