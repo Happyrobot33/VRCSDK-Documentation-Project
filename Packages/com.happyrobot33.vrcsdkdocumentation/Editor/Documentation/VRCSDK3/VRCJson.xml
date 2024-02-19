@@ -7,6 +7,9 @@
             returns true and the result token will be either a DataDictionary or DataList. If not
             successful, this returns false and puts an error explaining what the issue was in the
             result token.
+            <br />
+            <br />
+            TODO: Add more information about the JSON format that is expected, as it has some quirks mentioned on the documentation page.
         </summary>
         <param name="source">
             The JSON string to convert to json.
@@ -26,6 +29,9 @@
             successful, this returns true and the result token will be a string with the final Json.
             If not successful, this returns false and puts an error explaining what the issue was in
             the result token.
+            <br />
+            <br />
+            TODO: Add more information about the JSON format that is expected, as it has some quirks mentioned on the documentation page.
         </summary>
         <param name="input">
             The DataToken to convert to JSON.
