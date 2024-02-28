@@ -6,6 +6,7 @@ using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 using VRC.SDK3.Data;
+using System;
 
 [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class TestUScript : UdonSharpBehaviour
@@ -16,7 +17,44 @@ public class TestUScript : UdonSharpBehaviour
 
     private void DataTokenInteractions()
     {
+        DataToken token = new DataToken(true);
+        token = new DataToken((SByte)1);
+        token = new DataToken((Byte)1);
+        token = new DataToken((short)1);
+        token = new DataToken((ushort)1);
+        token = new DataToken((int)1);
+        token = new DataToken((uint)1);
+        token = new DataToken((long)1);
+        token = new DataToken((ulong)1);
+        token = new DataToken((float)1);
+        token = new DataToken((double)1);
+        token = new DataToken("1");
+        token = new DataToken(new DataToken[1]);
 
+        d(token.TokenType);
+        d(token.IsNumber);
+        d(token.IsNull);
+        d(token.Boolean);
+        d(token.Number);
+        d(token.SByte);
+        d(token.Byte);
+        d(token.Short);
+        d(token.UShort);
+        d(token.Int);
+        d(token.UInt);
+        d(token.Long);
+        d(token.ULong);
+        d(token.Float);
+        d(token.Double);
+        d(token.String);
+        d(token.DataDictionary);
+        d(token.DataList);
+        d(token.Reference);
+        d(token.Error);
+
+        token.ToString();
+        token.GetHashCode();
+        token.CompareTo(token);
     }
 
     private void VRCJSONInteractions()
