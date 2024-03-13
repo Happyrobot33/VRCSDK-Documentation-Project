@@ -287,6 +287,13 @@ public partial class Program
                 IEntity member = field;
                 if (member.Accessibility == Accessibility.Public)
                 {
+                    //get the field type
+                    IType symbol = field.ReturnType;
+                    //skip if a delegate
+                    if (symbol.Kind == TypeKind.Delegate)
+                    {
+                        continue;
+                    }
                     publicFields.Add(field);
                 }
             }
