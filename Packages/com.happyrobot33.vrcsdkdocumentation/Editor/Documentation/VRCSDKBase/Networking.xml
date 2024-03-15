@@ -162,6 +162,8 @@
         <summary>
             Returns a unique name for a given GameObject.
         </summary>
+        <remarks> Uses <code>obj.GetInstanceID().ToString();</code> in clientsim, unsure if it's the
+            same in the actual client </remarks>
         <param name="obj">
             The GameObject to get the unique name of.
         </param>
