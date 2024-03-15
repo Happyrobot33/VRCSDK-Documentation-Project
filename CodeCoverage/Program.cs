@@ -97,7 +97,7 @@ public partial class Program
         assemblys.Add(basePath + @"\Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase-Editor.dll");
         assemblys.Add(basePath + @"\Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3.dll");
         assemblys.Add(basePath + @"\Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3-Editor.dll");
-        //TODO: Add in VRC.Udon.common and VRC.Udon.Editor
+        assemblys.Add(basePath + @"\Packages\com.vrchat.worlds\Runtime\Udon\External\VRC.Udon.Common.dll");
 
         List<assemblyPublicData> assemblyData = new List<assemblyPublicData>();
         foreach (string testAssemblyPath in assemblys)
