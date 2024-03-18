@@ -8,7 +8,6 @@ using System.Xml;
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.CSharp;
 using ICSharpCode.Decompiler.Metadata;
-using ICSharpCode.Decompiler.CSharp.Syntax;
 using ICSharpCode.Decompiler.TypeSystem;
 
 public partial class Program
@@ -24,9 +23,17 @@ public partial class Program
     static List<string> propertyMembers = new List<string>();
     static List<string> methodMembers = new List<string>();
     static List<string> eventMembers = new List<string>();
+
+    /// <summary>
+    /// A list of namespaces that should be ignored. a * can be used as a wildcard
+    /// </summary>
+    static List<string> namespaceBlacklist = new List<string>();
     
     public static void Main(string[] args)
     {
+        //populate the namespace blacklist
+        namespaceBlacklist.Add("VRC.SDKBase.Validation.*");
+
         #region XML Handling
         //load ALL XML files recursively at once and merge them into a single XML
         string[] xmlFiles = Directory.GetFiles(XMLPath, "*.xml", SearchOption.AllDirectories);
@@ -99,19 +106,19 @@ public partial class Program
         assemblys.Add(basePath + @"\Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3-Editor.dll");
         assemblys.Add(basePath + @"\Packages\com.vrchat.worlds\Runtime\Udon\External\VRC.Udon.Common.dll");
 
-        List<assemblyPublicData> assemblyData = new List<assemblyPublicData>();
+        //make the dictionary to store the public data
+        List<namespaceAssemblyData> assemblyData = new List<namespaceAssemblyData>();
         foreach (string testAssemblyPath in assemblys)
         {
-            var data = GetAssemblyPublicData(testAssemblyPath);
-            assemblyData.Add(data);
+            PopulateAssemblyData(testAssemblyPath, ref assemblyData);
         }
 
-        Console.WriteLine("Loaded " + assemblyData.Count + " assemblies");
+        Console.WriteLine("Loaded " + assemblyData.Count + " namespaces");
 
-        List<coverageData> coverageData = new List<coverageData>();
+        List<namespaceCoverageData> coverageData = new List<namespaceCoverageData>();
 
         //compare the assembly data to the XML data
-        foreach (assemblyPublicData data in assemblyData)
+        foreach (namespaceAssemblyData data in assemblyData)
         {
             //merge all of the lists into a single INamedElement list
             List<INamedElement> allElements = new List<INamedElement>();
@@ -183,58 +190,90 @@ public partial class Program
             }
 
             //add the coverage data to the list
-            coverageData.Add(new coverageData(data, typeCount, fieldCount, propertyCount, methodCount, eventCount));
+            coverageData.Add(new namespaceCoverageData(data, data.namespaceName, typeCount, fieldCount, propertyCount, methodCount, eventCount));
         }
 
         //tally up total coverage data and print it
-        foreach (coverageData data in coverageData)
+        foreach (namespaceCoverageData data in coverageData)
         {
             Console.WriteLine(data);
         }
     }
 
-    private class coverageData
+    private class namespaceCoverageData
     {
-        public assemblyPublicData assemblyData;
+        public namespaceAssemblyData publicData;
+        public string namespaceName;
         public int typeCount;
         public int fieldCount;
         public int propertyCount;
         public int methodCount;
         public int eventCount;
 
-        public coverageData(assemblyPublicData assemblyData, int typeCount, int fieldCount, int propertyCount, int methodCount, int eventCount)
+        public namespaceCoverageData(namespaceAssemblyData publicData, string namespaceName, int typeCount, int fieldCount, int propertyCount, int methodCount, int eventCount)
         {
-            this.assemblyData = assemblyData;
+            this.publicData = publicData;
+            this.namespaceName = namespaceName;
             this.typeCount = typeCount;
             this.fieldCount = fieldCount;
             this.propertyCount = propertyCount;
             this.methodCount = methodCount;
             this.eventCount = eventCount;
+
+            //if namespace is empty, then just represent it with "root"
+            if (namespaceName == "")
+            {
+                this.namespaceName = "<root>";
+            }
+        }
+
+        //make a comparer to a namespacePublicData object
+        public string CompareTo(namespaceAssemblyData data)
+        {
+            //only compare if there is any reason to, for example if 0/0, then just dont compare
+            string result = "";
+            result += "Namespace: " + namespaceName + "\n";
+            if (data.publicTypes.Count > 0)
+            {
+                result += "   Public Types: " + typeCount + "/" + data.publicTypes.Count + " (" + (typeCount / (float)data.publicTypes.Count * 100).ToString("0.00") + "%)\n";
+            }
+            if (data.publicFields.Count > 0)
+            {
+                result += "   Public Fields: " + fieldCount + "/" + data.publicFields.Count + " (" + (fieldCount / (float)data.publicFields.Count * 100).ToString("0.00") + "%)\n";
+            }
+            if (data.publicProperties.Count > 0)
+            {
+                result += "   Public Properties: " + propertyCount + "/" + data.publicProperties.Count + " (" + (propertyCount / (float)data.publicProperties.Count * 100).ToString("0.00") + "%)\n";
+            }
+            if (data.publicMethods.Count > 0)
+            {
+                result += "   Public Methods: " + methodCount + "/" + data.publicMethods.Count + " (" + (methodCount / (float)data.publicMethods.Count * 100).ToString("0.00") + "%)\n";
+            }
+            if (data.publicEvents.Count > 0)
+            {
+                result += "   Public Events: " + eventCount + "/" + data.publicEvents.Count + " (" + (eventCount / (float)data.publicEvents.Count * 100).ToString("0.00") + "%)\n";
+            }
+            return result;
         }
 
         public override string ToString()
         {
-            return "Assembly: " + assemblyData.assemblyName + "\n" +
-                "   Type Count: " + typeCount + "/" + assemblyData.publicTypes.Count + "(" + (typeCount / (float)assemblyData.publicTypes.Count * 100) + "%)\n" +
-                "   Field Count: " + fieldCount + "/" + assemblyData.publicFields.Count + "(" + (fieldCount / (float)assemblyData.publicFields.Count * 100) + "%)\n" +
-                "   Property Count: " + propertyCount + "/" + assemblyData.publicProperties.Count + "(" + (propertyCount / (float)assemblyData.publicProperties.Count * 100) + "%)\n" +
-                "   Method Count: " + methodCount + "/" + assemblyData.publicMethods.Count + "(" + (methodCount / (float)assemblyData.publicMethods.Count * 100) + "%)\n" +
-                "   Event Count: " + eventCount + "/" + assemblyData.publicEvents.Count + "(" + (eventCount / (float)assemblyData.publicEvents.Count * 100) + "%)";
+            return CompareTo(publicData);
         }
     }
 
-    private class assemblyPublicData
+    private class namespaceAssemblyData
     {
-        public string assemblyName;
+        public string namespaceName;
         public List<IField> publicFields;
         public List<IProperty> publicProperties;
         public List<IEvent> publicEvents;
         public List<ITypeDefinition> publicTypes;
         public List<IMethod> publicMethods;
 
-        public assemblyPublicData(string assemblyName, List<IField> publicFields, List<IProperty> publicProperties, List<IEvent> publicEvents, List<ITypeDefinition> publicTypes, List<IMethod> publicMethods)
+        public namespaceAssemblyData(string namespaceName, List<IField> publicFields, List<IProperty> publicProperties, List<IEvent> publicEvents, List<ITypeDefinition> publicTypes, List<IMethod> publicMethods)
         {
-            this.assemblyName = assemblyName;
+            this.namespaceName = namespaceName;
             this.publicFields = publicFields;
             this.publicProperties = publicProperties;
             this.publicEvents = publicEvents;
@@ -244,7 +283,7 @@ public partial class Program
 
         public override string ToString()
         {
-            return "Assembly: " + assemblyName + "\n" +
+            return "Namespace: " + namespaceName + "\n" +
                 "   Public Types: " + publicTypes.Count + "\n" +
                 "   Public Fields: " + publicFields.Count + "\n" +
                 "   Public Properties: " + publicProperties.Count + "\n" +
@@ -253,7 +292,7 @@ public partial class Program
         }
     }
 
-    private static assemblyPublicData GetAssemblyPublicData(string testAssemblyPath)
+    private static void PopulateAssemblyData(string testAssemblyPath, ref List<namespaceAssemblyData> dict)
     {
         var resolver = new UniversalAssemblyResolver(testAssemblyPath, false, testAssemblyPath);
         resolver.AddSearchDirectory(Path.GetDirectoryName(testAssemblyPath));
@@ -263,88 +302,52 @@ public partial class Program
 
         //get all public methods
         var typeDefs = decompiler.TypeSystem.MainModule.TypeDefinitions;
-        //tally up all the public methods
-        List<IMethod> publicMethods = new List<IMethod>();
+
         foreach (var type in typeDefs)
         {
-            foreach (IMethod method in type.Methods)
+            //the type must be public
+            if (type.Accessibility != Accessibility.Public)
             {
-                //get the member
-                IEntity member = method;
-                if (member.Accessibility == Accessibility.Public)
+                continue;
+            }
+            //the type must not be a delegate
+            if (type.Kind == TypeKind.Delegate)
+            {
+                continue;
+            }
+
+            string namespaceName = type.Namespace;
+
+            //check if the namespace is blacklisted
+            bool blacklisted = false;
+            foreach (string blacklist in namespaceBlacklist)
+            {
+                //replace * and .* with nothing
+                if (namespaceName.Replace(".*", "").StartsWith(blacklist.Replace(".*", "")))
                 {
-                    publicMethods.Add(method);
+                    blacklisted = true;
+                    break;
                 }
             }
-        }
-
-        //tally up all the public fields
-        List<IField> publicFields = new List<IField>();
-        foreach (var type in typeDefs)
-        {
-            foreach (IField field in type.Fields)
+            if (blacklisted)
             {
-                //get the member
-                IEntity member = field;
-                if (member.Accessibility == Accessibility.Public)
-                {
-                    //get the field type
-                    IType symbol = field.ReturnType;
-                    //skip if a delegate
-                    if (symbol.Kind == TypeKind.Delegate)
-                    {
-                        continue;
-                    }
-                    publicFields.Add(field);
-                }
+                continue;
             }
-        }
 
-        //tally up all the public properties
-        List<IProperty> publicProperties = new List<IProperty>();
-        foreach (var type in typeDefs)
-        {
-            foreach (IProperty property in type.Properties)
+            if (!dict.Exists(x => x.namespaceName == namespaceName))
             {
-                //get the member
-                IEntity member = property;
-                if (member.Accessibility == Accessibility.Public)
-                {
-                    publicProperties.Add(property);
-                }
+                dict.Add(new namespaceAssemblyData(namespaceName, new List<IField>(), new List<IProperty>(), new List<IEvent>(), new List<ITypeDefinition>(), new List<IMethod>()));
             }
-        }
 
-        //tally up all the public events
-        List<IEvent> publicEvents = new List<IEvent>();
-        foreach (var type in typeDefs)
-        {
-            foreach (IEvent ev in type.Events)
-            {
-                //get the member
-                IEntity member = ev;
-                if (member.Accessibility == Accessibility.Public)
-                {
-                    publicEvents.Add(ev);
-                }
-            }
-        }
+            //find the correct entry for this namespace
+            namespaceAssemblyData entry = dict.Find(x => x.namespaceName == namespaceName);
 
-        //tally up all type definitions
-        List<ITypeDefinition> publicTypes = new List<ITypeDefinition>();
-        foreach (var type in typeDefs)
-        {
-            //get the member
-            IEntity member = type;
-            if (member.Accessibility == Accessibility.Public)
-            {
-                publicTypes.Add(type);
-            }
+            entry.publicMethods.AddRange(type.Methods.Where(x => x.Accessibility == Accessibility.Public));
+            entry.publicFields.AddRange(type.Fields.Where(x => x.Accessibility == Accessibility.Public));
+            entry.publicProperties.AddRange(type.Properties.Where(x => x.Accessibility == Accessibility.Public));
+            entry.publicEvents.AddRange(type.Events.Where(x => x.Accessibility == Accessibility.Public));
+            entry.publicTypes.Add(type);
         }
-
-        //make the object
-        assemblyPublicData data = new assemblyPublicData(Path.GetFileName(testAssemblyPath), publicFields, publicProperties, publicEvents, publicTypes, publicMethods);
-        return data;
     }
 
     private static string DetermineMemberID(XmlNode member)

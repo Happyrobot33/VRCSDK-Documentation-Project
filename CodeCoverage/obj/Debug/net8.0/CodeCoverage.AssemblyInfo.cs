@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CodeCoverage")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+822398056808195f99ae7a59ccc115e17811e0da")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+57476654d6d0dbbd63d14ef16747f67f68f0f4bb")]
 [assembly: System.Reflection.AssemblyProductAttribute("CodeCoverage")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CodeCoverage")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
