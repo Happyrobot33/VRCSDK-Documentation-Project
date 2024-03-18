@@ -548,10 +548,6 @@
       <HintPath>Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="SDKBase-Legacy">
-      <HintPath>Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\SDKBase-Legacy.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="VRC.Udon.EditorBindings">
       <HintPath>Packages\com.vrchat.worlds\Editor\Udon\External\VRC.Udon.EditorBindings.dll</HintPath>
       <Private>False</Private>
@@ -570,6 +566,10 @@
     </Reference>
     <Reference Include="0Harmony">
       <HintPath>Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\Harmony\0Harmony.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SDKBase-Legacy">
+      <HintPath>Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\SDKBase-Legacy.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="VRC.Udon.Compiler">

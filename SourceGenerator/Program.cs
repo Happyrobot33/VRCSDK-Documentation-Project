@@ -12,11 +12,17 @@ using ICSharpCode.Decompiler.TypeSystem;
 
 public partial class Program
 {
-    const string basePath = @"E:\Storage\Personal\Coding\VRChat\VRCSDK-Documentation-Project";
+    static string basePath = @"E:\Storage\Personal\Coding\VRChat\VRCSDK-Documentation-Project";
     static List<string> assemblys = new List<string>();
     
     public static void Main(string[] args)
     {
+        //try to make a basepath
+        string workingDirectory = Environment.CurrentDirectory;
+        string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
+        Console.WriteLine("Working Directory: " + projectDirectory);
+        basePath = projectDirectory;
+
         //load assemblys
         assemblys.Add(basePath + @"\Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase.dll");
         assemblys.Add(basePath + @"\Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase-Editor.dll");

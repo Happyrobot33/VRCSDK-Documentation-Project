@@ -30,7 +30,7 @@
             <cannyPost
                 url="https://feedback.vrchat.com/bug-reports/p/networkingisinstanceowner-true-for-all-users">This
                 property is currently broken, and will always return true! use <see
-                    cref="P:VRC.SDKBase.VRCPlayerApi.isInstanceOwner" /> instead.</cannyPost>
+                    cref="VRC.SDKBase.VRCPlayerApi.isInstanceOwner" /> instead.</cannyPost>
         </cannyPosts>
         <summary>
             if the local Player is the one who created the instance.
@@ -51,10 +51,10 @@
     <member name="P:VRC.SDKBase.Networking.LocalPlayer">
         <docURL>
             https://creators.vrchat.com/worlds/udon/networking/network-components#networking-properties</docURL>
-        <summary> returns the <see cref="T:VRC.SDKBase.VRCPlayerApi"></see> object of the local
+        <summary> returns the <see cref="VRC.SDKBase.VRCPlayerApi"></see> object of the local
             player. </summary>
         <remarks> Will be null in the editor, unless using a client emulator - use <see
-                cref="M:VRC.SDKBase.VRCPlayerApi.IsValid"></see> to easily branch your logic on
+                cref="VRC.SDKBase.VRCPlayerApi.IsValid"></see> to easily branch your logic on
             this.</remarks>
     </member>
     <member name="M:VRC.SDKBase.Networking.IsOwner(UnityEngine.GameObject)">
@@ -87,12 +87,12 @@
     </member>
     <member name="M:VRC.SDKBase.Networking.GetOwner(UnityEngine.GameObject)">
         <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#methods-4</docURL>
-        <summary> Returns the <see cref="T:VRC.SDKBase.VRCPlayerApi"></see> object of the owner of a
+        <summary> Returns the <see cref="VRC.SDKBase.VRCPlayerApi"></see> object of the owner of a
             given GameObject. </summary>
         <param name="obj">
             The GameObject to check ownership of.
         </param>
-        <returns> The <see cref="T:VRC.SDKBase.VRCPlayerApi"></see> object of the owner of the
+        <returns> The <see cref="VRC.SDKBase.VRCPlayerApi"></see> object of the owner of the
             GameObject. </returns>
     </member>
     <member
@@ -110,8 +110,8 @@
     </member>
     <member name="M:VRC.SDKBase.Networking.GetNetworkDateTime">
         <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#methods-4</docURL>
-        <summary> Returns the current network time as a <see cref="T:System.DateTime"></see> object. </summary>
-        <returns> The current network time as a <see cref="T:System.DateTime"></see> object. </returns>
+        <summary> Returns the current network time as a <see cref="System.DateTime"></see> object. </summary>
+        <returns> The current network time as a <see cref="System.DateTime"></see> object. </returns>
     </member>
     <member name="M:VRC.SDKBase.Networking.GetServerTimeInSeconds">
         <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#methods-4</docURL>
@@ -134,7 +134,7 @@
     <member name="M:VRC.SDKBase.Networking.CalculateServerDeltaTime(System.Double,System.Double)">
         <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#methods-4</docURL>
         <summary> Calculates the difference between two server time stamps as returned by <see
-                cref="M:VRC.SDKBase.Networking.GetServerTimeInSeconds"></see>. </summary>
+                cref="VRC.SDKBase.Networking.GetServerTimeInSeconds"></see>. </summary>
         <param name="timeInSeconds">
             The first server time stamp.
         </param>
@@ -168,7 +168,7 @@
             The GameObject to get the unique name of.
         </param>
         <returns> A unique name for the GameObject. This will be a integer (in string form) that is
-            unique to that object. This is NOT the same as <see cref="M:string.GetHashCode"></see>
+            unique to that object. This is NOT the same as <see cref="string.GetHashCode"></see>
             on the name of the object. </returns>
     </member>
     <member name="M:VRC.SDKBase.Networking.SimulationTime(UnityEngine.GameObject)">
@@ -197,7 +197,7 @@
             The GameObject to get the simulation time of.
         </param>
         <returns> The current simulation time of the object. This MAY be <see
-                cref="P:UnityEngine.Time.time"></see>
+                cref="UnityEngine.Time.time"></see>
         </returns>
     </member>
     <member name="M:VRC.SDKBase.Networking.SimulationTime(VRC.SDKBase.VRCPlayerApi)">
@@ -226,7 +226,7 @@
             The player to get the simulation time of.
         </param>
         <returns> The current simulation time of the object. This MAY be <see
-                cref="P:UnityEngine.Time.time"></see>
+                cref="UnityEngine.Time.time"></see>
         </returns>
     </member>
     <member name="T:VRC.SDKBase.Networking.SyncType">

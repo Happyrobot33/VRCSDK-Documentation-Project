@@ -38,7 +38,7 @@ namespace Happyrobot33.VRCSDKDocumentationProject
                     Indent = false,
                     NewLineChars = "",
                     NewLineHandling = NewLineHandling.Replace,
-                    NewLineOnAttributes = false,
+                    NewLineOnAttributes = false
                 };
             }
             else
@@ -162,6 +162,7 @@ namespace Happyrobot33.VRCSDKDocumentationProject
                         }
                         //generate the xml into the correct location
                         XmlDocument generatedDoc = newDoc.Generate();
+                        generatedDoc.PreserveWhitespace = false;
 
                         XmlWriter writer = XmlWriter.Create(xmlPath, settings);
                         generatedDoc.Save(writer);

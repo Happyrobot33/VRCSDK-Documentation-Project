@@ -76,7 +76,7 @@
         </summary>
         <param name="hand"> The hand to check for a pickup. <see
                 cref="T:VRC.SDKBase.VRC_Pickup.PickupHand" />. Any is not supported. </param>
-        <returns> The <see cref="T:VRC.SDKBase.VRC_Pickup" /> object the player is holding in the
+        <returns> The <see cref="VRC.SDKBase.VRC_Pickup" /> object the player is holding in the
             specified hand. Returns null if no VRCPickup is found. </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.IsOwner(UnityEngine.GameObject)">
@@ -108,7 +108,7 @@
         </summary>
         <remarks> The feeling can vary quite a bit between controllers. <br /> All 3 parameters MUST
             be positive. <br /></remarks>
-        <param name="hand"> The hand to vibrate. <see cref="T:VRC.SDKBase.VRC_Pickup.PickupHand" />
+        <param name="hand"> The hand to vibrate. <see cref="VRC.SDKBase.VRC_Pickup.PickupHand" />
             . </param>
         <param name="duration">
             The duration of the vibration in seconds.
@@ -139,23 +139,23 @@
         </summary>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.CombatGetDestructible">
-        <inheritdoc cref="M:VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
+        <inheritdoc cref="VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.CombatSetCurrentHitpoints(System.Single)">
-        <inheritdoc cref="M:VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
+        <inheritdoc cref="VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.CombatSetDamageGraphic(UnityEngine.GameObject)">
-        <inheritdoc cref="M:VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
+        <inheritdoc cref="VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.CombatSetMaxHitpoints(System.Single)">
-        <inheritdoc cref="M:VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
+        <inheritdoc cref="VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
     </member>
     <member
         name="M:VRC.SDKBase.VRCPlayerApi.CombatSetRespawn(System.Boolean,System.Single,UnityEngine.Transform)">
-        <inheritdoc cref="M:VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
+        <inheritdoc cref="VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.CombatSetup">
-        <inheritdoc cref="M:VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
+        <inheritdoc cref="VRC.SDKBase.VRCPlayerApi.CombatGetCurrentHitpoints" />
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetCurrentLanguage">
         <docURL>https://creators.vrchat.com/worlds/udon/players/#getcurrentlanguage</docURL>
@@ -226,7 +226,7 @@
             Get the cached PlayerId, calls GetPlayerId if it hasn't been cached yet.
         </summary>
         <remarks> Currently, this seems to behave identically to <see
-                cref="M:VRC.SDKBase.VRCPlayerApi.GetPlayerId(VRC.SDKBase.VRCPlayerApi)" />.</remarks>
+                cref="VRC.SDKBase.VRCPlayerApi.GetPlayerId(VRC.SDKBase.VRCPlayerApi)" />.</remarks>
         <value>
             The Network Id of the player. Always increments, even if the player leaves and
             rejoins.
@@ -405,7 +405,7 @@
             be used carefully, and is mainly for distant audio sources that need to sound "large" as
             you move past them. Keep this at zero unless you know what you're doing. The value for
             Volumetric Radius should always be lower than <see
-                cref="M:VRC.SDKBase.VRCPlayerApi.SetAvatarAudioFarRadius(System.Single)" />.</remarks>
+                cref="VRC.SDKBase.VRCPlayerApi.SetAvatarAudioFarRadius(System.Single)" />.</remarks>
         <param name="distance"> in Meters, Range 0 - <see
                 href="https://learn.microsoft.com/en-us/dotnet/api/system.single.maxvalue?view=net-8.0">
             Single.MaxValue</see>. Default is 0. </param>
@@ -694,7 +694,7 @@
             attributes like a player's height, pose etc based on the rotation of bones. Things like
             wrist rotation, or forward axis's of a hand have no set standard, so for one avatar it
             may be +X, for another it may be -Z. The only reliable rotation is from <see
-                cref="M:VRC.SDKBase.VRCPlayerApi.GetTrackingData(VRC.SDKBase.VRCPlayerApi.TrackingDataType)"></see>,
+                cref="VRC.SDKBase.VRCPlayerApi.GetTrackingData(VRC.SDKBase.VRCPlayerApi.TrackingDataType)"></see>,
             however this only works on local players, so may require a more complex setup depending
             on your application.</remarks>
         <param name="tt"> The bone to get the rotation of. see <see

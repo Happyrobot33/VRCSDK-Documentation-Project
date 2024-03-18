@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_minifyDocumentation: 0
   m_generateDocumentation: 1
-  m_embedParamsInSummary: 1
+  m_embedParamsInSummary: 0
   m_warnOnCannys: 1

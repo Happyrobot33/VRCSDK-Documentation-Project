@@ -95,10 +95,10 @@
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Dependencies\Managed\System.Collections.Immutable.dll" />
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\VRC.SDKBase.asmdef" />
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Sample Assets\Shaders\Mobile\VRChat-Mobile-SupersampledUnlit.shader" />
+    <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase.xml" />
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Sample Assets\Shaders\Mobile\VRChat-Mobile-Particle-Multiply.shader" />
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRC.Utility.dll" />
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\license.txt" />
-    <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\SDKBase-Legacy.dll" />
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Sample Assets\Shaders\Video-RealtimeEmissiveGamma.shader" />
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Sample Assets\Shaders\Mobile\VRChat-Mobile-BumpedSpecular.shader" />
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Sample Assets\Shaders\Mobile\VRChat-Mobile-BumpedDiffuse.shader" />
@@ -109,12 +109,12 @@
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Dependencies\VRChat\Resources\awsconfig.xml" />
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Sample Assets\Shaders\VRChat-Sprites-Diffuse.shader" />
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Sample Assets\Shaders\Mobile\VRChat-Mobile-StandardLite.shader" />
+    <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\SDKBase-Legacy.dll" />
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Sample Assets\Shaders\Mobile\VRChat-Mobile-Particle-Alpha.shader" />
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Dependencies\Managed\System.Runtime.CompilerServices.Unsafe.dll" />
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Dependencies\Managed\Collections.Pooled.dll" />
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase.dll" />
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\version.txt" />
-    <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase.xml" />
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase-Editor.dll" />
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Sample Assets\Shaders\Mobile\VRChat-Mobile-Diffuse.shader" />
     <None Include="Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRC.Dynamics.dll" />
@@ -544,10 +544,6 @@
       <HintPath>Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="SDKBase-Legacy">
-      <HintPath>Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\SDKBase-Legacy.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="VRC.Udon.EditorBindings">
       <HintPath>Packages\com.vrchat.worlds\Editor\Udon\External\VRC.Udon.EditorBindings.dll</HintPath>
       <Private>False</Private>
@@ -566,6 +562,10 @@
     </Reference>
     <Reference Include="0Harmony">
       <HintPath>Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\Harmony\0Harmony.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SDKBase-Legacy">
+      <HintPath>Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\SDKBase-Legacy.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="VRC.Udon.Compiler">
