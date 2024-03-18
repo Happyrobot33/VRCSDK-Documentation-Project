@@ -12,11 +12,11 @@ using ICSharpCode.Decompiler.TypeSystem;
 
 public partial class Program
 {
-    const string basePath = @"E:\Storage\Personal\Coding\VRChat\VRCSDK-Documentation-Project";
+    static string basePath = @"E:\Storage\Personal\Coding\VRChat\VRCSDK-Documentation-Project";
     static List<string> assemblys = new List<string>();
     //static string testAssemblyPath = basePath + @"\Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase.dll";
 
-    static string XMLPath = basePath + @"\Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation";
+    static string XMLPath = @"\Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation";
     
     static List<string> typeMembers = new List<string>();
     static List<string> fieldMembers = new List<string>();
@@ -31,6 +31,13 @@ public partial class Program
     
     public static void Main(string[] args)
     {
+        //try to make a basepath
+        string workingDirectory = Environment.CurrentDirectory;
+        string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
+        Console.WriteLine("Working Directory: " + projectDirectory);
+        basePath = projectDirectory;
+        XMLPath = basePath + XMLPath;
+
         //populate the namespace blacklist
         namespaceBlacklist.Add("VRC.SDKBase.Validation.*");
 
