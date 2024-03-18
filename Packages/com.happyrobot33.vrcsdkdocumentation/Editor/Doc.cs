@@ -281,6 +281,11 @@ namespace Happyrobot33.VRCSDKDocumentationProject
                 }
             }
 
+            //clean up summary, by finding all new lines, and making the subsequent spaces into a single space
+            //TODO: Implement a better version of this since its messing with doxygen
+            //summary.InnerXml = System.Text.RegularExpressions.Regex.Replace(summary.InnerXml, @"\n\s+", "\n");
+            //remarks.InnerXml = System.Text.RegularExpressions.Regex.Replace(remarks.InnerXml, @"\n\s+", "\n");
+
             return memberNode;
         }
 

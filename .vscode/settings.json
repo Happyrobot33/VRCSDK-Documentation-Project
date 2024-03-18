@@ -51,6 +51,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "CodeCoverage.sln",
+    "dotnet.defaultSolution": "VRCSDK-Documentation-Project.sln",
     "cmake.configureOnOpen": false
 }
