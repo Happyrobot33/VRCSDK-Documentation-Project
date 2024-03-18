@@ -129,68 +129,40 @@ public partial class Program
             allElements.AddRange(data.publicTypes);
 
             //loop through each element
-            int fieldCount = 0;
-            int propertyCount = 0;
-            int methodCount = 0;
-            int eventCount = 0;
-            int typeCount = 0;
+            List<string> fields = new List<string>();
+            List<string> propertys = new List<string>();
+            List<string> methods = new List<string>();
+            List<string> events = new List<string>();
+            List<string> types = new List<string>();
             foreach (INamedElement element in allElements)
             {
-                //get the named element as a member
-                IMethod member = element as IMethod;
-                IParameterizedMember parameterizedMember = member as IParameterizedMember;
-                List<string> parameterNames = new List<string>();
-                if (parameterizedMember != null)
-                {
-                    IReadOnlyList<IParameter> parameters = parameterizedMember.Parameters;
-                    foreach (IParameter parameter in parameters)
-                    {
-                        IVariable variable = parameter as IVariable;
-                        parameterNames.Add(variable.Type.FullName);
-                    }
-                }
-
-                //assemble a full name, which looks something like "M:VRC.SDKBase.VRCPlayerApi.PlayHapticEventInHand(VRC.SDKBase.VRC_Pickup.PickupHand,System.Single,System.Single,System.Single)"
-                string fullName = element.FullName;
-                string searchString = fullName;
-                if (parameterNames.Count > 0)
-                {
-                    searchString += "(";
-                    foreach (string parameter in parameterNames)
-                    {
-                        //swap & to @
-                        string newparameter = parameter.Replace("&", "@");
-                        searchString += newparameter + ",";
-                    }
-                    searchString = searchString.TrimEnd(',');
-                    searchString += ")";
-                }
+                string searchString = GetSearchString(element);
 
                 //find if it is in the XML by doing *:FullName
                 if (typeMembers.Contains("T:" + searchString))
                 {
-                    typeCount++;
+                    types.Add(element.Name);
                 }
                 else if (fieldMembers.Contains("F:" + searchString))
                 {
-                    fieldCount++;
+                    fields.Add(element.Name);
                 }
                 else if (propertyMembers.Contains("P:" + searchString))
                 {
-                    propertyCount++;
+                    propertys.Add(element.Name);
                 }
                 else if (methodMembers.Contains("M:" + searchString))
                 {
-                    methodCount++;
+                    methods.Add(element.Name);
                 }
                 else if (eventMembers.Contains("E:" + searchString))
                 {
-                    eventCount++;
+                    events.Add(element.Name);
                 }
             }
 
             //add the coverage data to the list
-            coverageData.Add(new namespaceCoverageData(data, data.namespaceName, typeCount, fieldCount, propertyCount, methodCount, eventCount));
+            coverageData.Add(new namespaceCoverageData(data, data.namespaceName, types, fields, propertys, methods, events));
         }
 
         //tally up total coverage data and print it
@@ -200,25 +172,60 @@ public partial class Program
         }
     }
 
+    private static string GetSearchString(INamedElement element)
+    {
+        //get the named element as a member
+        IMethod member = element as IMethod;
+        IParameterizedMember parameterizedMember = member as IParameterizedMember;
+        List<string> parameterNames = new List<string>();
+        if (parameterizedMember != null)
+        {
+            IReadOnlyList<IParameter> parameters = parameterizedMember.Parameters;
+            foreach (IParameter parameter in parameters)
+            {
+                IVariable variable = parameter as IVariable;
+                parameterNames.Add(variable.Type.FullName);
+            }
+        }
+
+        //assemble a full name, which looks something like "M:VRC.SDKBase.VRCPlayerApi.PlayHapticEventInHand(VRC.SDKBase.VRC_Pickup.PickupHand,System.Single,System.Single,System.Single)"
+        string fullName = element.FullName;
+        string searchString = fullName;
+        if (parameterNames.Count > 0)
+        {
+            searchString += "(";
+            foreach (string parameter in parameterNames)
+            {
+                //swap & to @
+                string newparameter = parameter.Replace("&", "@");
+                searchString += newparameter + ",";
+            }
+            searchString = searchString.TrimEnd(',');
+            searchString += ")";
+        }
+
+        return searchString;
+    }
+
     private class namespaceCoverageData
     {
         public namespaceAssemblyData publicData;
         public string namespaceName;
-        public int typeCount;
-        public int fieldCount;
-        public int propertyCount;
-        public int methodCount;
-        public int eventCount;
+        public List<string> types;
+        public List<string> fields;
+        public List<string> propertys;
+        public List<string> methods;
+        public List<string> events;
 
-        public namespaceCoverageData(namespaceAssemblyData publicData, string namespaceName, int typeCount, int fieldCount, int propertyCount, int methodCount, int eventCount)
+        public namespaceCoverageData(namespaceAssemblyData publicData, string namespaceName, List<string> typeCount, List<string> fieldCount, List<string> propertyCount, List<string> methodCount, List<string> eventCount)
         {
             this.publicData = publicData;
             this.namespaceName = namespaceName;
-            this.typeCount = typeCount;
-            this.fieldCount = fieldCount;
-            this.propertyCount = propertyCount;
-            this.methodCount = methodCount;
-            this.eventCount = eventCount;
+            this.types = typeCount;
+            this.fields = fieldCount;
+            this.propertys = propertyCount;
+            this.methods = methodCount;
+            this.events = eventCount;
 
             //if namespace is empty, then just represent it with "root"
             if (namespaceName == "")
@@ -227,6 +234,8 @@ public partial class Program
             }
         }
 
+        const string Tab = "   ";
+        
         //make a comparer to a namespacePublicData object
         public string CompareTo(namespaceAssemblyData data)
         {
@@ -235,24 +244,57 @@ public partial class Program
             result += "Namespace: " + namespaceName + "\n";
             if (data.publicTypes.Count > 0)
             {
-                result += "   Public Types: " + typeCount + "/" + data.publicTypes.Count + " (" + (typeCount / (float)data.publicTypes.Count * 100).ToString("0.00") + "%)\n";
+                result += Tab + "Public Types: " + types.Count + "/" + data.publicTypes.Count + " (" + (types.Count / (float)data.publicTypes.Count * 100).ToString("0.00") + "%)\n";
+                result += CreateDefinitionList(types, data.publicTypes);
             }
+
             if (data.publicFields.Count > 0)
             {
-                result += "   Public Fields: " + fieldCount + "/" + data.publicFields.Count + " (" + (fieldCount / (float)data.publicFields.Count * 100).ToString("0.00") + "%)\n";
+                result += Tab + "Public Fields: " + fields.Count + "/" + data.publicFields.Count + " (" + (fields.Count / (float)data.publicFields.Count * 100).ToString("0.00") + "%)\n";
+                result += CreateDefinitionList(fields, data.publicFields);
             }
             if (data.publicProperties.Count > 0)
             {
-                result += "   Public Properties: " + propertyCount + "/" + data.publicProperties.Count + " (" + (propertyCount / (float)data.publicProperties.Count * 100).ToString("0.00") + "%)\n";
+                result += Tab + "Public Properties: " + propertys.Count + "/" + data.publicProperties.Count + " (" + (propertys.Count / (float)data.publicProperties.Count * 100).ToString("0.00") + "%)\n";
+                result += CreateDefinitionList(propertys, data.publicProperties);
             }
             if (data.publicMethods.Count > 0)
             {
-                result += "   Public Methods: " + methodCount + "/" + data.publicMethods.Count + " (" + (methodCount / (float)data.publicMethods.Count * 100).ToString("0.00") + "%)\n";
+                result += Tab + "Public Methods: " + methods.Count + "/" + data.publicMethods.Count + " (" + (methods.Count / (float)data.publicMethods.Count * 100).ToString("0.00") + "%)\n";
+                result += CreateDefinitionList(methods, data.publicMethods);
             }
             if (data.publicEvents.Count > 0)
             {
-                result += "   Public Events: " + eventCount + "/" + data.publicEvents.Count + " (" + (eventCount / (float)data.publicEvents.Count * 100).ToString("0.00") + "%)\n";
+                result += Tab + "Public Events: " + events.Count + "/" + data.publicEvents.Count + " (" + (events.Count / (float)data.publicEvents.Count * 100).ToString("0.00") + "%)\n";
+                result += CreateDefinitionList(events, data.publicEvents);
             }
+
+
+            return result;
+        }
+
+        private string CreateDefinitionList<T>(List<string> definedList, List<T> namedElements)
+        {
+            string result = "";
+            foreach (INamedElement namedElement in namedElements)
+            {
+                //determine if we have this type defined already
+                bool defined = false;
+                foreach (string name in definedList)
+                {
+                    if (name == namedElement.Name)
+                    {
+                        defined = true;
+                        break;
+                    }
+                }
+                //display a checkmark or a X depending on if it is defined. Make sure its only in ascii, and no unicode
+                string definedString = defined ? "\x1b[32mY" : "\x1b[31mN";
+                definedString += "\x1b[39m";
+
+                result += Tab + Tab + definedString + " " + GetSearchString(namedElement) + "\n";
+            }
+
             return result;
         }
 
@@ -271,14 +313,14 @@ public partial class Program
         public List<ITypeDefinition> publicTypes;
         public List<IMethod> publicMethods;
 
-        public namespaceAssemblyData(string namespaceName, List<IField> publicFields, List<IProperty> publicProperties, List<IEvent> publicEvents, List<ITypeDefinition> publicTypes, List<IMethod> publicMethods)
+        public namespaceAssemblyData(string namespaceName)
         {
             this.namespaceName = namespaceName;
-            this.publicFields = publicFields;
-            this.publicProperties = publicProperties;
-            this.publicEvents = publicEvents;
-            this.publicTypes = publicTypes;
-            this.publicMethods = publicMethods;
+            publicFields = new List<IField>();
+            publicProperties = new List<IProperty>();
+            publicEvents = new List<IEvent>();
+            publicTypes = new List<ITypeDefinition>();
+            publicMethods = new List<IMethod>();
         }
 
         public override string ToString()
@@ -288,7 +330,7 @@ public partial class Program
                 "   Public Fields: " + publicFields.Count + "\n" +
                 "   Public Properties: " + publicProperties.Count + "\n" +
                 "   Public Methods: " + publicMethods.Count + "\n" +
-                "   Public Events: " + publicEvents.Count;
+                "   Public Events: " + publicEvents.Count + "\n";
         }
     }
 
@@ -301,7 +343,7 @@ public partial class Program
         var decompiler = new CSharpDecompiler(testAssemblyPath, resolver, new DecompilerSettings());
 
         //get all public methods
-        var typeDefs = decompiler.TypeSystem.MainModule.TypeDefinitions;
+        IEnumerable<ITypeDefinition> typeDefs = decompiler.TypeSystem.MainModule.TypeDefinitions;
 
         foreach (var type in typeDefs)
         {
@@ -336,15 +378,26 @@ public partial class Program
 
             if (!dict.Exists(x => x.namespaceName == namespaceName))
             {
-                dict.Add(new namespaceAssemblyData(namespaceName, new List<IField>(), new List<IProperty>(), new List<IEvent>(), new List<ITypeDefinition>(), new List<IMethod>()));
+                dict.Add(new namespaceAssemblyData(namespaceName));
             }
 
             //find the correct entry for this namespace
             namespaceAssemblyData entry = dict.Find(x => x.namespaceName == namespaceName);
 
-            entry.publicMethods.AddRange(type.Methods.Where(x => x.Accessibility == Accessibility.Public));
-            entry.publicFields.AddRange(type.Fields.Where(x => x.Accessibility == Accessibility.Public));
             entry.publicProperties.AddRange(type.Properties.Where(x => x.Accessibility == Accessibility.Public));
+            entry.publicMethods.AddRange(type.Methods.Where(x => x.Accessibility == Accessibility.Public));
+            //do some extra logic to only add fields that are not delegates
+            foreach (IField field in type.Fields)
+            {
+                if (field.Accessibility == Accessibility.Public)
+                {
+                    IType symbol = field.ReturnType;
+                    if (symbol.Kind != TypeKind.Delegate)
+                    {
+                        entry.publicFields.Add(field);
+                    }
+                }
+            }
             entry.publicEvents.AddRange(type.Events.Where(x => x.Accessibility == Accessibility.Public));
             entry.publicTypes.Add(type);
         }
