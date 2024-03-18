@@ -96,6 +96,16 @@ public class TestUScript : UdonSharpBehaviour
         Networking.GetUniqueName(gameObject);
     }
 
+    private void VideoError()
+    {
+        VRC.SDK3.Components.Video.VideoError error = new VRC.SDK3.Components.Video.VideoError();
+        d(VRC.SDK3.Components.Video.VideoError.Unknown);
+        d(VRC.SDK3.Components.Video.VideoError.InvalidURL);
+        d(VRC.SDK3.Components.Video.VideoError.AccessDenied);
+        d(VRC.SDK3.Components.Video.VideoError.PlayerError);
+        d(VRC.SDK3.Components.Video.VideoError.RateLimited);
+    }
+
     //contains all the player interactions
     private void PlayerInteractions()
     {

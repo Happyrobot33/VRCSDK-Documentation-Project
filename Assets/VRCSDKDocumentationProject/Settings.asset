@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ce8236016c4e6345b6876438b2230f8, type: 3}
   m_Name: Settings
   m_EditorClassIdentifier: 
-  m_minifyDocumentation: 1
+  m_minifyDocumentation: 0
   m_generateDocumentation: 1
-  m_embedParamsInSummary: 0
+  m_embedParamsInSummary: 1
   m_warnOnCannys: 1

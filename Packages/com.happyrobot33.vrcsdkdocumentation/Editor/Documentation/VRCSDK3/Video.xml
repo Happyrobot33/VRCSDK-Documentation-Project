@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<members>
+    <member name="T:VRC.SDK3.Components.Video.VideoError">
+        <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#videoerror</docURL>
+        <summary>
+            An enum representing the different types of errors that can occur when trying to play a video.
+        </summary>
+    </member>
+    <member name="F:VRC.SDK3.Components.Video.VideoError.Unknown">
+        <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#videoerror</docURL>
+        <summary>
+            An unknown error occurred.
+        </summary>
+    </member>
+    <member name="F:VRC.SDK3.Components.Video.VideoError.InvalidURL">
+        <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#videoerror</docURL>
+        <summary>
+            The URL provided is invalid.
+        </summary>
+    </member>
+    <member name="F:VRC.SDK3.Components.Video.VideoError.AccessDenied">
+        <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#videoerror</docURL>
+        <summary>
+            Access to the video has been denied.
+        </summary>
+    </member>
+    <member name="F:VRC.SDK3.Components.Video.VideoError.PlayerError">
+        <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#videoerror</docURL>
+        <summary>
+            An error with the video player occurred.
+        </summary>
+    </member>
+    <member name="F:VRC.SDK3.Components.Video.VideoError.RateLimited">
+        <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#videoerror</docURL>
+        <summary>
+            The video player has been rate limited.
+        </summary>
+    </member>
+</members>
