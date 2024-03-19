@@ -1,3 +1,15 @@
 <?xml version="1.0"?>
 <members>
+    <member name="T:VRC.SDKBase.VRCUrl">
+        <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#vrcurl</docURL>
+        <summary>
+            Represents a URL that can be used to load at runtime. Cannot be constructed at runtime, only set in the editor, or retrieved from a <see cref="VRC.SDK3.Components.VRCUrlInputField"/>.
+        </summary>
+    </member>
+    <member name="P:VRC.SDKBase.VRCUrl.Empty">
+        <docURL>https://udonsharp.docs.vrchat.com/vrchat-api/#vrcurl</docURL>
+        <summary>
+            Returns a empty VRCUrl.
+        </summary>
+    </member>
 </members>
