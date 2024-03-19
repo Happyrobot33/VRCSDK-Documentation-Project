@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "mRRYBTHhOtIDo1+0HAKBpn+3yB0o+KC7c/lqEtWC6fq27bO6T6/I0Q4u3AXRkQNTHKBgVlVcvQirSdQ7+4yL7w==",
+  "dgSpecHash": "UhhE/U/sX3CXDaeUbvGklgYUjCh42lH8ElaaYDfj+HX0PLhZPmuntgq0hnGkeeJjczXUDnNRvdpqNjXyaz+8Eg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Matthew\\Documents\\VRCSDK-Documentation-Project\\CodeCoverage\\CodeCoverage.csproj",
+  "projectFilePath": "E:\\Storage\\Personal\\Coding\\VRChat\\VRCSDK-Documentation-Project\\CodeCoverage\\CodeCoverage.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Matthew\\.nuget\\packages\\icsharpcode.decompiler\\8.2.0.7535\\icsharpcode.decompiler.8.2.0.7535.nupkg.sha512",
     "C:\\Users\\Matthew\\.nuget\\packages\\system.collections.immutable\\6.0.0\\system.collections.immutable.6.0.0.nupkg.sha512",

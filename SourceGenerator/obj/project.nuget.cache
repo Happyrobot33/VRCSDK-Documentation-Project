@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "S7IvJEAgGN4H1q4D3nenfDCi0LNnYbDg4qLma98Sfbr66bvGqoooI2KIT0ylfXNfay85EVojEQeOTlyeyrynag==",
+  "dgSpecHash": "qdpVvt+3sZeXD0SZl305gIwLFlT3LK1GXs7Vbe0BD/wpRfugSXN2JJSkMfvzp1D9jZN3rQVdKdFoxNj/IpzXlA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Matthew\\Documents\\VRCSDK-Documentation-Project\\SourceGenerator\\SourceGenerator.csproj",
+  "projectFilePath": "E:\\Storage\\Personal\\Coding\\VRChat\\VRCSDK-Documentation-Project\\SourceGenerator\\SourceGenerator.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Matthew\\.nuget\\packages\\icsharpcode.decompiler\\8.2.0.7535\\icsharpcode.decompiler.8.2.0.7535.nupkg.sha512",
     "C:\\Users\\Matthew\\.nuget\\packages\\system.collections.immutable\\6.0.0\\system.collections.immutable.6.0.0.nupkg.sha512",

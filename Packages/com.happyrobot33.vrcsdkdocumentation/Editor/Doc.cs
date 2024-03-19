@@ -281,10 +281,9 @@ namespace Happyrobot33.VRCSDKDocumentationProject
                         listItem.AppendChild(descriptionNode);
                         descriptionNode.InnerXml = description;
                     }
+                    //remove the cannyPosts node
+                    memberNode.RemoveChild(cannyPosts);
                 }
-
-                //remove the cannyPosts node
-                memberNode.RemoveChild(cannyPosts);
             }
 
             //clean up summary, by finding all new lines, and making the subsequent spaces into a single space

@@ -84,11 +84,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3-Editor.dll" />
-    <None Include="Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3.xml" />
     <None Include="Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\ImageLoader\Windows\x86_64\vrc_image_loader.dll" />
     <None Include="Packages\com.vrchat.worlds\Runtime\VRCSDK\VRC.SDK3.asmdef" />
     <None Include="Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3.dll" />
     <None Include="Packages\com.vrchat.worlds\Runtime\VRCSDK\SDK3\Midi\PortMidi\Plugins\Windows\portmidi.dll" />
+    <None Include="Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3.xml" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -511,6 +511,10 @@
       <HintPath>Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="SDKBase-Legacy">
+      <HintPath>Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\SDKBase-Legacy.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="VRC.Udon.EditorBindings">
       <HintPath>Packages\com.vrchat.worlds\Editor\Udon\External\VRC.Udon.EditorBindings.dll</HintPath>
       <Private>False</Private>
@@ -529,10 +533,6 @@
     </Reference>
     <Reference Include="0Harmony">
       <HintPath>Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\Harmony\0Harmony.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SDKBase-Legacy">
-      <HintPath>Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\SDKBase-Legacy.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="VRC.Udon.Compiler">
