@@ -31,6 +31,9 @@ public partial class Program
     
     public static void Main(string[] args)
     {
+        //clear the terminal
+        Console.Clear();
+
         //try to make a basepath
         string workingDirectory = Environment.CurrentDirectory;
         string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
@@ -40,6 +43,7 @@ public partial class Program
 
         //populate the namespace blacklist
         namespaceBlacklist.Add("VRC.SDKBase.Validation.*");
+        namespaceBlacklist.Add("VRC.SDK3");
 
         #region XML Handling
         //load ALL XML files recursively at once and merge them into a single XML
@@ -113,6 +117,9 @@ public partial class Program
         assemblys.Add(basePath + @"\Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3-Editor.dll");
         assemblys.Add(basePath + @"\Packages\com.vrchat.worlds\Runtime\Udon\External\VRC.Udon.Common.dll");
 
+        //generate the source code for documentation purposes
+        GenerateSourceCode();
+
         //make the dictionary to store the public data
         List<namespaceAssemblyData> assemblyData = new List<namespaceAssemblyData>();
         foreach (string testAssemblyPath in assemblys)
@@ -177,6 +184,37 @@ public partial class Program
         {
             Console.WriteLine(data);
         }
+    }
+
+    private static void GenerateSourceCode()
+    {
+        Console.WriteLine("Generating source code...");
+
+        foreach(string assembly in assemblys)
+        {
+            var resolver = new UniversalAssemblyResolver(assembly, false, assembly);
+            resolver.AddSearchDirectory(Path.GetDirectoryName(assembly));
+
+            //load the solution
+            var decompiler = new CSharpDecompiler(assembly, resolver, new DecompilerSettings());
+
+            //we want to save the decompiled code to a file
+            string code = decompiler.DecompileWholeModuleAsString();
+
+            //save the code to a folder
+            string path = basePath + @"\DecompiledSource\" + Path.GetFileNameWithoutExtension(assembly) + ".cs";
+
+            //make sure folder exists
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+
+            File.WriteAllText(path, code);
+        }
+
+        //make a gitignore file
+        string gitignore = basePath + @"\DecompiledSource\.gitignore";
+        File.WriteAllText(gitignore, "*");
+
+        Console.WriteLine("Generated source code");
     }
 
     private static string GetSearchString(INamedElement element)
@@ -299,7 +337,14 @@ public partial class Program
                 string definedString = defined ? "\x1b[32mY" : "\x1b[31mN";
                 definedString += "\x1b[39m";
 
-                result += Tab + Tab + definedString + " " + GetSearchString(namedElement) + "\n";
+                IField field = namedElement as IField;
+                IType symbol = field != null ? field.ReturnType : null;
+                string kind = symbol != null ? symbol.Kind.ToString() : "";
+
+                //format the kind as yellow
+                kind = "\x1b[33m" + kind + "\x1b[39m";
+
+                result += String.Format("{0}{0}{1} {2} {3}\n", Tab, definedString, kind, GetSearchString(namedElement));
             }
 
             return result;
@@ -399,6 +444,16 @@ public partial class Program
                 if (field.Accessibility == Accessibility.Public)
                 {
                     IType symbol = field.ReturnType;
+                    //check if its a struct
+                    if (symbol.Kind == TypeKind.Struct)
+                    {
+                        //if it is, it might be the value__ field of a enum, in which case skip it
+                        if (field.Name == "value__")
+                        {
+                            continue;
+                        }
+                    }
+
                     if (symbol.Kind != TypeKind.Delegate)
                     {
                         entry.publicFields.Add(field);

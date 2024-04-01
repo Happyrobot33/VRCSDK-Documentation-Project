@@ -119,6 +119,9 @@ public class TestUScript : UdonSharpBehaviour
         d(player.displayName);
         d(player.isLocal);
         d(player.isMaster);
+        //d(player.isModerator);
+        //d(player.isSuper);
+        //d(VRCPlayerApi.AllPlayers);
         player.GetPickupInHand(VRC_Pickup.PickupHand.Left);
         player.IsOwner(gameObject);
         player.IsUserInVR();
@@ -196,6 +199,7 @@ public class TestUScript : UdonSharpBehaviour
         //player positions
         player.GetPosition();
         player.GetRotation();
+        //player.GetBoneTransform(HumanBodyBones.Head);
         player.GetBonePosition(HumanBodyBones.Head);
         player.GetBoneRotation(HumanBodyBones.Head);
         player.GetTrackingData(VRCPlayerApi.TrackingDataType.Head);

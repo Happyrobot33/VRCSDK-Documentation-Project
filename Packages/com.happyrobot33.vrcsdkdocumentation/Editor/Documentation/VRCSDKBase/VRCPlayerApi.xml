@@ -68,6 +68,34 @@
             Will be False when in Build &amp; Test and Unity Playmode.
         </remarks>
     </member>
+    <member name="P:VRC.SDKBase.VRCPlayerApi.isModerator">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/networking/network-components#networking-properties</docURL>
+        <summary>
+            if the player is a moderator. Currently unusable in udon
+        </summary>
+    </member>
+    <member name="P:VRC.SDKBase.VRCPlayerApi.TakeOwnership(UnityEngine.GameObject)">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/networking/network-components#networking-properties</docURL>
+        <summary>
+            Take ownership of a GameObject. Currently unusable in udon
+        </summary>
+    </member>
+    <member name="P:VRC.SDKBase.VRCPlayerApi.isSuper">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/networking/network-components#networking-properties</docURL>
+        <summary>
+            if the player is a super user? Currently unusable in udon
+        </summary>
+    </member>
+    <member name="P:VRC.SDKBase.VRCPlayerApi.AllPlayers">
+        <docURL>
+            https://creators.vrchat.com/worlds/udon/networking/network-components#networking-properties</docURL>
+        <summary>
+            Gets all the players in the instance as a list. Currently unusable in udon
+        </summary>
+    </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetPickupInHand(VRC.SDKBase.VRC_Pickup.PickupHand)">
         <docURL>https://creators.vrchat.com/worlds/udon/players/#getpickupinhand</docURL>
         <summary>
@@ -663,6 +691,14 @@
         <returns>
             The rotation of the player in world space.
         </returns>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.GetBoneTransform(UnityEngine.HumanBodyBones)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players/player-positions#getboneposition</docURL>
+        <summary>
+            Gets the transform of a bone in the Player's Avatar. Currently unusable in Udon, use <see
+                cref="VRC.SDKBase.VRCPlayerApi.GetBonePosition(UnityEngine.HumanBodyBones)" /> and <see
+                cref="VRC.SDKBase.VRCPlayerApi.GetBoneRotation(UnityEngine.HumanBodyBones)" /> instead.
+        </summary>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetBonePosition(UnityEngine.HumanBodyBones)">
         <docURL>https://creators.vrchat.com/worlds/udon/players/player-positions#getboneposition</docURL>
