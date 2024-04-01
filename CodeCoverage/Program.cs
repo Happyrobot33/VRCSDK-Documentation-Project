@@ -190,6 +190,13 @@ public partial class Program
     {
         Console.WriteLine("Generating source code...");
 
+        //clear the folder of previous C# files
+        string decompiledSourcePath = basePath + @"\DecompiledSource";
+        if (Directory.Exists(decompiledSourcePath))
+        {
+            Directory.Delete(decompiledSourcePath, true);
+        }
+
         foreach(string assembly in assemblys)
         {
             var resolver = new UniversalAssemblyResolver(assembly, false, assembly);
