@@ -115,7 +115,7 @@ public partial class Program
         assemblys.Add(basePath + @"\Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase-Editor.dll");
         assemblys.Add(basePath + @"\Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3.dll");
         assemblys.Add(basePath + @"\Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3-Editor.dll");
-        assemblys.Add(basePath + @"\Packages\com.vrchat.worlds\Runtime\Udon\External\VRC.Udon.Common.dll");
+        //assemblys.Add(basePath + @"\Packages\com.vrchat.worlds\Runtime\Udon\External\VRC.Udon.Common.dll");
 
         //generate the source code for documentation purposes
         GenerateSourceCode();

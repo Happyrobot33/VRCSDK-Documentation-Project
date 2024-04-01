@@ -73,7 +73,6 @@
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCStation.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\DataToken.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Editor.asmdef" />
-    <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRC.Udon.Common\Common.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCUrlInputField.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCPickup.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDKBase\VRCPlayerApi.xml" />
