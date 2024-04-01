@@ -209,6 +209,8 @@ public class TestUScript : UdonSharpBehaviour
         player.TeleportTo(transform.position, transform.rotation);
         player.TeleportTo(transform.position, transform.rotation, VRC_SceneDescriptor.SpawnOrientation.AlignRoomWithSpawnPoint);
         player.TeleportTo(transform.position, transform.rotation, VRC_SceneDescriptor.SpawnOrientation.AlignRoomWithSpawnPoint, true);
+        player.Respawn();
+        player.Respawn(0);
 
         d(player.isInstanceOwner);
         d(VRCPlayerApi.TrackingDataType.Head);

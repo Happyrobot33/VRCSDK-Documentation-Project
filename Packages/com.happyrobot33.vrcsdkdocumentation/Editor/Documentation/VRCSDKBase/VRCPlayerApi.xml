@@ -811,6 +811,21 @@
             The rotation to teleport the player to in world space.
         </param>
     </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.Respawn">
+        <docURL>https://creators.vrchat.com/worlds/udon/players</docURL>
+        <summary>
+            Respawns the player
+        </summary>
+    </member>
+    <member name="M:VRC.SDKBase.VRCPlayerApi.Respawn(System.Int32)">
+        <docURL>https://creators.vrchat.com/worlds/udon/players</docURL>
+        <summary>
+            Respawns the player
+        </summary>
+        <param name="spawnsIndex">
+            The index of the respawn point to use
+        </param>
+    </member>
     <member
         name="M:VRC.SDKBase.VRCPlayerApi.TeleportTo(UnityEngine.Vector3,UnityEngine.Quaternion,VRC.SDKBase.VRC_SceneDescriptor.SpawnOrientation)">
         <docURL>https://creators.vrchat.com/worlds/udon/players/player-positions#teleportto</docURL>
