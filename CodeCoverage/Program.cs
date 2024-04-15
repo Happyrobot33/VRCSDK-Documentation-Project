@@ -44,6 +44,13 @@ public partial class Program
         //populate the namespace blacklist
         namespaceBlacklist.Add("VRC.SDKBase.Validation.*");
         namespaceBlacklist.Add("VRC.SDK3");
+        namespaceBlacklist.Add("VRC.SDKBase.RPC");
+        namespaceBlacklist.Add("VRC.SDKBase.Network");
+        namespaceBlacklist.Add("VRC.SDKBase.Editor.Attributes");
+        namespaceBlacklist.Add("VRC.Core.Burst");
+        namespaceBlacklist.Add("VRC.SDKBase.Editor.Source");
+        namespaceBlacklist.Add("VRC.SDKBase.Editor.V3");
+        namespaceBlacklist.Add("VRC.SDKBase.Editor.Validation");
 
         #region XML Handling
         //load ALL XML files recursively at once and merge them into a single XML
@@ -444,7 +451,27 @@ public partial class Program
             namespaceAssemblyData entry = dict.Find(x => x.namespaceName == namespaceName);
 
             entry.publicProperties.AddRange(type.Properties.Where(x => x.Accessibility == Accessibility.Public));
-            entry.publicMethods.AddRange(type.Methods.Where(x => x.Accessibility == Accessibility.Public));
+
+            //loop through the public methods, and get all .ctor methods
+            foreach (IMethod method in type.Methods)
+            {
+                if (method.Accessibility == Accessibility.Public)
+                {
+                    if (method.Name == ".ctor")
+                    {
+                        //determine if the .ctor is part of a enum
+                        if (type.Kind == TypeKind.Enum)
+                        {
+                            //if it is, skip it
+                            continue;
+                        }
+                    }
+
+                    entry.publicMethods.Add(method);
+                }
+            }
+
+            //entry.publicMethods.AddRange(type.Methods.Where(x => x.Accessibility == Accessibility.Public));
             //do some extra logic to only add fields that are not delegates
             foreach (IField field in type.Fields)
             {

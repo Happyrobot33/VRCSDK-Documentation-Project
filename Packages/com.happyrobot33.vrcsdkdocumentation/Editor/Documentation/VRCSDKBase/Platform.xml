@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<members>
+    <member name="T:VRC.SDKBase.Platform.VRCOrientation">
+        <docURL>https://creators.vrchat.com/worlds/udon/graph/event-nodes/#onscreenupdate</docURL>
+        <summary>
+            the orientation of the player's device.
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.Platform.VRCOrientation.Landscape">
+        <docURL>https://creators.vrchat.com/worlds/udon/graph/event-nodes/#onscreenupdate</docURL>
+        <summary>
+            The player's device is in landscape orientation.
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.Platform.VRCOrientation.Portrait">
+        <docURL>https://creators.vrchat.com/worlds/udon/graph/event-nodes/#onscreenupdate</docURL>
+        <summary>
+            The player's device is in portrait orientation.
+        </summary>
+    </member>
+</members>

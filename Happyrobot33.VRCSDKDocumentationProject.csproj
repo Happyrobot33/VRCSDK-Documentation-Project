@@ -59,7 +59,7 @@
     <UnityVersion>2022.3.6f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="C:\Users\mherber\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.0.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="C:\Users\mherber\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.0.1\Analyzers\Microsoft.Unity.Analyzers.dll" />
     <Analyzer Include="C:\Users\mherber\Documents\2022.3.6f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Users\mherber\Documents\2022.3.6f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
@@ -73,6 +73,7 @@
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCStation.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\DataToken.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Editor.asmdef" />
+    <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDKBase\Platform.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCUrlInputField.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCPickup.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDKBase\VRCPlayerApi.xml" />
@@ -81,7 +82,9 @@
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\DataDictionary.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDKBase\VRCUrl.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCObjectSync.xml" />
+    <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDKBase\BuildPipeline.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCJson.xml" />
+    <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDKBase\VRC_MidiNoteIn.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\Video.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCAvatarPedestal.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDKBase\InputManager.xml" />

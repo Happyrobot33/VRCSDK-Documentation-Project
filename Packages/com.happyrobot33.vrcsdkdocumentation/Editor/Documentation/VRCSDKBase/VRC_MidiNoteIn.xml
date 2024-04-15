@@ -1,0 +1,339 @@
+<?xml version="1.0"?>
+<members>
+    <member name="T:VRC.SDKBase.VRC_MidiNoteIn.Channel">
+        <docURL>https://creators.vrchat.com/worlds/udon/midi/midi-playback</docURL>
+        <summary>
+            The MIDI channel.
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Channel.Any">
+        <docURL>https://creators.vrchat.com/worlds/udon/midi/midi-playback</docURL>
+        <summary>
+            Any channel.
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_1">
+        <docURL>https://creators.vrchat.com/worlds/udon/midi/midi-playback</docURL>
+        <summary>
+            Specific Midi Channel.
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_2">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_1" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_3">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_1" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_4">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_1" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_5">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_1" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_6">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_1" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_7">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_1" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_8">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_1" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_9">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_1" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_10">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_1" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_11">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_1" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_12">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_1" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_13">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_1" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_14">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_1" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_15">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_1" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_16">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Channel.Ch_1" />
+    </member>
+    <member name="T:VRC.SDKBase.VRC_MidiNoteIn.Note">
+        <docURL>https://creators.vrchat.com/worlds/udon/midi/midi-playback</docURL>
+        <summary>
+            The MIDI note. 0-127 range number for the note played.
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.A0">
+        <docURL>https://creators.vrchat.com/worlds/udon/midi/midi-playback</docURL>
+        <summary>
+            Specific Midi Note.
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Bb0">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.B0">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.C1">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Db1">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.D1">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Eb1">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.E1">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.F1">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Gb1">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.G1">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Ab1">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.A1">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Bb1">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.B1">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.C2">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Db2">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.D2">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Eb2">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.E2">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.F2">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Gb2">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.G2">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Ab2">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.A2">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Bb2">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.B2">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.C3">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Db3">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.D3">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Eb3">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.E3">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.F3">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Gb3">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.G3">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Ab3">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.A3">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Bb3">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.B3">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.C4">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Db4">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.D4">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Eb4">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.E4">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.F4">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Gb4">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.G4">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Ab4">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.A4">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Bb4">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.B4">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.C5">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Db5">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.D5">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Eb5">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.E5">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.F5">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Gb5">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.G5">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Ab5">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.A5">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Bb5">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.B5">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.C6">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Db6">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.D6">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Eb6">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.E6">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.F6">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Gb6">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.G6">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Ab6">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.A6">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Bb6">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.B6">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.C7">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Db7">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.D7">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Eb7">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.E7">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.F7">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Gb7">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.G7">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Ab7">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.A7">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.Bb7">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.B7">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.Note.C8">
+        <inheritdoc cref="VRC.SDKBase.VRC_MidiNoteIn.Note.A0" />
+    </member>
+</members>

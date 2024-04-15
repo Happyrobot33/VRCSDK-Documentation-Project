@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<members>
+    <member name="T:VRC.SDKBase.Editor.BuildPipeline.VRCSDKRequestedBuildType">
+        <docURL>
+            https://creators.vrchat.com/sdk/build-pipeline-callbacks-and-interfaces/#ivrcsdkbuildrequestedcallback</docURL>
+        <summary>
+            The type of build requested by the user.
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.Editor.BuildPipeline.VRCSDKRequestedBuildType.Avatar">
+        <docURL>
+            https://creators.vrchat.com/sdk/build-pipeline-callbacks-and-interfaces/#ivrcsdkbuildrequestedcallback</docURL>
+        <summary>
+            The user requested an avatar build.
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.Editor.BuildPipeline.VRCSDKRequestedBuildType.Scene">
+        <docURL>
+            https://creators.vrchat.com/sdk/build-pipeline-callbacks-and-interfaces/#ivrcsdkbuildrequestedcallback</docURL>
+        <summary>
+            The user requested a world build.
+        </summary>
+    </member>
+    <member name="T:VRC.SDKBase.Editor.BuildPipeline.IVRCSDKBuildRequestedCallback">
+        <docURL>
+            https://creators.vrchat.com/sdk/build-pipeline-callbacks-and-interfaces/#ivrcsdkbuildrequestedcallback</docURL>
+        <summary>
+            This interface allows you to perform some logic before the VRChat SDK starts building the content.
+        </summary>
+        <remarks>
+            Returning false from the OnBuildRequested method will abort the build process.
+        </remarks>
+    </member>
+</members>
