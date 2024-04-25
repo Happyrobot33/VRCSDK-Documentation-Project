@@ -61,9 +61,47 @@
     <member name="P:VRC.SDKBase.VRCPlayerApi.isInstanceOwner">
         <docURL>
             https://creators.vrchat.com/worlds/udon/networking/network-components#networking-properties</docURL>
-        <summary>
-            if the Player is the one who created the instance.
-        </summary>
+        <summary> If the player is the owner of the instance. This isnt as straightforward as it
+            seems, and a table is provided to explain it. <list type="table">
+                <listheader>
+                    <term>Instance Type</term>
+                    <description>Will be true for</description>
+                </listheader>
+                <item>
+                    <term>Public</term>
+                    <description>World Uploader/Creator</description>
+                </item>
+                <item>
+                    <term>Friends+</term>
+                    <description>Instance Creator</description>
+                </item>
+                <item>
+                    <term>Friends</term>
+                    <description>Instance Creator</description>
+                </item>
+                <item>
+                    <term>Invite+</term>
+                    <description>Instance Creator</description>
+                </item>
+                <item>
+                    <term>Invite</term>
+                    <description>Instance Creator</description>
+                </item>
+                <item>
+                    <term>Group+</term>
+                    <description>Never</description>
+                </item>
+                <item>
+                    <term>Group</term>
+                    <description>Never</description>
+                </item>
+                <item>
+                    <term>Group Public</term>
+                    <description>Never</description>
+                </item>
+            </list> From
+            testing and for future reference incase features are added, the name displayed when
+            viewing a instance in instance details should be the "Instance Owner". </summary>
         <remarks>
             Will be False when in Build &amp; Test and Unity Playmode.
         </remarks>
@@ -136,8 +174,7 @@
         </summary>
         <remarks> The feeling can vary quite a bit between controllers. <br /> All 3 parameters MUST
             be positive. <br /></remarks>
-        <param name="hand"> The hand to vibrate. <see cref="VRC.SDKBase.VRC_Pickup.PickupHand" />
-            . </param>
+        <param name="hand"> The hand to vibrate. <see cref="VRC.SDKBase.VRC_Pickup.PickupHand" /> . </param>
         <param name="duration">
             The duration of the vibration in seconds.
         </param>
@@ -694,11 +731,11 @@
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetBoneTransform(UnityEngine.HumanBodyBones)">
         <docURL>https://creators.vrchat.com/worlds/udon/players/player-positions#getboneposition</docURL>
-        <summary>
-            Gets the transform of a bone in the Player's Avatar. Currently unusable in Udon, use <see
+        <summary> Gets the transform of a bone in the Player's Avatar. Currently unusable in Udon,
+            use <see
                 cref="VRC.SDKBase.VRCPlayerApi.GetBonePosition(UnityEngine.HumanBodyBones)" /> and <see
-                cref="VRC.SDKBase.VRCPlayerApi.GetBoneRotation(UnityEngine.HumanBodyBones)" /> instead.
-        </summary>
+                cref="VRC.SDKBase.VRCPlayerApi.GetBoneRotation(UnityEngine.HumanBodyBones)" />
+            instead. </summary>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetBonePosition(UnityEngine.HumanBodyBones)">
         <docURL>https://creators.vrchat.com/worlds/udon/players/player-positions#getboneposition</docURL>
