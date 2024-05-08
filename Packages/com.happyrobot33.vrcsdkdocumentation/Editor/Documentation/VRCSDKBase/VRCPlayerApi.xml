@@ -224,23 +224,36 @@
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetCurrentLanguage">
         <docURL>https://creators.vrchat.com/worlds/udon/players/#getcurrentlanguage</docURL>
+        <cannyPosts>
+            <cannyPost
+                url="https://feedback.vrchat.com/sdk-bug-reports/p/clientsim-does-not-return-the-correct-values-for-the-language-methods">Check
+                the return section of this documentation for more information</cannyPost>
+        </cannyPosts>
         <summary>
             Gets the selected language of the local user.
         </summary>
-        <remarks> This feature isnt added to the client yet, so it currently is not useful.</remarks>
         <returns>
-            Currently returns a example string. Will throw an exception in clientsim currently.
+            Depends on the context that this is called. In Clientsim, it will return either a ISO
+            639 language code (in most regards with the region truncated) or just the full english
+            name of the language. In the actual client, it returns the proper ISO 639 code for all
+            languages (region is still truncated for most of them).
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetAvailableLanguages">
         <docURL>https://creators.vrchat.com/worlds/udon/players/#getavailablelanguages</docURL>
+        <cannyPosts>
+            <cannyPost
+                url="https://feedback.vrchat.com/sdk-bug-reports/p/clientsim-does-not-return-the-correct-values-for-the-language-methods">Check
+                the return section of this documentation for more information</cannyPost>
+        </cannyPosts>
         <summary>
             Gets all available languages a player can select.
         </summary>
-        <remarks> This feature isnt added to the client yet, so it currently is not useful.</remarks>
         <returns>
-            Currently returns a example string[]. Will throw an exception in clientsim
-            currently.
+            Depends on the context that this is called. In Clientsim, it will return either a
+            string[] with each element being the full english name of the language. In the actual
+            client, it returns the proper ISO 639 standard string[] for all
+            languages (region is still truncated for most of them).
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayerCount">

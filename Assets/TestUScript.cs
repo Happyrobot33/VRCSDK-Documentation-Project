@@ -15,6 +15,23 @@ public class TestUScript : UdonSharpBehaviour
     {
     }
 
+    /*
+    void Update()
+    {
+        //test the language stuff
+        string lang = VRCPlayerApi.GetCurrentLanguage();
+        string[] languages = VRCPlayerApi.GetAvailableLanguages();
+
+        string langstr = "Current Language: " + lang + "\nAvailable Languages: ";
+        foreach (string l in languages)
+        {
+            langstr += l + ", ";
+        }
+
+        d(langstr);
+    }
+    */
+
     private void DataTokenInteractions()
     {
         DataToken token = new DataToken(true);
