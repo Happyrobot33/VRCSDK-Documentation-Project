@@ -234,8 +234,8 @@
         </summary>
         <returns>
             Depends on the context that this is called. In Clientsim, it will return either a ISO
-            639 language code (in most regards with the region truncated) or just the full english
-            name of the language. In the actual client, it returns the proper ISO 639 code for all
+            639 language code or just the full english
+            name of the language. In the actual client, it returns the proper RFC 5646 code for all
             languages (region is still truncated for most of them).
         </returns>
     </member>
@@ -252,8 +252,8 @@
         <returns>
             Depends on the context that this is called. In Clientsim, it will return either a
             string[] with each element being the full english name of the language. In the actual
-            client, it returns the proper ISO 639 standard string[] for all
-            languages (region is still truncated for most of them).
+            client, it returns the proper RFC 5646 standard string[] for all
+            languages.
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayerCount">
