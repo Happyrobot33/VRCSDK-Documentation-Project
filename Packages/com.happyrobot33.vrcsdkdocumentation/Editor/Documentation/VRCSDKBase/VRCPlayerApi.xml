@@ -224,36 +224,20 @@
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetCurrentLanguage">
         <docURL>https://creators.vrchat.com/worlds/udon/players/#getcurrentlanguage</docURL>
-        <cannyPosts>
-            <cannyPost
-                url="https://feedback.vrchat.com/sdk-bug-reports/p/clientsim-does-not-return-the-correct-values-for-the-language-methods">Check
-                the return section of this documentation for more information</cannyPost>
-        </cannyPosts>
         <summary>
-            Gets the selected language of the local user.
+            Gets the selected language of the local user, in RFC 5646 format.
         </summary>
         <returns>
-            Depends on the context that this is called. In Clientsim, it will return either a ISO
-            639 language code or just the full english
-            name of the language. In the actual client, it returns the proper RFC 5646 code for all
-            languages (region is still truncated for most of them).
+            The selected language of the local user, in RFC 5646 format.
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetAvailableLanguages">
         <docURL>https://creators.vrchat.com/worlds/udon/players/#getavailablelanguages</docURL>
-        <cannyPosts>
-            <cannyPost
-                url="https://feedback.vrchat.com/sdk-bug-reports/p/clientsim-does-not-return-the-correct-values-for-the-language-methods">Check
-                the return section of this documentation for more information</cannyPost>
-        </cannyPosts>
         <summary>
-            Gets all available languages a player can select.
+            Gets all available languages a player can select, in RFC 5646 format.
         </summary>
         <returns>
-            Depends on the context that this is called. In Clientsim, it will return either a
-            string[] with each element being the full english name of the language. In the actual
-            client, it returns the proper RFC 5646 standard string[] for all
-            languages.
+            Returns a string[] of all available languages a player can select, in RFC 5646 format.
         </returns>
     </member>
     <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayerCount">
