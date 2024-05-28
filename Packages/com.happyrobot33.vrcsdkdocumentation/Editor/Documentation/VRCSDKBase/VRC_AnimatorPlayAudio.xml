@@ -1,0 +1,213 @@
+<members>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.Source">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>The AudioSource to play through.
+            If the AudioSource is not found when transitioning to this state for the first time,
+            AnimatorPlayAudio will be disabled.</summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.VolumeApplySettings">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>How to apply the volume setting</summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.PitchApplySettings">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>How to apply the pitch setting</summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.Clips">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>A list of AudioClips that can be applied to the AudioSource when transitioning to this state.</summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.ClipsApplySettings">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>How to apply the clip setting</summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.Loop">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>Whether the AudioSource's looping should be set enabled or disabled when
+            transitioning to this state.</summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.LoopApplySettings">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>How to apply the looping setting</summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.DelayInSeconds">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>The delay before "Play On Enter" plays a clip, if enabled. Clamped from 0 to 60 seconds. (Default: 0 seconds)</summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.PlayOnEnter">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>To play the audiosource on enter, after possibly stopping it first</summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.StopOnEnter">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>To stop the audio source on enter</summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.PlayOnExit">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <incomplete />
+        <summary>To play the audio source on exit</summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.StopOnExit">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>To stop the audio source on exit</summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.playbackIndex">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <incomplete />
+        <summary>This is not documented properly yet</summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.destParam">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <incomplete />
+        <summary>This is not documented properly yet</summary>
+    </member>
+    <member name="P:VRC.SDKBase.VRC_AnimatorPlayAudio.ShouldApplyVolume">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <incomplete />
+        <summary>This is not documented properly yet</summary>
+    </member>
+    <member name="P:VRC.SDKBase.VRC_AnimatorPlayAudio.ShouldApplyPitch">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <incomplete />
+        <summary>This is not documented properly yet</summary>
+    </member>
+    <member name="P:VRC.SDKBase.VRC_AnimatorPlayAudio.ShouldApplyClip">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <incomplete />
+        <summary>This is not documented properly yet</summary>
+    </member>
+    <member name="P:VRC.SDKBase.VRC_AnimatorPlayAudio.ShouldApplyLoop">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <incomplete />
+        <summary>This is not documented properly yet</summary>
+    </member>
+    <member
+        name="M:VRC.SDKBase.VRC_AnimatorPlayAudio.ShouldApplySetting(VRC.SDKBase.VRC_AnimatorPlayAudio.ApplySettings)">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <incomplete />
+        <summary>This is not documented properly yet</summary>
+    </member>
+    <member
+        name="M:VRC.SDKBase.VRC_AnimatorPlayAudio.OnStateEnter(UnityEngine.Animator,UnityEngine.AnimatorStateInfo,System.Int32)">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <incomplete />
+        <summary>This is not documented properly yet</summary>
+    </member>
+    <member
+        name="M:VRC.SDKBase.VRC_AnimatorPlayAudio.OnStateExit(UnityEngine.Animator,UnityEngine.AnimatorStateInfo,System.Int32)">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <incomplete />
+        <summary>This is not documented properly yet</summary>
+    </member>
+    <member name="T:VRC.SDKBase.VRC_AnimatorPlayAudio">
+        <docURL>https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>This behavior modifies an AudioSource when transitioning to the
+            animation state. It can change the audio clip, pitch, or loop value, and it can play the
+            AudioSource.</summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.ParameterName">
+        <docURL>
+            https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary> The name of the "int" type avatar parameter that determines which audio clip is
+            chosen. If the parameter cannot be found, the first clip is chosen instead. <see
+                cref="F:VRC.SDKBase.VRC_AnimatorPlayAudio.Order.Parameter" />
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.Volume">
+        <docURL>
+            https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>
+            The random volume range for the AudioSource.
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.Pitch">
+        <docURL>
+            https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>
+            The random pitch range for the AudioSource.
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.SourcePath">
+        <docURL>
+            https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>
+            The path to the AudioSource relative to the avatar's root transform.
+            If the AudioSource is not found when transitioning to this state for the first time,
+            AnimatorPlayAudio will be disabled.
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.PlaybackOrder">
+        <docURL>
+            https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>
+            Determines which audio clip is chosen when transitioning to this state.
+        </summary>
+    </member>
+    <member name="T:VRC.SDKBase.VRC_AnimatorPlayAudio.Order">
+        <docURL>
+            https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>
+            The order in which audio clips are chosen.
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.Order.Random">
+        <docURL>
+            https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>
+            Chooses a random clip. (Default)
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.Order.UniqueRandom">
+        <docURL>
+            https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>
+            Chooses a random audio clip, but not the same clip twice in a row.
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.Order.Roundabout">
+        <docURL>
+            https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>
+            Chooses the first clip, then the second, and so on. After the last clip, the first clip
+            is chosen again.
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.Order.Parameter">
+        <docURL>
+            https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary> Chooses a clip based on an "int" type avatar parameter. For example, if the
+            parameter is 0, the first clip is chosen. The parameter must be defined in the avatar's
+            Expressions Parameters. If the parameter cannot be found, the first clip is chosen
+            instead. <see
+                cref="F:VRC.SDKBase.VRC_AnimatorPlayAudio.ParameterName" />
+        </summary>
+    </member>
+    <member name="T:VRC.SDKBase.VRC_AnimatorPlayAudio.ApplySettings">
+        <docURL>
+            https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>
+            Determines when the settings are applied to the audio source.
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.ApplySettings.AlwaysApply">
+        <docURL>
+            https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>
+            The setting is applied to the audio source, even if it is currently playing a clip.
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.ApplySettings.ApplyIfStopped">
+        <docURL>
+            https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>
+            The setting is applied to the audio source unless it's already playing a clip. (Default)
+        </summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_AnimatorPlayAudio.ApplySettings.NeverApply">
+        <docURL>
+            https://creators.vrchat.com/avatars/state-behaviors/#animator-play-audio</docURL>
+        <summary>
+            The setting is unused and greyed out in the inspector.
+        </summary>
+    </member>
+</members>

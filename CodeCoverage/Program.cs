@@ -17,18 +17,20 @@ public partial class Program
     //static string testAssemblyPath = basePath + @"\Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase.dll";
 
     static string XMLPath = @"\Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation";
-    
+
     static List<string> typeMembers = new List<string>();
     static List<string> fieldMembers = new List<string>();
     static List<string> propertyMembers = new List<string>();
     static List<string> methodMembers = new List<string>();
     static List<string> eventMembers = new List<string>();
 
+    const string incompleteMarker = "incomplete";
+
     /// <summary>
     /// A list of namespaces that should be ignored. a * can be used as a wildcard
     /// </summary>
     static List<string> namespaceBlacklist = new List<string>();
-    
+
     public static void Main(string[] args)
     {
         //clear the terminal
@@ -51,6 +53,7 @@ public partial class Program
         namespaceBlacklist.Add("VRC.SDKBase.Editor.Source");
         namespaceBlacklist.Add("VRC.SDKBase.Editor.V3");
         namespaceBlacklist.Add("VRC.SDKBase.Editor.Validation");
+        namespaceBlacklist.Add("VRC.SDKBase.Source.Validation.Performance.Scanners");
 
         #region XML Handling
         //load ALL XML files recursively at once and merge them into a single XML
@@ -87,6 +90,12 @@ public partial class Program
         //convert to individual lists of member types. All we care about is the name field of the member
         foreach (XmlNode member in membersNode.ChildNodes)
         {
+            //check if there is a node called incomplete, if there is, then skip this member
+            if (member[incompleteMarker] != null)
+            {
+                continue;
+            }
+
             string memberID = DetermineMemberID(member);
             if (memberID == "Type")
             {
@@ -157,7 +166,7 @@ public partial class Program
             List<string> types = new List<string>();
             foreach (INamedElement element in allElements)
             {
-                string searchString = GetSearchString(element);
+                string searchString = GetXMLNameString(element);
 
                 //find if it is in the XML by doing *:FullName
                 if (typeMembers.Contains("T:" + searchString))
@@ -186,12 +195,143 @@ public partial class Program
             coverageData.Add(new namespaceCoverageData(data, data.namespaceName, types, fields, propertys, methods, events));
         }
 
+        //total up the complete coverage data
+        int totalCovered = 0;
+        int totalToCover = 0;
+        foreach (namespaceCoverageData data in coverageData)
+        {
+            totalCovered += data.GetTotalElements();
+            totalToCover += data.publicData.GetTotalElements();
+        }
+
+        Console.WriteLine(string.Format("Total Coverage: {0}/{1} ({2}%)", totalCovered, totalToCover, totalCovered / (float)totalToCover * 100));
+
         //tally up total coverage data and print it
         foreach (namespaceCoverageData data in coverageData)
         {
             Console.WriteLine(data);
         }
+
+
+
+
+        //System to generate XML files automatically
+        const string pathToGenerate = "VRC.SDKBase.VRCPlayerApi";
+
+        //gather up all the elements in the namespace
+        List<IField> fieldsGen = new List<IField>();
+        List<IProperty> propertysGen = new List<IProperty>();
+        List<IMethod> methodsGen = new List<IMethod>();
+        List<IEvent> eventsGen = new List<IEvent>();
+        List<ITypeDefinition> typesGen = new List<ITypeDefinition>();
+        foreach (namespaceAssemblyData data in assemblyData)
+        {
+            if (pathToGenerate.Contains(data.namespaceName))
+            {
+                foreach (IField field in data.publicFields)
+                {
+                    if (field.FullName.Contains(pathToGenerate))
+                    {
+                        fieldsGen.Add(field);
+                    }
+                }
+                foreach (IProperty property in data.publicProperties)
+                {
+                    if (property.FullName.Contains(pathToGenerate))
+                    {
+                        propertysGen.Add(property);
+                    }
+                }
+                foreach (IMethod method in data.publicMethods)
+                {
+                    if (method.FullName.Contains(pathToGenerate))
+                    {
+                        methodsGen.Add(method);
+                    }
+                }
+                foreach (IEvent @event in data.publicEvents)
+                {
+                    if (@event.FullName.Contains(pathToGenerate))
+                    {
+                        eventsGen.Add(@event);
+                    }
+                }
+                foreach (ITypeDefinition type in data.publicTypes)
+                {
+                    if (type.FullName.Contains(pathToGenerate))
+                    {
+                        typesGen.Add(type);
+                    }
+                }
+            }
+        }
+
+        Console.WriteLine(string.Format("Found {0} fields, {1} propertys, {2} methods, {3} events, {4} types to generate for {5}", fieldsGen.Count, propertysGen.Count, methodsGen.Count, eventsGen.Count, typesGen.Count, pathToGenerate));
+
+        //generate a XML file next to where this is
+        string xmlPath = basePath + @"\GeneratedXML\" + pathToGenerate + ".xml";
+
+        //make sure the folder exists
+        Directory.CreateDirectory(Path.GetDirectoryName(xmlPath));
+
+        //create the XML document
+        XmlDocument generatedDoc = new XmlDocument();
+        generatedDoc.LoadXml("<members></members>");
+        XmlNode generatedMembersNode = generatedDoc.GetElementsByTagName("members")[0];
+
+        //add all the fields
+        foreach (IField field in fieldsGen)
+        {
+            GenXML(generatedDoc, generatedMembersNode, field, "F:", fieldMembers);
+        }
+        foreach (IProperty property in propertysGen)
+        {
+            GenXML(generatedDoc, generatedMembersNode, property, "P:", propertyMembers);
+        }
+        foreach (IMethod method in methodsGen)
+        {
+            GenXML(generatedDoc, generatedMembersNode, method, "M:", methodMembers);
+        }
+        foreach (IEvent @event in eventsGen)
+        {
+            GenXML(generatedDoc, generatedMembersNode, @event, "E:", eventMembers);
+        }
+        foreach (ITypeDefinition type in typesGen)
+        {
+            GenXML(generatedDoc, generatedMembersNode, type, "T:", typeMembers);
+        }
+
+        //save it
+        generatedDoc.Save(xmlPath);
     }
+
+    private static void GenXML(XmlDocument generatedDoc, XmlNode generatedMembersNode, INamedElement element, string type, List<string> existingMembers)
+    {
+        if (existingMembers.Contains(type + GetXMLNameString(element)))
+        {
+            Console.WriteLine("Skipping " + element.Name + " as it is already documented");
+            return;
+        }
+
+        XmlNode fieldNode = generatedDoc.CreateElement("member");
+        XmlAttribute fieldAttribute = generatedDoc.CreateAttribute("name");
+        fieldAttribute.Value = type + GetXMLNameString(element);
+        fieldNode.Attributes.Append(fieldAttribute);
+        //add the docURL node
+        XmlNode docURLNode = generatedDoc.CreateElement("docURL");
+        docURLNode.InnerText = "???";
+        fieldNode.AppendChild(docURLNode);
+        //add the incomplete node
+        XmlNode incompleteNode = generatedDoc.CreateElement(incompleteMarker);
+        fieldNode.AppendChild(incompleteNode);
+        //add a summary
+        XmlNode summaryNode = generatedDoc.CreateElement("summary");
+        summaryNode.InnerText = "This is not documented properly yet";
+        fieldNode.AppendChild(summaryNode);
+
+        generatedMembersNode.AppendChild(fieldNode);
+    }
+
 
     private static void GenerateSourceCode()
     {
@@ -204,7 +344,7 @@ public partial class Program
             Directory.Delete(decompiledSourcePath, true);
         }
 
-        foreach(string assembly in assemblys)
+        foreach (string assembly in assemblys)
         {
             var resolver = new UniversalAssemblyResolver(assembly, false, assembly);
             resolver.AddSearchDirectory(Path.GetDirectoryName(assembly));
@@ -231,7 +371,7 @@ public partial class Program
         Console.WriteLine("Generated source code");
     }
 
-    private static string GetSearchString(INamedElement element)
+    private static string GetXMLNameString(INamedElement element)
     {
         //get the named element as a member
         IMethod member = element as IMethod;
@@ -266,6 +406,9 @@ public partial class Program
         return searchString;
     }
 
+    /// <summary>
+    /// A class to store the coverage data of a namespace
+    /// </summary>
     private class namespaceCoverageData
     {
         public namespaceAssemblyData publicData;
@@ -294,43 +437,60 @@ public partial class Program
         }
 
         const string Tab = "   ";
-        
+
         //make a comparer to a namespacePublicData object
         public string CompareTo(namespaceAssemblyData data)
         {
             //only compare if there is any reason to, for example if 0/0, then just dont compare
             string result = "";
-            result += "Namespace: " + namespaceName + "\n";
+
+            //determine the total coverage of the namespace
+            int total = GetTotalElements();
+            int totalData = data.GetTotalElements();
+
+            result += string.Format("Namespace: {0} ({1}/{2} ({3}%)\n", namespaceName, total, totalData, CalculateCoveragePercentage(total, totalData));
             if (data.publicTypes.Count > 0)
             {
-                result += Tab + "Public Types: " + types.Count + "/" + data.publicTypes.Count + " (" + (types.Count / (float)data.publicTypes.Count * 100).ToString("0.00") + "%)\n";
+                result += string.Format("{0}Public Types: {1}/{2} ({3}%)\n", Tab, types.Count, data.publicTypes.Count, CalculateCoveragePercentage(types.Count, data.publicTypes.Count));
                 result += CreateDefinitionList(types, data.publicTypes);
             }
 
             if (data.publicFields.Count > 0)
             {
-                result += Tab + "Public Fields: " + fields.Count + "/" + data.publicFields.Count + " (" + (fields.Count / (float)data.publicFields.Count * 100).ToString("0.00") + "%)\n";
+                result += string.Format("{0}Public Fields: {1}/{2} ({3}%)\n", Tab, fields.Count, data.publicFields.Count, CalculateCoveragePercentage(fields.Count, data.publicFields.Count));
                 result += CreateDefinitionList(fields, data.publicFields);
             }
             if (data.publicProperties.Count > 0)
             {
-                result += Tab + "Public Properties: " + propertys.Count + "/" + data.publicProperties.Count + " (" + (propertys.Count / (float)data.publicProperties.Count * 100).ToString("0.00") + "%)\n";
+                result += string.Format("{0}Public Properties: {1}/{2} ({3}%)\n", Tab, propertys.Count, data.publicProperties.Count, CalculateCoveragePercentage(propertys.Count, data.publicProperties.Count));
                 result += CreateDefinitionList(propertys, data.publicProperties);
             }
             if (data.publicMethods.Count > 0)
             {
-                result += Tab + "Public Methods: " + methods.Count + "/" + data.publicMethods.Count + " (" + (methods.Count / (float)data.publicMethods.Count * 100).ToString("0.00") + "%)\n";
+                result += string.Format("{0}Public Methods: {1}/{2} ({3}%)\n", Tab, methods.Count, data.publicMethods.Count, CalculateCoveragePercentage(methods.Count, data.publicMethods.Count));
                 result += CreateDefinitionList(methods, data.publicMethods);
             }
             if (data.publicEvents.Count > 0)
             {
-                result += Tab + "Public Events: " + events.Count + "/" + data.publicEvents.Count + " (" + (events.Count / (float)data.publicEvents.Count * 100).ToString("0.00") + "%)\n";
+                result += string.Format("{0}Public Events: {1}/{2} ({3}%)\n", Tab, events.Count, data.publicEvents.Count, CalculateCoveragePercentage(events.Count, data.publicEvents.Count));
                 result += CreateDefinitionList(events, data.publicEvents);
             }
 
 
             return result;
         }
+
+        public int GetTotalElements()
+        {
+            return types.Count + fields.Count + propertys.Count + methods.Count + events.Count;
+        }
+
+
+        private string CalculateCoveragePercentage(int namespaceDataCount, int assemblyDataCount)
+        {
+            return (namespaceDataCount / (float)assemblyDataCount * 100).ToString("0.00");
+        }
+
 
         private string CreateDefinitionList<T>(List<string> definedList, List<T> namedElements)
         {
@@ -355,10 +515,17 @@ public partial class Program
                 IType symbol = field != null ? field.ReturnType : null;
                 string kind = symbol != null ? symbol.Kind.ToString() : "";
 
+                //make sure the kind ends on the same ammount of characters
+                while (kind.Length < 10)
+                {
+                    kind += " ";
+                }
+
                 //format the kind as yellow
                 kind = "\x1b[33m" + kind + "\x1b[39m";
 
-                result += String.Format("{0}{0}{1} {2} {3}\n", Tab, definedString, kind, GetSearchString(namedElement));
+
+                result += String.Format("{0}{0}{1} {2} {3}\n", Tab, definedString, kind, GetXMLNameString(namedElement));
             }
 
             return result;
@@ -370,6 +537,9 @@ public partial class Program
         }
     }
 
+    /// <summary>
+    /// A class to store the public data of a namespace
+    /// </summary>
     private class namespaceAssemblyData
     {
         public string namespaceName;
@@ -387,16 +557,17 @@ public partial class Program
             publicEvents = new List<IEvent>();
             publicTypes = new List<ITypeDefinition>();
             publicMethods = new List<IMethod>();
+
+            publicFields.Sort((x, y) => x.Name.CompareTo(y.Name));
+            publicProperties.Sort((x, y) => x.Name.CompareTo(y.Name));
+            publicEvents.Sort((x, y) => x.Name.CompareTo(y.Name));
+            publicTypes.Sort((x, y) => x.Name.CompareTo(y.Name));
+            publicMethods.Sort((x, y) => x.Name.CompareTo(y.Name));
         }
 
-        public override string ToString()
+        public int GetTotalElements()
         {
-            return "Namespace: " + namespaceName + "\n" +
-                "   Public Types: " + publicTypes.Count + "\n" +
-                "   Public Fields: " + publicFields.Count + "\n" +
-                "   Public Properties: " + publicProperties.Count + "\n" +
-                "   Public Methods: " + publicMethods.Count + "\n" +
-                "   Public Events: " + publicEvents.Count + "\n";
+            return publicFields.Count + publicProperties.Count + publicEvents.Count + publicTypes.Count + publicMethods.Count;
         }
     }
 

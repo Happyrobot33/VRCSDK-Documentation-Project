@@ -1,5 +1,30 @@
 <?xml version="1.0"?>
 <members>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.channel">
+        <docURL>???</docURL>
+        <incomplete />
+        <summary>This is not documented properly yet</summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.note">
+        <docURL>???</docURL>
+        <incomplete />
+        <summary>This is not documented properly yet</summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.OnNoteOn">
+        <docURL>???</docURL>
+        <incomplete />
+        <summary>This is not documented properly yet</summary>
+    </member>
+    <member name="F:VRC.SDKBase.VRC_MidiNoteIn.OnNoteOff">
+        <docURL>???</docURL>
+        <incomplete />
+        <summary>This is not documented properly yet</summary>
+    </member>
+    <member name="T:VRC.SDKBase.VRC_MidiNoteIn">
+        <docURL>???</docURL>
+        <incomplete />
+        <summary>This is not documented properly yet</summary>
+    </member>
     <member name="T:VRC.SDKBase.VRC_MidiNoteIn.Channel">
         <docURL>https://creators.vrchat.com/worlds/udon/midi/midi-playback</docURL>
         <summary>
