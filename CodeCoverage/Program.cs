@@ -558,7 +558,7 @@ public partial class Program
                     }
                 }
                 //display a checkmark or a X depending on if it is defined. Make sure its only in ascii, and no unicode
-                string definedString = defined ? green + "✔" : red + "✘";
+                string definedString = defined ? green + "Y" : red + "N";
                 definedString += reset;
 
                 IField field = namedElement as IField;
