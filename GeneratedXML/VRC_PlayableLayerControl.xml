@@ -1,0 +1,62 @@
+<members>
+  <member name="F:VRC.SDKBase.VRC_PlayableLayerControl.layer">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PlayableLayerControl.goalWeight">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PlayableLayerControl.blendDuration">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PlayableLayerControl.debugString">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PlayableLayerControl.outputParamHash">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PlayableLayerControl.BlendableLayer.Action">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PlayableLayerControl.BlendableLayer.FX">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PlayableLayerControl.BlendableLayer.Gesture">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PlayableLayerControl.BlendableLayer.Additive">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRC_PlayableLayerControl.OnStateEnter(UnityEngine.Animator,UnityEngine.AnimatorStateInfo,System.Int32)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDKBase.VRC_PlayableLayerControl">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDKBase.VRC_PlayableLayerControl.BlendableLayer">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

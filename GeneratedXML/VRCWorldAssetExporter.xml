@@ -1,0 +1,47 @@
+<members>
+  <member name="P:VRC.SDK3.Editor.Builder.VRCWorldAssetExporter.Name">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Editor.Builder.VRCWorldAssetExporter.ExportCurrentSceneResource">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Editor.Builder.VRCWorldAssetExporter.ExportCurrentSceneResource(System.Boolean,System.Action,System.Action)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Editor.Builder.VRCWorldAssetExporter.FinishExportCurrentSceneResourceWithPlugin">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Editor.Builder.VRCWorldAssetExporter.RunScene(System.String,System.String)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Editor.Builder.VRCWorldAssetExporter.LaunchSceneBlueprintUploader">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Editor.Builder.VRCWorldAssetExporter.RunExportedSceneResourceAndCleanupPlugin">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Editor.Builder.VRCWorldAssetExporter..ctor">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDK3.Editor.Builder.VRCWorldAssetExporter">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

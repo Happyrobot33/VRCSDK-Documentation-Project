@@ -1,0 +1,142 @@
+<members>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.world">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.roomId">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.customPortalName">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.sortHeading">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.sortOrder">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.offset">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.searchTerm">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.tag">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.useDefaultPresentation">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.effectPrefabName">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.roomName">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.updateFlag">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.SortHeading.Featured">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.SortHeading.Trending">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.SortHeading.Updated">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.SortHeading.Created">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.SortHeading.Active">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.SortHeading.None">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.SortOrder.Ascending">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.SortOrder.Descending">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.VRChatWorld.None">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.VRChatWorld.Hub">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_PortalMarker.VRChatWorld.Home">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRC_PortalMarker.RefreshPortal">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDKBase.VRC_PortalMarker">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDKBase.VRC_PortalMarker.SortHeading">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDKBase.VRC_PortalMarker.SortOrder">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDKBase.VRC_PortalMarker.VRChatWorld">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

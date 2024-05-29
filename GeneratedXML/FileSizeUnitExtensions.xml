@@ -1,0 +1,42 @@
+<members>
+  <member name="F:VRC.FileSizeUnitExtensions.KBInBytes">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.FileSizeUnitExtensions.MBInBytes">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.FileSizeUnitExtensions.GBInBytes">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.FileSizeUnitExtensions.TBInBytes">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.FileSizeUnitExtensions.TryParse(System.String,VRC.FileSizeUnit@)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.FileSizeUnitExtensions.GetUnitSize(VRC.FileSizeUnit)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.FileSizeUnitExtensions.GetPostfix(VRC.FileSizeUnit)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.FileSizeUnitExtensions">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

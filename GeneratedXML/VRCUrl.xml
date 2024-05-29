@@ -1,0 +1,32 @@
+<members>
+  <member name="M:VRC.SDKBase.VRCUrl..ctor(System.String)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRCUrl.Get">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRCUrl.ToString">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRCUrl.Equals(System.Object)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRCUrl.Equals(VRC.SDKBase.VRCUrl)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRCUrl.GetHashCode">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

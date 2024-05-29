@@ -1,0 +1,97 @@
+<members>
+  <member name="P:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.Initialize">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.VideoURL">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.AutoPlay">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.MaximumResolution">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.Initialized">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.UseLowLatency">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.Loop">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.IsPlaying">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.IsReady">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.LoadURL(VRC.SDKBase.VRCUrl)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.PlayURL(VRC.SDKBase.VRCUrl)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.Play">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.Pause">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.Stop">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.GetDuration">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.GetTime">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.SetTime(System.Single)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer..ctor">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

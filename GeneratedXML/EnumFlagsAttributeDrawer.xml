@@ -1,0 +1,17 @@
+<members>
+  <member name="M:VRC.SDK3.Editor.EnumFlagsAttributeDrawer.OnGUI(UnityEngine.Rect,UnityEditor.SerializedProperty,UnityEngine.GUIContent)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Editor.EnumFlagsAttributeDrawer..ctor">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDK3.Editor.EnumFlagsAttributeDrawer">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

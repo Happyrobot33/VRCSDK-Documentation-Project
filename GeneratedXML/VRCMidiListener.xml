@@ -1,0 +1,37 @@
+<members>
+  <member name="F:VRC.SDK3.Midi.VRCMidiListener.activeEvents">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDK3.Midi.VRCMidiListener.MidiEvents.NoteOn">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDK3.Midi.VRCMidiListener.MidiEvents.NoteOff">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDK3.Midi.VRCMidiListener.MidiEvents.CC">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Midi.VRCMidiListener..ctor">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDK3.Midi.VRCMidiListener">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDK3.Midi.VRCMidiListener.MidiEvents">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

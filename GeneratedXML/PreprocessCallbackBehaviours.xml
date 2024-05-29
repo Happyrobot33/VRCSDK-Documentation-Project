@@ -1,0 +1,22 @@
+<members>
+  <member name="P:PreprocessCallbackBehaviours.callbackOrder">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:PreprocessCallbackBehaviours.OnPreprocessAvatar(UnityEngine.GameObject)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:PreprocessCallbackBehaviours..ctor">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:PreprocessCallbackBehaviours">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

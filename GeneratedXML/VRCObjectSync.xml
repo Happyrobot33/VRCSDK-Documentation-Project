@@ -1,0 +1,62 @@
+<members>
+  <member name="F:VRC.SDK3.Components.VRCObjectSync.AllowCollisionOwnershipTransfer">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Components.VRCObjectSync.SetKinematicHook">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Components.VRCObjectSync.SetGravityHook">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Components.VRCObjectSync.FlagDiscontinuityHook">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Components.VRCObjectSync.SetKinematic(System.Boolean)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Components.VRCObjectSync.SetGravity(System.Boolean)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Components.VRCObjectSync.FlagDiscontinuity">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Components.VRCObjectSync.TeleportTo(UnityEngine.Transform)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Components.VRCObjectSync.Respawn">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Components.VRCObjectSync.NetworkConfigure">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Components.VRCObjectSync..ctor">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDK3.Components.VRCObjectSync">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

@@ -1,0 +1,52 @@
+<members>
+  <member name="M:VRC.SDKBase.Editor.AssetExporter.ExportCurrentSceneAsUnityPackageIfNotExist">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.Editor.AssetExporter.ExportCurrentSceneAsUnityPackage">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.Editor.AssetExporter.ExportCurrentAssetAsUnityPackage(System.Collections.Generic.List,System.String)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.Editor.AssetExporter.CleanupUnityPackageExport">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.Editor.AssetExporter.GetActiveSceneUnityPackageExportPath">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.Editor.AssetExporter.FindDynamicContent(System.Collections.Generic.List@,System.Collections.Generic.List@)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.Editor.AssetExporter.DoPreExportShaderReplacement">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.Editor.AssetExporter.CleanupTmpFiles">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.Editor.AssetExporter..ctor">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDKBase.Editor.AssetExporter">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

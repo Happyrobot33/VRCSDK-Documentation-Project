@@ -89,6 +89,7 @@
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCAvatarPedestal.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDKBase\InputManager.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCMirrorReflection.xml" />
+    <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDKBase\VRC_AnimatorPlayAudio.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCObjectPool.xml" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,42 @@
+<members>
+  <member name="M:VRC.SDKBase.VRC_TutorialAction.ActivateAreaMarkerLabel(UnityEngine.Transform,System.String)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRC_TutorialAction.ActivateObjectLabel(UnityEngine.Transform,TutorialLabelType,ControllerHand,System.String,System.Single,System.Int32,AttachMode,System.Boolean)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRC_TutorialAction.ActivateObjectLabel(UnityEngine.Transform,TutorialLabelType,ControllerHand,System.String,ControllerActionUI,System.Single,System.Int32,AttachMode,System.Boolean)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRC_TutorialAction.ActivateObjectLabel(UnityEngine.Transform,TutorialLabelType,ControllerHand,System.String,ControllerActionUI,System.String,ControllerActionUI,System.Single,System.Int32,AttachMode,System.Boolean)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRC_TutorialAction.DeactivateObjectLabel(UnityEngine.Transform)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRC_TutorialAction.ActivateControllerLabel(ControllerHand,ControllerInputUI,System.String,System.Single,System.Int32)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRC_TutorialAction.DeactivateControllerLabel(ControllerHand,ControllerInputUI)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDKBase.VRC_TutorialAction">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

@@ -1,0 +1,212 @@
+<members>
+  <member name="F:VRC.SDKBase.VRC_Pickup.MomentumTransferMethod">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.DisallowTheft">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.ExactGun">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.ExactGrip">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.allowManipulationWhenEquipped">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.orientation">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.AutoHold">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.InteractionText">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.UseText">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.useEventBroadcastType">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.UseDownEventName">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.UseUpEventName">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.pickupDropEventBroadcastType">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.PickupEventName">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.DropEventName">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.ThrowVelocityBoostMinSpeed">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.ThrowVelocityBoostScale">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.currentlyHeldBy">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.currentLocalPlayer">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.pickupable">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.proximity">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.PickupOrientation.Any">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.PickupOrientation.Grip">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.PickupOrientation.Gun">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.AutoHoldMode.AutoDetect">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.AutoHoldMode.Yes">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.AutoHoldMode.No">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.PickupHand.None">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.PickupHand.Left">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDKBase.VRC_Pickup.PickupHand.Right">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDKBase.VRC_Pickup.currentPlayer">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDKBase.VRC_Pickup.IsHeld">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDKBase.VRC_Pickup.currentHand">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRC_Pickup.Drop">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRC_Pickup.Drop(VRC.SDKBase.VRCPlayerApi)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRC_Pickup.GenerateHapticEvent(System.Single,System.Single,System.Single)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRC_Pickup.PlayHaptics">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRC_Pickup.ProvideEvents">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDKBase.VRC_Pickup">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDKBase.VRC_Pickup.PickupOrientation">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDKBase.VRC_Pickup.AutoHoldMode">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDKBase.VRC_Pickup.PickupHand">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

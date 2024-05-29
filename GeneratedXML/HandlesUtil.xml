@@ -1,0 +1,62 @@
+<members>
+  <member name="M:HandlesUtil.SetColor(UnityEngine.Color,System.Single)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:HandlesUtil.DrawWireSphere(UnityEngine.Vector3,System.Single)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:HandlesUtil.DrawWireSphere(UnityEngine.Vector3,UnityEngine.Quaternion,System.Single)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:HandlesUtil.DrawWireCylinder(UnityEngine.Vector3,System.Single,System.Single,System.Single,UnityEngine.Quaternion,System.Int32)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:HandlesUtil.DrawWireCapsule(UnityEngine.Vector3,UnityEngine.Quaternion,System.Single,System.Single)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:HandlesUtil.DrawWireCapsule(UnityEngine.Vector3,UnityEngine.Quaternion,System.Single,System.Single,System.Single)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:HandlesUtil.DrawWireAngleCone(UnityEngine.Vector3,UnityEngine.Quaternion,System.Single,System.Single,System.Int32)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:HandlesUtil.DrawSolidAngleCone(UnityEngine.Vector3,UnityEngine.Quaternion,System.Single,System.Single)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:HandlesUtil.DrawWireSquare(UnityEngine.Vector3,UnityEngine.Quaternion,System.Single)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:HandlesUtil.DrawWireSquare(UnityEngine.Vector3,UnityEngine.Vector3,System.Single)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:HandlesUtil.DrawWirePlane(UnityEngine.Vector3,UnityEngine.Vector3,System.Single)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:HandlesUtil">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

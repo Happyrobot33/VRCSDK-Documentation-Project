@@ -1,0 +1,62 @@
+<members>
+  <member name="F:VRC.SDK3.Midi.VRCMidiHandler.STATUS_NOTE_OFF">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDK3.Midi.VRCMidiHandler.STATUS_NOTE_ON">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="F:VRC.SDK3.Midi.VRCMidiHandler.STATUS_CONTROL_CHANGE">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Midi.VRCMidiHandler.Initialize">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Midi.VRCMidiHandler.OnLog">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Midi.VRCMidiHandler.Instance">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Midi.VRCMidiHandler.OpenMidiInput(System.String)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Midi.VRCMidiHandler..ctor">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="E:VRC.SDK3.Midi.VRCMidiHandler.OnNoteOn">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="E:VRC.SDK3.Midi.VRCMidiHandler.OnNoteOff">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="E:VRC.SDK3.Midi.VRCMidiHandler.OnControlChange">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDK3.Midi.VRCMidiHandler">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

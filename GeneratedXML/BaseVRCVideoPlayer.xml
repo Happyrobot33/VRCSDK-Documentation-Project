@@ -1,0 +1,117 @@
+<members>
+  <member name="F:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.EnableAutomaticResync">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.InitializeBase">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.SyncIndexTimeSet">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.SyncIndexPosition">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.Loop">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.IsPlaying">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.IsReady">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.SetIndexMarker(System.Single)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.SetIndexMarker">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.PlayURL(VRC.SDKBase.VRCUrl)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.Play">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.SetTime(System.Single)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.LoadURL(VRC.SDKBase.VRCUrl)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.Pause">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.Stop">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.GetTime">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.GetDuration">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.OnVideoReady">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.OnVideoError(VRC.SDK3.Components.Video.VideoError)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.OnVideoStart">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.OnVideoLoop">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.OnVideoEnd">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

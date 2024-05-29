@@ -1,0 +1,37 @@
+<members>
+  <member name="M:VRC.SDKBase.VRC_NpcApi.GetApiByGameObject(UnityEngine.GameObject)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRC_NpcApi.ActThis(System.Int32,System.Boolean)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRC_NpcApi.SayThis(UnityEngine.AudioClip,System.Single)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRC_NpcApi.SetNamePlate(System.Boolean,System.String,System.String)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRC_NpcApi.SetSocialStatus(System.Boolean,System.Boolean,System.Boolean)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRC_NpcApi.SetMuteStatus(System.Boolean,System.Boolean)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDKBase.VRC_NpcApi">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

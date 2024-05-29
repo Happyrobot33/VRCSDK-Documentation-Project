@@ -1,0 +1,22 @@
+<members>
+  <member name="P:AssignAvatarNetworkIDs.callbackOrder">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:AssignAvatarNetworkIDs.OnPreprocessAvatar(UnityEngine.GameObject)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:AssignAvatarNetworkIDs..ctor">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:AssignAvatarNetworkIDs">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

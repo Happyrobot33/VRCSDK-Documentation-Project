@@ -1,0 +1,87 @@
+<members>
+  <member name="P:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest.done">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest.hasError">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest.width">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest.height">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest.depth">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest.layerCount">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest.layerDataSize">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Rendering.VRCAsyncGPUReadback.Request(UnityEngine.Texture,System.Int32,VRC.Udon.Common.Interfaces.IUdonEventReceiver)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Rendering.VRCAsyncGPUReadback.Request(UnityEngine.Texture,System.Int32,UnityEngine.TextureFormat,VRC.Udon.Common.Interfaces.IUdonEventReceiver)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Rendering.VRCAsyncGPUReadback.Request(UnityEngine.Texture,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,VRC.Udon.Common.Interfaces.IUdonEventReceiver)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Rendering.VRCAsyncGPUReadback.Request(UnityEngine.Texture,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,UnityEngine.TextureFormat,VRC.Udon.Common.Interfaces.IUdonEventReceiver)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest.TryGetData(System.Byte[],System.Int32)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest.TryGetData(System.Single[],System.Int32)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest.TryGetData(UnityEngine.Color32[],System.Int32)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest.TryGetData(UnityEngine.Color[],System.Int32)">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDK3.Rendering.VRCAsyncGPUReadback">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

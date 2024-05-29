@@ -12,6 +12,13 @@ using ICSharpCode.Decompiler.TypeSystem;
 
 public partial class Program
 {
+    const string green = "\x1b[32m";
+    const string yellow = "\x1b[33m";
+    const string orange = "\x1b[38;5;208m";
+    const string red = "\x1b[31m";
+    const string blue = "\x1b[34m";
+    const string reset = "\x1b[39m";
+
     static string basePath = @"E:\Storage\Personal\Coding\VRChat\VRCSDK-Documentation-Project";
     static List<string> assemblys = new List<string>();
     //static string testAssemblyPath = basePath + @"\Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase.dll";
@@ -45,7 +52,7 @@ public partial class Program
 
         //populate the namespace blacklist
         namespaceBlacklist.Add("VRC.SDKBase.Validation.*");
-        namespaceBlacklist.Add("VRC.SDK3");
+        //namespaceBlacklist.Add("VRC.SDK3");
         namespaceBlacklist.Add("VRC.SDKBase.RPC");
         namespaceBlacklist.Add("VRC.SDKBase.Network");
         namespaceBlacklist.Add("VRC.SDKBase.Editor.Attributes");
@@ -212,12 +219,40 @@ public partial class Program
             Console.WriteLine(data);
         }
 
-
-
-
         //System to generate XML files automatically
-        const string pathToGenerate = "VRC.SDKBase.VRCPlayerApi";
+        //const string pathToGenerate = "VRC.SDK3.Data.DataDictionary";
 
+        //get all classes
+        foreach (namespaceAssemblyData data in assemblyData)
+        {
+            Console.WriteLine(string.Format("{0}Generating XML files for {1}{2}", blue, data.namespaceName, reset));
+            foreach (ITypeDefinition type in data.publicTypes)
+            {
+                //skip if the type is not a normal class, so skipping things like enums
+                if (type.Kind != TypeKind.Class)
+                {
+                    continue;
+                }
+                //make sure its the top level class
+                if (type.DeclaringType != null)
+                {
+                    continue;
+                }
+                BlankDocGen(assemblyData, type.FullName);
+                //Console.WriteLine(type.FullName);
+            }
+        }
+
+        //BlankDocGen(assemblyData, pathToGenerate);
+    }
+
+    /// <summary>
+    /// Generate a blank XML file for a specific namespace
+    /// </summary>
+    /// <param name="assemblyData"></param>
+    /// <param name="pathToGenerate"></param>
+    private static void BlankDocGen(List<namespaceAssemblyData> assemblyData, string pathToGenerate)
+    {
         //gather up all the elements in the namespace
         List<IField> fieldsGen = new List<IField>();
         List<IProperty> propertysGen = new List<IProperty>();
@@ -266,10 +301,12 @@ public partial class Program
             }
         }
 
-        Console.WriteLine(string.Format("Found {0} fields, {1} propertys, {2} methods, {3} events, {4} types to generate for {5}", fieldsGen.Count, propertysGen.Count, methodsGen.Count, eventsGen.Count, typesGen.Count, pathToGenerate));
+        Console.WriteLine(string.Format("{0}Found {1} fields, {2} propertys, {3} methods, {4} events, {5} types to generate for {6}{7}", orange, fieldsGen.Count, propertysGen.Count, methodsGen.Count, eventsGen.Count, typesGen.Count, pathToGenerate, reset));
 
         //generate a XML file next to where this is
-        string xmlPath = basePath + @"\GeneratedXML\" + pathToGenerate + ".xml";
+        //string xmlPath = basePath + @"\GeneratedXML\" + pathToGenerate + ".xml";
+        //generate the name as just the class name
+        string xmlPath = basePath + @"\GeneratedXML\" + pathToGenerate.Split('.').Last() + ".xml";
 
         //make sure the folder exists
         Directory.CreateDirectory(Path.GetDirectoryName(xmlPath));
@@ -301,15 +338,28 @@ public partial class Program
             GenXML(generatedDoc, generatedMembersNode, type, "T:", typeMembers);
         }
 
+        //check if there is anything actually in the XML
+        if (generatedMembersNode.ChildNodes.Count == 0)
+        {
+            Console.WriteLine(string.Format("{0}Skipping {1} as it has no members left to document!{2}", green, pathToGenerate, reset));
+            //delete the file if it exists
+            if (File.Exists(xmlPath))
+            {
+                File.Delete(xmlPath);
+            }
+            return;
+        }
+
         //save it
         generatedDoc.Save(xmlPath);
     }
+
 
     private static void GenXML(XmlDocument generatedDoc, XmlNode generatedMembersNode, INamedElement element, string type, List<string> existingMembers)
     {
         if (existingMembers.Contains(type + GetXMLNameString(element)))
         {
-            Console.WriteLine("Skipping " + element.Name + " as it is already documented");
+            Console.WriteLine(string.Format("{0}Skipping {1} as it is already documented{2}", yellow, element.Name, reset));
             return;
         }
 
@@ -508,8 +558,8 @@ public partial class Program
                     }
                 }
                 //display a checkmark or a X depending on if it is defined. Make sure its only in ascii, and no unicode
-                string definedString = defined ? "\x1b[32mY" : "\x1b[31mN";
-                definedString += "\x1b[39m";
+                string definedString = defined ? green + "✔" : red + "✘";
+                definedString += reset;
 
                 IField field = namedElement as IField;
                 IType symbol = field != null ? field.ReturnType : null;
@@ -522,7 +572,7 @@ public partial class Program
                 }
 
                 //format the kind as yellow
-                kind = "\x1b[33m" + kind + "\x1b[39m";
+                kind = yellow + kind + reset;
 
 
                 result += String.Format("{0}{0}{1} {2} {3}\n", Tab, definedString, kind, GetXMLNameString(namedElement));
