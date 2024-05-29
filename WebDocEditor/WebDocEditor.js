@@ -112,6 +112,7 @@ class Member{
         let div = document.createElement("div");
         div.classList.add("member");
         div.innerHTML = "<h2>" + this.name + "</h2>";
+        EditableToggle(div, "incomplete", this.incomplete);
         EditableField(div, "docURL", this.URL);
         EditableField(div, "summary", this.summary);
         EditableField(div, "remarks", this.remarks);
@@ -152,6 +153,25 @@ function EditableField(div, fieldName, fieldValue){
     content.contentEditable = true;
     fieldDiv.appendChild(content);
     content.innerHTML = fieldValue;
+    //create the label
+    let label = document.createElement("label");
+    label.htmlFor = fieldName;
+    label.innerHTML = fieldName + ":";
+    fieldDiv.insertBefore(label, content);
+    content.addEventListener("input", updateOutput);
+    div.appendChild(fieldDiv);
+}
+
+function EditableToggle(div, fieldName, fieldValue){
+    //make a div to put the label and textarea in
+    let fieldDiv = document.createElement("div");
+    fieldDiv.classList.add("node");
+    //div.innerHTML += "<label for='" + fieldName + "'>" + fieldName + ":</label>";
+    //div.innerHTML += "<textarea id='" + fieldName + "' rows='4' cols='50'>" + fieldValue + "</textarea>";
+    let content = document.createElement("input");
+    content.type = "checkbox";
+    content.checked = fieldValue;
+    fieldDiv.appendChild(content);
     //create the label
     let label = document.createElement("label");
     label.htmlFor = fieldName;
