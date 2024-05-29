@@ -1,27 +1,39 @@
-/* text area and label formatting to make the labels ontop of the text area */
+/* Content editable divs, have a minimum size */
+div[contenteditable="true"] {
+    min-height: 1em;
+    min-width: 1em;
+}
+
 textarea {
     width: 100%;
-    height: 100px;
-    padding: 12px 20px;
-    box-sizing: border-box;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    background-color: #f8f8f8;
-    font-size: 16px;
-    resize: none;
 }
 
 label {
     display: inline-block;
+    width: 100%;
+    text-align: center;
+    color: #0044ff;
+    font-size: larger;
+}
+
+.node {
+    display: inline-block;
+    /* background */
+    background-color: #00000023;
+    /* padding */
+    padding: 5px;
+    /* margin */
+    margin: 5px;
 }
 
 .member {
-    display: inline-block;
+    /* Display across the width of the screen */
+    display: block;
     /* background */
     background-color: #00000023;
 }
 
-.parameter {
+.parameter_section {
     display: inline-block;
     /* darker background */
     background-color: #00000023;

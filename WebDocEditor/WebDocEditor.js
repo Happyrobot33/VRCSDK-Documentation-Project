@@ -60,7 +60,7 @@ class Parameter{
 
     getDiv(){
         let div = document.createElement("div");
-        div.classList.add("parameter");
+        div.classList.add("parameter_section");
         EditableField(div, "name", this.name);
         EditableField(div, "summary", this.summary);
         return div;
@@ -143,20 +143,22 @@ class Member{
 }
 
 function EditableField(div, fieldName, fieldValue){
+    //make a div to put the label and textarea in
+    let fieldDiv = document.createElement("div");
+    fieldDiv.classList.add("node");
     //div.innerHTML += "<label for='" + fieldName + "'>" + fieldName + ":</label>";
     //div.innerHTML += "<textarea id='" + fieldName + "' rows='4' cols='50'>" + fieldValue + "</textarea>";
-    let textarea = document.createElement("textarea");
-    //textarea.id = fieldName;
-    textarea.rows = 20;
-    textarea.cols = 50;
-    textarea.value = fieldValue;
-    div.appendChild(textarea);
+    let content = document.createElement("div");
+    content.contentEditable = true;
+    fieldDiv.appendChild(content);
+    content.innerHTML = fieldValue;
     //create the label
     let label = document.createElement("label");
     label.htmlFor = fieldName;
     label.innerHTML = fieldName + ":";
-    div.insertBefore(label, textarea);
-    textarea.addEventListener("input", updateOutput);
+    fieldDiv.insertBefore(label, content);
+    content.addEventListener("input", updateOutput);
+    div.appendChild(fieldDiv);
 }
 
 //initial setup
