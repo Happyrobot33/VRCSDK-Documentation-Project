@@ -238,6 +238,8 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="midiFile">???</param>
+    <param name="midiImportSettings">???</param>
   </member>
   <member name="M:VRC.SDK3.Midi.MidiRawData.MidiRawTrack..ctor">
     <docURL>???</docURL>

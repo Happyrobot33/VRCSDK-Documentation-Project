@@ -3,81 +3,180 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="source">???</param>
+    <param name="dest">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCGraphics.Blit(UnityEngine.Texture,UnityEngine.RenderTexture,UnityEngine.Material,System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="source">???</param>
+    <param name="dest">???</param>
+    <param name="mat">???</param>
+    <param name="pass">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCGraphics.Blit(UnityEngine.Texture,UnityEngine.RenderTexture,UnityEngine.Material)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="source">???</param>
+    <param name="dest">???</param>
+    <param name="mat">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCGraphics.Blit(UnityEngine.Texture,UnityEngine.RenderTexture,UnityEngine.Vector2,UnityEngine.Vector2)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="source">???</param>
+    <param name="dest">???</param>
+    <param name="scale">???</param>
+    <param name="offset">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCGraphics.Blit(UnityEngine.Texture,UnityEngine.RenderTexture,System.Int32,System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="source">???</param>
+    <param name="dest">???</param>
+    <param name="sourceDepthSlice">???</param>
+    <param name="destDepthSlice">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCGraphics.Blit(UnityEngine.Texture,UnityEngine.RenderTexture,UnityEngine.Vector2,UnityEngine.Vector2,System.Int32,System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="source">???</param>
+    <param name="dest">???</param>
+    <param name="scale">???</param>
+    <param name="offset">???</param>
+    <param name="sourceDepthSlice">???</param>
+    <param name="destDepthSlice">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCGraphics.Blit(UnityEngine.Texture,UnityEngine.Material,System.Int32,System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="source">???</param>
+    <param name="mat">???</param>
+    <param name="pass">???</param>
+    <param name="destDepthSlice">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCGraphics.DrawMeshInstanced(UnityEngine.Mesh,System.Int32,UnityEngine.Material,UnityEngine.Matrix4x4[])">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="mesh">???</param>
+    <param name="submeshIndex">???</param>
+    <param name="material">???</param>
+    <param name="matrices">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCGraphics.DrawMeshInstanced(UnityEngine.Mesh,System.Int32,UnityEngine.Material,UnityEngine.Matrix4x4[],System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="mesh">???</param>
+    <param name="submeshIndex">???</param>
+    <param name="material">???</param>
+    <param name="matrices">???</param>
+    <param name="count">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCGraphics.DrawMeshInstanced(UnityEngine.Mesh,System.Int32,UnityEngine.Material,UnityEngine.Matrix4x4[],System.Int32,UnityEngine.MaterialPropertyBlock)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="mesh">???</param>
+    <param name="submeshIndex">???</param>
+    <param name="material">???</param>
+    <param name="matrices">???</param>
+    <param name="count">???</param>
+    <param name="properties">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCGraphics.DrawMeshInstanced(UnityEngine.Mesh,System.Int32,UnityEngine.Material,UnityEngine.Matrix4x4[],System.Int32,UnityEngine.MaterialPropertyBlock,UnityEngine.Rendering.ShadowCastingMode)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="mesh">???</param>
+    <param name="submeshIndex">???</param>
+    <param name="material">???</param>
+    <param name="matrices">???</param>
+    <param name="count">???</param>
+    <param name="properties">???</param>
+    <param name="castShadows">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCGraphics.DrawMeshInstanced(UnityEngine.Mesh,System.Int32,UnityEngine.Material,UnityEngine.Matrix4x4[],System.Int32,UnityEngine.MaterialPropertyBlock,UnityEngine.Rendering.ShadowCastingMode,System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="mesh">???</param>
+    <param name="submeshIndex">???</param>
+    <param name="material">???</param>
+    <param name="matrices">???</param>
+    <param name="count">???</param>
+    <param name="properties">???</param>
+    <param name="castShadows">???</param>
+    <param name="receiveShadows">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCGraphics.DrawMeshInstanced(UnityEngine.Mesh,System.Int32,UnityEngine.Material,UnityEngine.Matrix4x4[],System.Int32,UnityEngine.MaterialPropertyBlock,UnityEngine.Rendering.ShadowCastingMode,System.Boolean,System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="mesh">???</param>
+    <param name="submeshIndex">???</param>
+    <param name="material">???</param>
+    <param name="matrices">???</param>
+    <param name="count">???</param>
+    <param name="properties">???</param>
+    <param name="castShadows">???</param>
+    <param name="receiveShadows">???</param>
+    <param name="layer">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCGraphics.DrawMeshInstanced(UnityEngine.Mesh,System.Int32,UnityEngine.Material,UnityEngine.Matrix4x4[],System.Int32,UnityEngine.MaterialPropertyBlock,UnityEngine.Rendering.ShadowCastingMode,System.Boolean,System.Int32,UnityEngine.Camera)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="mesh">???</param>
+    <param name="submeshIndex">???</param>
+    <param name="material">???</param>
+    <param name="matrices">???</param>
+    <param name="count">???</param>
+    <param name="properties">???</param>
+    <param name="castShadows">???</param>
+    <param name="receiveShadows">???</param>
+    <param name="layer">???</param>
+    <param name="camera">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCGraphics.DrawMeshInstanced(UnityEngine.Mesh,System.Int32,UnityEngine.Material,UnityEngine.Matrix4x4[],System.Int32,UnityEngine.MaterialPropertyBlock,UnityEngine.Rendering.ShadowCastingMode,System.Boolean,System.Int32,UnityEngine.Camera,UnityEngine.Rendering.LightProbeUsage)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="mesh">???</param>
+    <param name="submeshIndex">???</param>
+    <param name="material">???</param>
+    <param name="matrices">???</param>
+    <param name="count">???</param>
+    <param name="properties">???</param>
+    <param name="castShadows">???</param>
+    <param name="receiveShadows">???</param>
+    <param name="layer">???</param>
+    <param name="camera">???</param>
+    <param name="lightProbeUsage">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCGraphics.DrawMeshInstanced(UnityEngine.Mesh,System.Int32,UnityEngine.Material,UnityEngine.Matrix4x4[],System.Int32,UnityEngine.MaterialPropertyBlock,UnityEngine.Rendering.ShadowCastingMode,System.Boolean,System.Int32,UnityEngine.Camera,UnityEngine.Rendering.LightProbeUsage,UnityEngine.LightProbeProxyVolume)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="mesh">???</param>
+    <param name="submeshIndex">???</param>
+    <param name="material">???</param>
+    <param name="matrices">???</param>
+    <param name="count">???</param>
+    <param name="properties">???</param>
+    <param name="castShadows">???</param>
+    <param name="receiveShadows">???</param>
+    <param name="layer">???</param>
+    <param name="camera">???</param>
+    <param name="lightProbeUsage">???</param>
+    <param name="lightProbeProxyVolume">???</param>
   </member>
   <member name="T:VRC.SDKBase.VRCGraphics">
     <docURL>???</docURL>

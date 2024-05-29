@@ -8,41 +8,58 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="broadcast">???</param>
+    <param name="prefabPathOrDynamicPrefabName">???</param>
+    <param name="position">???</param>
+    <param name="rotation">???</param>
   </member>
   <member name="M:VRC.SDKBase.Networking.RPC(VRC.SDKBase.RPC.Destination,UnityEngine.GameObject,System.String,System.Object[])">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="targetClients">???</param>
+    <param name="targetObject">???</param>
+    <param name="methodName">???</param>
+    <param name="parameters">???</param>
   </member>
   <member name="M:VRC.SDKBase.Networking.RPC(VRC.SDKBase.VRCPlayerApi,UnityEngine.GameObject,System.String,System.Object[])">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="targetPlayer">???</param>
+    <param name="targetObject">???</param>
+    <param name="methodName">???</param>
+    <param name="parameters">???</param>
   </member>
   <member name="M:VRC.SDKBase.Networking.EncodeParameters(System.Object[])">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="parameters">???</param>
   </member>
   <member name="M:VRC.SDKBase.Networking.DecodeParameters(System.Byte[])">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="encodedData">???</param>
   </member>
   <member name="M:VRC.SDKBase.Networking.Destroy(UnityEngine.GameObject)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="obj">???</param>
   </member>
   <member name="M:VRC.SDKBase.Networking.GoToRoom(System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="roomID">???</param>
   </member>
   <member name="M:VRC.SDKBase.Networking.SafeStartCoroutine(System.Collections.IEnumerator)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="target">???</param>
   </member>
   <member name="M:VRC.SDKBase.Networking.GetEventDispatcher">
     <docURL>???</docURL>

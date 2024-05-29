@@ -73,6 +73,9 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="animator">???</param>
+    <param name="stateInfo">???</param>
+    <param name="layerIndex">???</param>
   </member>
   <member name="T:VRC.SDKBase.VRC_AnimatorTrackingControl">
     <docURL>???</docURL>

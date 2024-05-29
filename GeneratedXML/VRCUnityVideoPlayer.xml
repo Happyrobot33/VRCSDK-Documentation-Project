@@ -28,11 +28,13 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="url">???</param>
   </member>
   <member name="M:VRC.SDK3.Video.Components.VRCUnityVideoPlayer.PlayURL(VRC.SDKBase.VRCUrl)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="url">???</param>
   </member>
   <member name="M:VRC.SDK3.Video.Components.VRCUnityVideoPlayer.Pause">
     <docURL>???</docURL>
@@ -58,6 +60,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="value">???</param>
   </member>
   <member name="M:VRC.SDK3.Video.Components.VRCUnityVideoPlayer.Stop">
     <docURL>???</docURL>

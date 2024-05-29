@@ -3,6 +3,9 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="_position">???</param>
+    <param name="_property">???</param>
+    <param name="_label">???</param>
   </member>
   <member name="M:VRC.SDK3.Editor.EnumFlagsAttributeDrawer..ctor">
     <docURL>???</docURL>

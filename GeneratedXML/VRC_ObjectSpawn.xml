@@ -13,6 +13,8 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="position">???</param>
+    <param name="rotation">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_ObjectSpawn.DestroySpawnedObjects">
     <docURL>???</docURL>

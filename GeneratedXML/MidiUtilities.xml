@@ -3,6 +3,9 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="bpm">???</param>
+    <param name="ppq">???</param>
+    <param name="time">???</param>
   </member>
   <member name="T:VRC.SDK3.Midi.MidiUtilities">
     <docURL>???</docURL>

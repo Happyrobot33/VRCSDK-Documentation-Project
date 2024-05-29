@@ -3,26 +3,44 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="contentType">???</param>
+    <param name="mobilePlatform">???</param>
+    <param name="compressed">???</param>
   </member>
   <member name="M:VRC.ValidationHelpers.GetAssetBundleOverSizeLimitMessage(VRC.ContentType,System.Boolean,System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="contentType">???</param>
+    <param name="mobilePlatform">???</param>
+    <param name="compressed">???</param>
   </member>
   <member name="M:VRC.ValidationHelpers.GetAssetBundleOverSizeLimitMessage(VRC.ContentType,System.Int32,System.Boolean,System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="contentType">???</param>
+    <param name="contentSize">???</param>
+    <param name="mobilePlatform">???</param>
+    <param name="compressed">???</param>
   </member>
   <member name="M:VRC.ValidationHelpers.GetAssetBundleOverSizeLimitMessageSDKWarning(VRC.ContentType,System.Int32,System.Boolean,System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="contentType">???</param>
+    <param name="contentSize">???</param>
+    <param name="mobilePlatform">???</param>
+    <param name="compressed">???</param>
   </member>
   <member name="M:VRC.ValidationHelpers.FormatFileSize(System.Int64,System.Boolean,System.Int32,System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="filesize">???</param>
+    <param name="includeUnitPostfix">???</param>
+    <param name="precision">???</param>
+    <param name="requiredUnit">???</param>
   </member>
   <member name="T:VRC.ValidationHelpers">
     <docURL>???</docURL>

@@ -28,56 +28,76 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="symbolName">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.AbstractUdonBehaviour.GetProgramVariable(System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="symbolName">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.AbstractUdonBehaviour.GetProgramVariable(System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="symbolName">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.AbstractUdonBehaviour.TryGetProgramVariable(System.String,T@)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="symbolName">???</param>
+    <param name="value">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.AbstractUdonBehaviour.TryGetProgramVariable(System.String,System.Object@)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="symbolName">???</param>
+    <param name="value">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.AbstractUdonBehaviour.SetProgramVariable(System.String,T)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="symbolName">???</param>
+    <param name="value">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.AbstractUdonBehaviour.SetProgramVariable(System.String,System.Object)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="symbolName">???</param>
+    <param name="value">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.AbstractUdonBehaviour.SendCustomEvent(System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventName">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.AbstractUdonBehaviour.SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget,System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="target">???</param>
+    <param name="eventName">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.AbstractUdonBehaviour.SendCustomEventDelayedSeconds(System.String,System.Single,VRC.Udon.Common.Enums.EventTiming)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventName">???</param>
+    <param name="delaySeconds">???</param>
+    <param name="eventTiming">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.AbstractUdonBehaviour.SendCustomEventDelayedFrames(System.String,System.Int32,VRC.Udon.Common.Enums.EventTiming)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventName">???</param>
+    <param name="delayFrames">???</param>
+    <param name="eventTiming">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.AbstractUdonBehaviour.InitializeUdonContent">
     <docURL>???</docURL>
@@ -88,36 +108,51 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventName">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.AbstractUdonBehaviour.RunEvent(System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventName">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.AbstractUdonBehaviour.RunEvent(System.String,System.ValueTuple)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventName">???</param>
+    <param name="parameter0">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.AbstractUdonBehaviour.RunEvent(System.String,System.ValueTuple,System.ValueTuple)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventName">???</param>
+    <param name="parameter0">???</param>
+    <param name="parameter1">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.AbstractUdonBehaviour.RunEvent(System.String,System.ValueTuple,System.ValueTuple,System.ValueTuple)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventName">???</param>
+    <param name="parameter0">???</param>
+    <param name="parameter1">???</param>
+    <param name="parameter2">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.AbstractUdonBehaviour.RunEvent(System.String,System.ValueTuple[])">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventName">???</param>
+    <param name="programVariables">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.AbstractUdonBehaviour.RunInputEvent(System.String,VRC.Udon.Common.UdonInputEventArgs)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventName">???</param>
+    <param name="args">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.AbstractUdonBehaviour.RequestSerialization">
     <docURL>???</docURL>

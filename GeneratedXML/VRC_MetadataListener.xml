@@ -8,6 +8,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="data">???</param>
   </member>
   <member name="T:VRC.SDKBase.VRC_MetadataListener">
     <docURL>???</docURL>

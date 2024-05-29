@@ -379,6 +379,21 @@ public partial class Program
         summaryNode.InnerText = "This is not documented properly yet";
         fieldNode.AppendChild(summaryNode);
 
+        //determine if there is any parameters
+        IParameterizedMember method = element as IParameterizedMember;
+        if (method != null)
+        {
+            foreach (IParameter parameter in method.Parameters)
+            {
+                XmlNode paramNode = generatedDoc.CreateElement("param");
+                XmlAttribute paramName = generatedDoc.CreateAttribute("name");
+                paramName.Value = parameter.Name;
+                paramNode.Attributes.Append(paramName);
+                paramNode.InnerText = "???";
+                fieldNode.AppendChild(paramNode);
+            }
+        }
+
         generatedMembersNode.AppendChild(fieldNode);
     }
 

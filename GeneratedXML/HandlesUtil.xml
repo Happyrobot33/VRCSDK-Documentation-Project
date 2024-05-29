@@ -3,56 +3,96 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="color">???</param>
+    <param name="alpha">???</param>
   </member>
   <member name="M:HandlesUtil.DrawWireSphere(UnityEngine.Vector3,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="radius">???</param>
   </member>
   <member name="M:HandlesUtil.DrawWireSphere(UnityEngine.Vector3,UnityEngine.Quaternion,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="rotation">???</param>
+    <param name="radius">???</param>
   </member>
   <member name="M:HandlesUtil.DrawWireCylinder(UnityEngine.Vector3,System.Single,System.Single,System.Single,UnityEngine.Quaternion,System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="height">???</param>
+    <param name="radius1">???</param>
+    <param name="radius2">???</param>
+    <param name="rotation">???</param>
+    <param name="segments">???</param>
   </member>
   <member name="M:HandlesUtil.DrawWireCapsule(UnityEngine.Vector3,UnityEngine.Quaternion,System.Single,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="rotation">???</param>
+    <param name="height">???</param>
+    <param name="radius">???</param>
   </member>
   <member name="M:HandlesUtil.DrawWireCapsule(UnityEngine.Vector3,UnityEngine.Quaternion,System.Single,System.Single,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="rotation">???</param>
+    <param name="height">???</param>
+    <param name="radius1">???</param>
+    <param name="radius2">???</param>
   </member>
   <member name="M:HandlesUtil.DrawWireAngleCone(UnityEngine.Vector3,UnityEngine.Quaternion,System.Single,System.Single,System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="tip">???</param>
+    <param name="rotation">???</param>
+    <param name="radius">???</param>
+    <param name="angle">???</param>
+    <param name="segments">???</param>
   </member>
   <member name="M:HandlesUtil.DrawSolidAngleCone(UnityEngine.Vector3,UnityEngine.Quaternion,System.Single,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="tip">???</param>
+    <param name="rotation">???</param>
+    <param name="radius">???</param>
+    <param name="angle">???</param>
   </member>
   <member name="M:HandlesUtil.DrawWireSquare(UnityEngine.Vector3,UnityEngine.Quaternion,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="rotation">???</param>
+    <param name="size">???</param>
   </member>
   <member name="M:HandlesUtil.DrawWireSquare(UnityEngine.Vector3,UnityEngine.Vector3,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="normal">???</param>
+    <param name="size">???</param>
   </member>
   <member name="M:HandlesUtil.DrawWirePlane(UnityEngine.Vector3,UnityEngine.Vector3,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="normal">???</param>
+    <param name="size">???</param>
   </member>
   <member name="T:HandlesUtil">
     <docURL>???</docURL>

@@ -3,31 +3,44 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="npcGameObject">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_NpcApi.ActThis(System.Int32,System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="number">???</param>
+    <param name="loop">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_NpcApi.SayThis(UnityEngine.AudioClip,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="clip">???</param>
+    <param name="volume">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_NpcApi.SetNamePlate(System.Boolean,System.String,System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="visible">???</param>
+    <param name="playerName">???</param>
+    <param name="vipTag">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_NpcApi.SetSocialStatus(System.Boolean,System.Boolean,System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="friend">???</param>
+    <param name="vip">???</param>
+    <param name="blocked">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_NpcApi.SetMuteStatus(System.Boolean,System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="canSpeak">???</param>
+    <param name="canHear">???</param>
   </member>
   <member name="T:VRC.SDKBase.VRC_NpcApi">
     <docURL>???</docURL>

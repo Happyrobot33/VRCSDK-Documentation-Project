@@ -13,26 +13,32 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="type">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_Serialization.RegisterPluginType(System.Type)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="type">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_Serialization.RegisterType(System.Type)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="type">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_Serialization.ParameterEncoder(System.Object[])">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="parameters">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_Serialization.ParameterDecoder(System.Byte[],System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="dataParameters">???</param>
+    <param name="rethrow">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_Serialization..ctor">
     <docURL>???</docURL>

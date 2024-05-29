@@ -333,31 +333,37 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="name">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_SceneDescriptor.GetMaterial(System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="name">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_SceneDescriptor.GetNetworkIDObjects(System.Collections.Generic.List)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="netIds">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_SceneDescriptor.FindNetworkIDGameObject(System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="path">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_SceneDescriptor.GetNetworkIDGameObjectPath(UnityEngine.GameObject)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="obj">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_SceneDescriptor.PositionPortraitCamera(UnityEngine.Transform)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="cam">???</param>
   </member>
   <member name="T:VRC.SDKBase.VRC_SceneDescriptor">
     <docURL>???</docURL>

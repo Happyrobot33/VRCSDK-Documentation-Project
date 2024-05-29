@@ -123,26 +123,31 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="name">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_DataStorage.GetElement(System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="name">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_DataStorage.OnDataElementChanged(System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="idx">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_DataStorage.VrcDataElement.Serialize(T)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="objectToSerialize">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_DataStorage.VrcDataElement.Deserialize(T@)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="objectToDeserialize">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_DataStorage.VrcDataElement..ctor">
     <docURL>???</docURL>

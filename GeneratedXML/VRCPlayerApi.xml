@@ -13,21 +13,26 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="playerGameObject">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCPlayerApi.TakeOwnership(UnityEngine.GameObject)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="obj">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCPlayerApi.SetPickupInHand(VRC.SDKBase.VRC_Pickup,VRC.SDKBase.VRC_Pickup.PickupHand)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="pickup">???</param>
+    <param name="hand">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCPlayerApi.SetNamePlateColor(UnityEngine.Color)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="col">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCPlayerApi.RestoreNamePlateColor">
     <docURL>???</docURL>
@@ -38,6 +43,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="flag">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCPlayerApi.RestoreNamePlateVisibility">
     <docURL>???</docURL>
@@ -48,21 +54,33 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="invisible">???</param>
+    <param name="tagName">???</param>
+    <param name="tagValue">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCPlayerApi.SetInvisibleToUntagged(System.Boolean,System.String,System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="invisible">???</param>
+    <param name="tagName">???</param>
+    <param name="tagValue">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCPlayerApi.SetSilencedToTagged(System.Int32,System.String,System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="level">???</param>
+    <param name="tagName">???</param>
+    <param name="tagValue">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCPlayerApi.SetSilencedToUntagged(System.Int32,System.String,System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="level">???</param>
+    <param name="tagName">???</param>
+    <param name="tagValue">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCPlayerApi.ClearInvisible">
     <docURL>???</docURL>
@@ -88,6 +106,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="animations">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCPlayerApi.PopAnimations">
     <docURL>???</docURL>
@@ -103,6 +122,8 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="pos">???</param>
+    <param name="rot">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCPlayerApi.TrackingData..ctor">
     <docURL>???</docURL>

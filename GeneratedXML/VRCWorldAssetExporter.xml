@@ -13,6 +13,9 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="buildAssetBundle">???</param>
+    <param name="onProgress">???</param>
+    <param name="onContentProcessed">???</param>
   </member>
   <member name="M:VRC.SDK3.Editor.Builder.VRCWorldAssetExporter.FinishExportCurrentSceneResourceWithPlugin">
     <docURL>???</docURL>
@@ -23,6 +26,8 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="vrcFilePath">???</param>
+    <param name="pluginFilePath">???</param>
   </member>
   <member name="M:VRC.SDK3.Editor.Builder.VRCWorldAssetExporter.LaunchSceneBlueprintUploader">
     <docURL>???</docURL>

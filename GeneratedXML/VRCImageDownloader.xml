@@ -248,6 +248,10 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="url">???</param>
+    <param name="material">???</param>
+    <param name="udonBehaviour">???</param>
+    <param name="textureInfo">???</param>
   </member>
   <member name="M:VRC.SDK3.Image.VRCImageDownloader.Dispose">
     <docURL>???</docURL>
@@ -258,11 +262,13 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="imageDownload">???</param>
   </member>
   <member name="M:VRC.SDK3.Image.VRCImageDownloader.RemoveImageDownloadFromQueue(VRC.SDK3.Image.IVRCImageDownload)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="imageDownload">???</param>
   </member>
   <member name="M:VRC.SDK3.Image.VRCImageDownloader.ClearQueue">
     <docURL>???</docURL>
@@ -278,11 +284,19 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="url">???</param>
+    <param name="material">???</param>
+    <param name="udonBehaviour">???</param>
+    <param name="textureInfo">???</param>
   </member>
   <member name="M:VRC.SDK3.Image.VRCImageDownloader.ImageDownloader..ctor(VRC.SDKBase.VRCUrl,UnityEngine.Material,VRC.Udon.Common.Interfaces.IUdonEventReceiver,VRC.SDK3.Image.TextureInfo)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="url">???</param>
+    <param name="material">???</param>
+    <param name="udonBehaviour">???</param>
+    <param name="textureInfo">???</param>
   </member>
   <member name="M:VRC.SDK3.Image.VRCImageDownloader.ImageDownloader.StartDownload">
     <docURL>???</docURL>
@@ -318,6 +332,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="allocationLimit">???</param>
   </member>
   <member name="M:VRC.SDK3.Image.VRCImageDownloader.ImageDownloader.ImageLoadSettings.GetResolutionLimit">
     <docURL>???</docURL>
@@ -328,6 +343,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="resolutionLimit">???</param>
   </member>
   <member name="M:VRC.SDK3.Image.VRCImageDownloader.ImageDownloader.ImageLoadSettings.GetVerticalFlip">
     <docURL>???</docURL>
@@ -338,6 +354,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="flip">???</param>
   </member>
   <member name="M:VRC.SDK3.Image.VRCImageDownloader.ImageDownloader.ImageLoadSettings.GetResizeResolution">
     <docURL>???</docURL>
@@ -348,11 +365,13 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="targetResolution">???</param>
   </member>
   <member name="M:VRC.SDK3.Image.VRCImageDownloader.ImageDownloader.ImageLoadSettings.SetFastResize(System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="fast">???</param>
   </member>
   <member name="M:VRC.SDK3.Image.VRCImageDownloader.ImageDownloader.ImageLoadSettings.GetFastResize">
     <docURL>???</docURL>
@@ -368,11 +387,13 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="outputFormatOverride">???</param>
   </member>
   <member name="M:VRC.SDK3.Image.VRCImageDownloader.ImageDownloader.ImageLoadSettings.SetGenerateMipMaps(System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="enable">???</param>
   </member>
   <member name="M:VRC.SDK3.Image.VRCImageDownloader.ImageDownloader.ImageLoadSettings.GetGenerateMipMaps">
     <docURL>???</docURL>

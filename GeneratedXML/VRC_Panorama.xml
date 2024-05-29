@@ -48,6 +48,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="index">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_Panorama.PanoSpec..ctor">
     <docURL>???</docURL>

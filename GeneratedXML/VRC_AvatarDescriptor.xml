@@ -203,21 +203,25 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="cam">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_AvatarDescriptor.GetNetworkIDObjects(System.Collections.Generic.List)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="netIds">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_AvatarDescriptor.FindNetworkIDGameObject(System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="path">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_AvatarDescriptor.GetNetworkIDGameObjectPath(UnityEngine.GameObject)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="obj">???</param>
   </member>
   <member name="T:VRC.SDKBase.VRC_AvatarDescriptor">
     <docURL>???</docURL>

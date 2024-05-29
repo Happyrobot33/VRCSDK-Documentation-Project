@@ -298,51 +298,61 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="url">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.VRCUrlInputField.MoveTextEnd(System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="shift">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.VRCUrlInputField.MoveTextStart(System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="shift">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.VRCUrlInputField.ScreenToLocal(UnityEngine.Vector2)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="screen">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.VRCUrlInputField.OnBeginDrag(UnityEngine.EventSystems.PointerEventData)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventData">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.VRCUrlInputField.OnDrag(UnityEngine.EventSystems.PointerEventData)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventData">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.VRCUrlInputField.OnEndDrag(UnityEngine.EventSystems.PointerEventData)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventData">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.VRCUrlInputField.OnPointerDown(UnityEngine.EventSystems.PointerEventData)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventData">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.VRCUrlInputField.ProcessEvent(UnityEngine.Event)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="e">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.VRCUrlInputField.OnUpdateSelected(UnityEngine.EventSystems.BaseEventData)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventData">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.VRCUrlInputField.ForceLabelUpdate">
     <docURL>???</docURL>
@@ -353,6 +363,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="update">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.VRCUrlInputField.LayoutComplete">
     <docURL>???</docURL>
@@ -373,11 +384,13 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventData">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.VRCUrlInputField.OnPointerClick(UnityEngine.EventSystems.PointerEventData)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventData">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.VRCUrlInputField.DeactivateInputField">
     <docURL>???</docURL>
@@ -388,11 +401,13 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventData">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.VRCUrlInputField.OnSubmit(UnityEngine.EventSystems.BaseEventData)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventData">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.VRCUrlInputField.CalculateLayoutInputHorizontal">
     <docURL>???</docURL>

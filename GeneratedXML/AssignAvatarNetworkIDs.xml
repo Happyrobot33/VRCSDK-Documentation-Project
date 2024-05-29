@@ -8,6 +8,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="avatarGameObject">???</param>
   </member>
   <member name="M:AssignAvatarNetworkIDs..ctor">
     <docURL>???</docURL>

@@ -70,27 +70,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDKBase\Networking.xml" />
-    <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCStation.xml" />
-    <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\DataToken.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Editor.asmdef" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDKBase\Platform.xml" />
-    <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCUrlInputField.xml" />
-    <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCPickup.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDKBase\VRCPlayerApi.xml" />
-    <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\DataList.xml" />
-    <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCPortalMarker.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\DataDictionary.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDKBase\VRCUrl.xml" />
-    <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCObjectSync.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDKBase\BuildPipeline.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCJson.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDKBase\VRC_MidiNoteIn.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\Video.xml" />
-    <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCAvatarPedestal.xml" />
-    <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDKBase\InputManager.xml" />
-    <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCMirrorReflection.xml" />
     <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDKBase\VRC_AnimatorPlayAudio.xml" />
-    <None Include="Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation\VRCSDK3\VRCObjectPool.xml" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

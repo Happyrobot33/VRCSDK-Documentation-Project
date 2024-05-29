@@ -3,16 +3,19 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="parameter">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCCustomAction.Execute(System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="parameter">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCCustomAction.Execute(VRC.SDKBase.VRCUrl)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="parameter">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCCustomAction..ctor">
     <docURL>???</docURL>

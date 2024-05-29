@@ -113,11 +113,14 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="function">???</param>
+    <param name="handler">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_WebPanel.NavigateTo(System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="uri">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_WebPanel.Awake">
     <docURL>???</docURL>

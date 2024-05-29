@@ -3,6 +3,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="url">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCUrl.Get">
     <docURL>???</docURL>
@@ -18,11 +19,13 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="obj">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCUrl.Equals(VRC.SDKBase.VRCUrl)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="other">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCUrl.GetHashCode">
     <docURL>???</docURL>

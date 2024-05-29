@@ -48,51 +48,70 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="name">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCShader.SetGlobalInteger(System.Int32,System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="nameID">???</param>
+    <param name="value">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCShader.SetGlobalFloat(System.Int32,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="nameID">???</param>
+    <param name="value">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCShader.SetGlobalTexture(System.Int32,UnityEngine.Texture)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="nameID">???</param>
+    <param name="value">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCShader.SetGlobalColor(System.Int32,UnityEngine.Color)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="nameID">???</param>
+    <param name="value">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCShader.SetGlobalVector(System.Int32,UnityEngine.Vector4)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="nameID">???</param>
+    <param name="value">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCShader.SetGlobalMatrix(System.Int32,UnityEngine.Matrix4x4)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="nameID">???</param>
+    <param name="value">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCShader.SetGlobalFloatArray(System.Int32,System.Single[])">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="nameID">???</param>
+    <param name="value">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCShader.SetGlobalVectorArray(System.Int32,UnityEngine.Vector4[])">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="nameID">???</param>
+    <param name="value">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCShader.SetGlobalMatrixArray(System.Int32,UnityEngine.Matrix4x4[])">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="nameID">???</param>
+    <param name="value">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCShader.ClearGlobalVariableWhitelist">
     <docURL>???</docURL>

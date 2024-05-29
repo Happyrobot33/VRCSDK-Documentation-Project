@@ -38,41 +38,75 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="src">???</param>
+    <param name="mipIndex">???</param>
+    <param name="udonBehaviour">???</param>
   </member>
   <member name="M:VRC.SDK3.Rendering.VRCAsyncGPUReadback.Request(UnityEngine.Texture,System.Int32,UnityEngine.TextureFormat,VRC.Udon.Common.Interfaces.IUdonEventReceiver)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="src">???</param>
+    <param name="mipIndex">???</param>
+    <param name="dstFormat">???</param>
+    <param name="udonBehaviour">???</param>
   </member>
   <member name="M:VRC.SDK3.Rendering.VRCAsyncGPUReadback.Request(UnityEngine.Texture,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,VRC.Udon.Common.Interfaces.IUdonEventReceiver)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="src">???</param>
+    <param name="mipIndex">???</param>
+    <param name="x">???</param>
+    <param name="width">???</param>
+    <param name="y">???</param>
+    <param name="height">???</param>
+    <param name="z">???</param>
+    <param name="depth">???</param>
+    <param name="udonBehaviour">???</param>
   </member>
   <member name="M:VRC.SDK3.Rendering.VRCAsyncGPUReadback.Request(UnityEngine.Texture,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,UnityEngine.TextureFormat,VRC.Udon.Common.Interfaces.IUdonEventReceiver)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="src">???</param>
+    <param name="mipIndex">???</param>
+    <param name="x">???</param>
+    <param name="width">???</param>
+    <param name="y">???</param>
+    <param name="height">???</param>
+    <param name="z">???</param>
+    <param name="depth">???</param>
+    <param name="dstFormat">???</param>
+    <param name="udonBehaviour">???</param>
   </member>
   <member name="M:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest.TryGetData(System.Byte[],System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="data">???</param>
+    <param name="layer">???</param>
   </member>
   <member name="M:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest.TryGetData(System.Single[],System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="data">???</param>
+    <param name="layer">???</param>
   </member>
   <member name="M:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest.TryGetData(UnityEngine.Color32[],System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="data">???</param>
+    <param name="layer">???</param>
   </member>
   <member name="M:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest.TryGetData(UnityEngine.Color[],System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="data">???</param>
+    <param name="layer">???</param>
   </member>
   <member name="T:VRC.SDK3.Rendering.VRCAsyncGPUReadback">
     <docURL>???</docURL>

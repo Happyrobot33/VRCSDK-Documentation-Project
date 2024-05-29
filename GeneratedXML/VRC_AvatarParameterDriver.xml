@@ -123,6 +123,9 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="animator">???</param>
+    <param name="stateInfo">???</param>
+    <param name="layerIndex">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_AvatarParameterDriver.Parameter..ctor">
     <docURL>???</docURL>

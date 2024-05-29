@@ -13,6 +13,8 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="assetPaths">???</param>
+    <param name="dstPath">???</param>
   </member>
   <member name="M:VRC.SDKBase.Editor.AssetExporter.CleanupUnityPackageExport">
     <docURL>???</docURL>
@@ -28,6 +30,8 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="prefabs">???</param>
+    <param name="materials">???</param>
   </member>
   <member name="M:VRC.SDKBase.Editor.AssetExporter.DoPreExportShaderReplacement">
     <docURL>???</docURL>

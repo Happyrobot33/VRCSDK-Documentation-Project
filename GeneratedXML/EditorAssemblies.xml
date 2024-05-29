@@ -28,6 +28,9 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="className">???</param>
+    <param name="staticFunctionName">???</param>
+    <param name="autoSerialize">???</param>
   </member>
   <member name="M:VRC.SDK3.Editor.EditorAssemblies.ClearAssemblyReloadCallbacks">
     <docURL>???</docURL>

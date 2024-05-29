@@ -93,6 +93,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="blocks">???</param>
   </member>
   <member name="M:VRC.SDK3.Midi.MidiData.MidiTrack..ctor">
     <docURL>???</docURL>

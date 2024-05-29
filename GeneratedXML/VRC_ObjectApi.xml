@@ -3,6 +3,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="player">???</param>
   </member>
   <member name="T:VRC.SDKBase.VRC_ObjectApi">
     <docURL>???</docURL>

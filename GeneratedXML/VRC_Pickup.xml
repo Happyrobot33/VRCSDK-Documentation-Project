@@ -173,11 +173,15 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="instigator">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_Pickup.GenerateHapticEvent(System.Single,System.Single,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="duration">???</param>
+    <param name="amplitude">???</param>
+    <param name="frequency">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_Pickup.PlayHaptics">
     <docURL>???</docURL>

@@ -3,86 +3,154 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="color">???</param>
+    <param name="alpha">???</param>
   </member>
   <member name="M:GizmosUtil.DrawWireCube(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Quaternion)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="size">???</param>
+    <param name="rotation">???</param>
   </member>
   <member name="M:GizmosUtil.DrawArrow(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="from">???</param>
+    <param name="to">???</param>
+    <param name="arrowHeadLength">???</param>
+    <param name="arrowHeadAngle">???</param>
   </member>
   <member name="M:GizmosUtil.DrawWireSphere(UnityEngine.Vector3,System.Single,UnityEngine.Quaternion)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="radius">???</param>
+    <param name="rotation">???</param>
   </member>
   <member name="M:GizmosUtil.DrawWireCircle(UnityEngine.Vector3,System.Single,System.Int32,UnityEngine.Quaternion)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="radius">???</param>
+    <param name="segments">???</param>
+    <param name="rotation">???</param>
   </member>
   <member name="M:GizmosUtil.DrawWireArc(UnityEngine.Vector3,System.Single,System.Single,System.Int32,UnityEngine.Quaternion)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="radius">???</param>
+    <param name="angle">???</param>
+    <param name="segments">???</param>
+    <param name="rotation">???</param>
   </member>
   <member name="M:GizmosUtil.DrawWireArc(UnityEngine.Vector3,System.Single,System.Single,System.Int32,UnityEngine.Quaternion,UnityEngine.Vector3)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="radius">???</param>
+    <param name="angle">???</param>
+    <param name="segments">???</param>
+    <param name="rotation">???</param>
+    <param name="centerOfRotation">???</param>
   </member>
   <member name="M:GizmosUtil.DrawWireArc(UnityEngine.Matrix4x4,System.Single,System.Single,System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="matrix">???</param>
+    <param name="radius">???</param>
+    <param name="angle">???</param>
+    <param name="segments">???</param>
   </member>
   <member name="M:GizmosUtil.DrawWireCylinder(UnityEngine.Vector3,System.Single,System.Single,UnityEngine.Quaternion)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="radius">???</param>
+    <param name="height">???</param>
+    <param name="rotation">???</param>
   </member>
   <member name="M:GizmosUtil.DrawWireCylinder(UnityEngine.Vector3,System.Single,System.Single,System.Single,UnityEngine.Quaternion)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="height">???</param>
+    <param name="radius1">???</param>
+    <param name="radius2">???</param>
+    <param name="rotation">???</param>
   </member>
   <member name="M:GizmosUtil.DrawWireCapsule(UnityEngine.Vector3,System.Single,System.Single,UnityEngine.Quaternion)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="radius">???</param>
+    <param name="height">???</param>
+    <param name="rotation">???</param>
   </member>
   <member name="M:GizmosUtil.DrawWireCapsule(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="point1">???</param>
+    <param name="point2">???</param>
+    <param name="radius1">???</param>
+    <param name="radius2">???</param>
   </member>
   <member name="M:GizmosUtil.DrawWireCapsule(UnityEngine.Vector3,UnityEngine.Quaternion,System.Single,System.Single,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="rotation">???</param>
+    <param name="height">???</param>
+    <param name="radius1">???</param>
+    <param name="radius2">???</param>
   </member>
   <member name="M:GizmosUtil.DrawWireSquare(UnityEngine.Vector3,UnityEngine.Quaternion,UnityEngine.Vector2)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="rotation">???</param>
+    <param name="size">???</param>
   </member>
   <member name="M:GizmosUtil.DrawWirePlane(UnityEngine.Vector3,UnityEngine.Quaternion,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="center">???</param>
+    <param name="rotation">???</param>
+    <param name="size">???</param>
   </member>
   <member name="M:GizmosUtil.DrawWireCone(UnityEngine.Vector3,UnityEngine.Quaternion,System.Single,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="tip">???</param>
+    <param name="rotation">???</param>
+    <param name="height">???</param>
+    <param name="radius">???</param>
   </member>
   <member name="M:GizmosUtil.DrawWireAngleCone(UnityEngine.Vector3,UnityEngine.Quaternion,System.Single,System.Single,System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="tip">???</param>
+    <param name="rotation">???</param>
+    <param name="radius">???</param>
+    <param name="angle">???</param>
+    <param name="segments">???</param>
   </member>
   <member name="T:GizmosUtil">
     <docURL>???</docURL>

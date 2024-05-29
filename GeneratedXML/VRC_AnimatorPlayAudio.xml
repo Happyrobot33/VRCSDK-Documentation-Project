@@ -38,15 +38,22 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="setting">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_AnimatorPlayAudio.OnStateEnter(UnityEngine.Animator,UnityEngine.AnimatorStateInfo,System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="animator">???</param>
+    <param name="stateInfo">???</param>
+    <param name="layerIndex">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_AnimatorPlayAudio.OnStateExit(UnityEngine.Animator,UnityEngine.AnimatorStateInfo,System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="animator">???</param>
+    <param name="stateInfo">???</param>
+    <param name="layerIndex">???</param>
   </member>
 </members>

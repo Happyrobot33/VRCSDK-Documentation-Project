@@ -3,26 +3,36 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="handler">???</param>
+    <param name="e">???</param>
+    <param name="broadcast">???</param>
+    <param name="instagatorId">???</param>
+    <param name="fastForward">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_EventDispatcherLocal.RegisterEventHandler(VRC.SDKBase.VRC_EventHandler)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="handler">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_EventDispatcherLocal.UnregisterEventHandler(VRC.SDKBase.VRC_EventHandler)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="handler">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_EventDispatcherLocal.FindGameObject(System.String,System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="path">???</param>
+    <param name="suppressErrors">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_EventDispatcherLocal.GetGameObjectPath(UnityEngine.GameObject)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="go">???</param>
   </member>
   <member name="T:VRC.SDKBase.VRC_EventDispatcherLocal">
     <docURL>???</docURL>

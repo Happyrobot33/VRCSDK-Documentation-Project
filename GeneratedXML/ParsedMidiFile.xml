@@ -23,16 +23,19 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="stream">???</param>
   </member>
   <member name="M:Midi.ParsedMidiFile..ctor(System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="path">???</param>
   </member>
   <member name="M:Midi.ParsedMidiFile..ctor(System.Byte[])">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="data">???</param>
   </member>
   <member name="T:Midi.ParsedMidiFile">
     <docURL>???</docURL>

@@ -1,0 +1,28 @@
+/* text area and label formatting to make the labels ontop of the text area */
+textarea {
+    width: 100%;
+    height: 100px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    font-size: 16px;
+    resize: none;
+}
+
+label {
+    display: inline-block;
+}
+
+.member {
+    display: inline-block;
+    /* background */
+    background-color: #00000023;
+}
+
+.parameter {
+    display: inline-block;
+    /* darker background */
+    background-color: #00000023;
+}

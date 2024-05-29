@@ -18,16 +18,19 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="externalReference">???</param>
   </member>
   <member name="M:VRC.SDK3.Editor.Builder.VRCWorldBuilder.ExportAndUploadAvatarBlueprint(UnityEngine.GameObject)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="externalReference">???</param>
   </member>
   <member name="M:VRC.SDK3.Editor.Builder.VRCWorldBuilder.ExportAndTestAvatarBlueprint(UnityEngine.GameObject)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="externalReference">???</param>
   </member>
   <member name="M:VRC.SDK3.Editor.Builder.VRCWorldBuilder.ExportAndUploadSceneBlueprint">
     <docURL>???</docURL>
@@ -63,6 +66,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="externalReference">???</param>
   </member>
   <member name="M:VRC.SDK3.Editor.Builder.VRCWorldBuilder..ctor">
     <docURL>???</docURL>

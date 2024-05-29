@@ -3,36 +3,74 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="targetObject">???</param>
+    <param name="text">???</param>
   </member>
   <member name="M:VRC.SDKBase.Tutorial.ActivateObjectLabel(UnityEngine.Transform,TutorialLabelType,ControllerHand,System.String,System.Single,System.Int32,AttachMode,System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="targetObject">???</param>
+    <param name="type">???</param>
+    <param name="hand">???</param>
+    <param name="text">???</param>
+    <param name="duration">???</param>
+    <param name="priority">???</param>
+    <param name="attachMode">???</param>
+    <param name="showOffscreen">???</param>
   </member>
   <member name="M:VRC.SDKBase.Tutorial.ActivateObjectLabel(UnityEngine.Transform,TutorialLabelType,ControllerHand,System.String,ControllerActionUI,System.Single,System.Int32,AttachMode,System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="targetObject">???</param>
+    <param name="type">???</param>
+    <param name="hand">???</param>
+    <param name="text">???</param>
+    <param name="action">???</param>
+    <param name="duration">???</param>
+    <param name="priority">???</param>
+    <param name="attachMode">???</param>
+    <param name="showOffscreen">???</param>
   </member>
   <member name="M:VRC.SDKBase.Tutorial.ActivateObjectLabel(UnityEngine.Transform,TutorialLabelType,ControllerHand,System.String,ControllerActionUI,System.String,ControllerActionUI,System.Single,System.Int32,AttachMode,System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="targetObject">???</param>
+    <param name="type">???</param>
+    <param name="hand">???</param>
+    <param name="text">???</param>
+    <param name="action">???</param>
+    <param name="textSecondary">???</param>
+    <param name="actionSecondary">???</param>
+    <param name="duration">???</param>
+    <param name="priority">???</param>
+    <param name="attachMode">???</param>
+    <param name="showOffscreen">???</param>
   </member>
   <member name="M:VRC.SDKBase.Tutorial.DeactivateObjectLabel(UnityEngine.Transform)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="targetObject">???</param>
   </member>
   <member name="M:VRC.SDKBase.Tutorial.ActivateControllerLabel(ControllerHand,ControllerInputUI,System.String,System.Single,System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="hand">???</param>
+    <param name="controllerPart">???</param>
+    <param name="text">???</param>
+    <param name="duration">???</param>
+    <param name="priority">???</param>
   </member>
   <member name="M:VRC.SDKBase.Tutorial.DeactivateControllerLabel(ControllerHand,ControllerInputUI)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="hand">???</param>
+    <param name="controllerPart">???</param>
   </member>
   <member name="M:VRC.SDKBase.Tutorial..ctor">
     <docURL>???</docURL>

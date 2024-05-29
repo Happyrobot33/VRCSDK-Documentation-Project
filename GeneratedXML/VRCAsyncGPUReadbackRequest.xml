@@ -38,21 +38,29 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="data">???</param>
+    <param name="layer">???</param>
   </member>
   <member name="M:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest.TryGetData(System.Single[],System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="data">???</param>
+    <param name="layer">???</param>
   </member>
   <member name="M:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest.TryGetData(UnityEngine.Color32[],System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="data">???</param>
+    <param name="layer">???</param>
   </member>
   <member name="M:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest.TryGetData(UnityEngine.Color[],System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="data">???</param>
+    <param name="layer">???</param>
   </member>
   <member name="T:VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest">
     <docURL>???</docURL>

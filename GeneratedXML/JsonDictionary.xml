@@ -8,11 +8,14 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="source">???</param>
   </member>
   <member name="M:VRC.SDK3.Data.JsonDictionary.SetValue(VRC.SDK3.Data.DataToken,VRC.SDK3.Data.DataToken)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="key">???</param>
+    <param name="value">???</param>
   </member>
   <member name="M:VRC.SDK3.Data.JsonDictionary.Clear">
     <docURL>???</docURL>
@@ -23,11 +26,13 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="key">???</param>
   </member>
   <member name="M:VRC.SDK3.Data.JsonDictionary.Remove(VRC.SDK3.Data.DataToken)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="key">???</param>
   </member>
   <member name="M:VRC.SDK3.Data.JsonDictionary.GetKeys">
     <docURL>???</docURL>
@@ -38,6 +43,8 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="key">???</param>
+    <param name="value">???</param>
   </member>
   <member name="T:VRC.SDK3.Data.JsonDictionary">
     <docURL>???</docURL>

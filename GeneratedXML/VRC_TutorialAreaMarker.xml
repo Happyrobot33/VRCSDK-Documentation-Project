@@ -23,6 +23,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="enable">???</param>
   </member>
   <member name="T:VRC.SDKBase.VRC_TutorialAreaMarker">
     <docURL>???</docURL>

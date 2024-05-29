@@ -18,6 +18,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventHandler">???</param>
   </member>
   <member name="M:VRC.SDKBase.Editor.VRC_SdkBuilder.ClearUploadEventHandlers">
     <docURL>???</docURL>
@@ -53,16 +54,19 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="externalReference">???</param>
   </member>
   <member name="M:VRC.SDKBase.Editor.VRC_SdkBuilder.ExportAndUploadAvatarBlueprint(UnityEngine.GameObject)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="externalReference">???</param>
   </member>
   <member name="M:VRC.SDKBase.Editor.VRC_SdkBuilder.ExportAndTestAvatarBlueprint(UnityEngine.GameObject)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="externalReference">???</param>
   </member>
   <member name="M:VRC.SDKBase.Editor.VRC_SdkBuilder.RunLastExportedSceneResource">
     <docURL>???</docURL>
@@ -78,6 +82,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="externalReference">???</param>
   </member>
   <member name="M:VRC.SDKBase.Editor.VRC_SdkBuilder.GetLastUrl">
     <docURL>???</docURL>
@@ -93,6 +98,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="gameObject">???</param>
   </member>
   <member name="M:VRC.SDKBase.Editor.VRC_SdkBuilder.GetLocalLowPath">
     <docURL>???</docURL>
@@ -103,6 +109,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="knownFolderId">???</param>
   </member>
   <member name="M:VRC.SDKBase.Editor.VRC_SdkBuilder..ctor">
     <docURL>???</docURL>

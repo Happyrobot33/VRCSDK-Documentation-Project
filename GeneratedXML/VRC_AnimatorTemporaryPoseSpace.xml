@@ -23,11 +23,17 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="animator">???</param>
+    <param name="stateInfo">???</param>
+    <param name="layerIndex">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_AnimatorTemporaryPoseSpace.OnStateUpdate(UnityEngine.Animator,UnityEngine.AnimatorStateInfo,System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="animator">???</param>
+    <param name="stateInfo">???</param>
+    <param name="layerIndex">???</param>
   </member>
   <member name="T:VRC.SDKBase.VRC_AnimatorTemporaryPoseSpace">
     <docURL>???</docURL>

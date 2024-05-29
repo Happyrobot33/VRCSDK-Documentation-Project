@@ -388,36 +388,57 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="Op">???</param>
+    <param name="Current">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_EventHandler.VrcAnimationEvent(UnityEngine.AnimationEvent)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="aEvent">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_EventHandler.IsReceiverRequiredForEventType(VRC.SDKBase.VRC_EventHandler.VrcEventType)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventType">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_EventHandler.TriggerEvent(VRC.SDKBase.VRC_EventHandler.VrcEvent,VRC.SDKBase.VRC_EventHandler.VrcBroadcastType,UnityEngine.GameObject,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="e">???</param>
+    <param name="broadcast">???</param>
+    <param name="instagator">???</param>
+    <param name="fastForward">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_EventHandler.TriggerEvent(VRC.SDKBase.VRC_EventHandler.VrcEvent,VRC.SDKBase.VRC_EventHandler.VrcBroadcastType,System.Int32,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="e">???</param>
+    <param name="broadcast">???</param>
+    <param name="instagatorId">???</param>
+    <param name="fastForward">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_EventHandler.TriggerEvent(System.String,VRC.SDKBase.VRC_EventHandler.VrcBroadcastType,UnityEngine.GameObject,System.Int32)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventName">???</param>
+    <param name="broadcast">???</param>
+    <param name="instagator">???</param>
+    <param name="instagatorId">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_EventHandler.TriggerEvent(System.String,VRC.SDKBase.VRC_EventHandler.VrcBroadcastType,UnityEngine.GameObject,System.Int32,System.Single)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="eventName">???</param>
+    <param name="broadcast">???</param>
+    <param name="instagator">???</param>
+    <param name="instagatorId">???</param>
+    <param name="fastForward">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_EventHandler.GetCombinedNetworkId">
     <docURL>???</docURL>
@@ -428,6 +449,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="go">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_EventHandler.IsReadyForEvents">
     <docURL>???</docURL>
@@ -438,6 +460,10 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="e">???</param>
+    <param name="broadcast">???</param>
+    <param name="instagator">???</param>
+    <param name="fastForward">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_EventHandler..ctor">
     <docURL>???</docURL>

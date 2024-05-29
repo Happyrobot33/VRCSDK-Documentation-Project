@@ -438,16 +438,21 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="target">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_Trigger.Trigger(UnityEngine.GameObject,VRC.SDKBase.VRC_Trigger.TriggerType)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="obj">???</param>
+    <param name="type">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_Trigger.TriggerCustom(UnityEngine.GameObject,System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="obj">???</param>
+    <param name="name">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_Trigger.Awake">
     <docURL>???</docURL>
@@ -483,21 +488,25 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="triggers">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_Trigger.ExecuteTriggerType(VRC.SDKBase.VRC_Trigger.TriggerType)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="triggerType">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_Trigger.ExecuteCustomTrigger(System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="name">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_Trigger.ResetClock(VRC.SDKBase.VRC_Trigger.TriggerEvent)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="timer">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_Trigger.CustomTriggerTarget..ctor">
     <docURL>???</docURL>

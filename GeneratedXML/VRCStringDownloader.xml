@@ -8,16 +8,20 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="url">???</param>
+    <param name="udonBehaviour">???</param>
   </member>
   <member name="M:VRC.SDK3.StringLoading.VRCStringDownloader.AddToManager(VRC.SDK3.StringLoading.IVRCStringDownload)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="download">???</param>
   </member>
   <member name="M:VRC.SDK3.StringLoading.VRCStringDownloader.RemoveFromManager(VRC.SDK3.StringLoading.IVRCStringDownload)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="download">???</param>
   </member>
   <member name="M:VRC.SDK3.StringLoading.VRCStringDownloader.ClearQueue">
     <docURL>???</docURL>

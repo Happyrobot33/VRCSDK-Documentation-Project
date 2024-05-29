@@ -53,6 +53,7 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="inputName">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRC_PropController.InputPairing.GetKeyDown">
     <docURL>???</docURL>

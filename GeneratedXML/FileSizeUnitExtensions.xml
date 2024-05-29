@@ -23,16 +23,20 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="unitText">???</param>
+    <param name="unitLiteral">???</param>
   </member>
   <member name="M:VRC.FileSizeUnitExtensions.GetUnitSize(VRC.FileSizeUnit)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="unit">???</param>
   </member>
   <member name="M:VRC.FileSizeUnitExtensions.GetPostfix(VRC.FileSizeUnit)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="unit">???</param>
   </member>
   <member name="T:VRC.FileSizeUnitExtensions">
     <docURL>???</docURL>

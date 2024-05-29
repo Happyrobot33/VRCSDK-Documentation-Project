@@ -3,16 +3,27 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="width">???</param>
+    <param name="height">???</param>
+    <param name="depthBuffer">???</param>
+    <param name="format">???</param>
+    <param name="readWrite">???</param>
+    <param name="antiAliasing">???</param>
+    <param name="memorylessMode">???</param>
+    <param name="vrUsage">???</param>
+    <param name="useDynamicScale">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCRenderTexture.GetTemporary(UnityEngine.RenderTextureDescriptor)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="renderTextureDescriptor">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCRenderTexture.ReleaseTemporary(UnityEngine.RenderTexture)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
+    <param name="renderTexture">???</param>
   </member>
   <member name="E:VRC.SDKBase.VRCRenderTexture.OnGetTemporaryRenderTexture">
     <docURL>???</docURL>
