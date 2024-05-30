@@ -47,7 +47,7 @@ public partial class Program
         //check if we can see the Packages folder
         Console.WriteLine("Initial Working Directory: " + workingDirectory);
         //see if the packages folder exists
-        if(!Directory.Exists(Directory.Path.Combine(workingDirectory, "Packages")))
+        if(!Directory.Exists(Path.Combine(workingDirectory, "Packages")))
         {
             //list everything in this directory
             string[] directories = Directory.GetDirectories(workingDirectory);
