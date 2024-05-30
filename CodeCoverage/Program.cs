@@ -46,8 +46,15 @@ public partial class Program
 
         //check if we can see the Packages folder
         Console.WriteLine("Initial Working Directory: " + workingDirectory);
+        //see if the packages folder exists
         if(!Directory.Exists(workingDirectory + @"\Packages"))
         {
+            //list everything in this directory
+            string[] directories = Directory.GetDirectories(workingDirectory);
+            foreach (string directory in directories)
+            {
+                Console.WriteLine("Directory: " + directory);
+            }
             //if we cant, then we are in the wrong directory, so go up a few directories
             workingDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
         }
