@@ -66,7 +66,7 @@ jobs:
 
       - name: Dotnet Run
         run: |
-          cd $GITHUB_WORKSPACE/CodeCoverage
+          cd $GITHUB_WORKSPACE
           dotnet run --project $GITHUB_WORKSPACE/CodeCoverage/CodeCoverage.csproj
 
       - name: Setup Pages
