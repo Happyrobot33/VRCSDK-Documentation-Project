@@ -59,7 +59,7 @@ public partial class Program
             workingDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
         }
         Console.WriteLine("Working Directory: " + workingDirectory);
-        XMLPath = workingDirectory + XMLPath;
+        XMLPath = Path.Combine(workingDirectory, XMLPath);
 
         //populate the namespace blacklist
         namespaceBlacklist.Add("VRC.SDKBase.Validation.*");
