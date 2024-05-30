@@ -146,10 +146,10 @@ public partial class Program
         #endregion
 
         //load assemblys
-        assemblys.Add(workingDirectory + @"\Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase.dll");
-        assemblys.Add(workingDirectory + @"\Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase-Editor.dll");
-        assemblys.Add(workingDirectory + @"\Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3.dll");
-        assemblys.Add(workingDirectory + @"\Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3-Editor.dll");
+        assemblys.Add(workingDirectory + "/Packages/com.vrchat.base/Runtime/VRCSDK/Plugins/VRCSDKBase.dll");
+        assemblys.Add(workingDirectory + "/Packages/com.vrchat.base/Runtime/VRCSDK/Plugins/VRCSDKBase-Editor.dll");
+        assemblys.Add(workingDirectory + "/Packages/com.vrchat.worlds/Runtime/VRCSDK/Plugins/VRCSDK3.dll");
+        assemblys.Add(workingDirectory + "/Packages/com.vrchat.worlds/Runtime/VRCSDK/Plugins/VRCSDK3-Editor.dll");
         //assemblys.Add(workingDirectory + @"\Packages\com.vrchat.worlds\Runtime\Udon\External\VRC.Udon.Common.dll");
 
         //generate the source code for documentation purposes
@@ -415,7 +415,7 @@ public partial class Program
         Console.WriteLine("Generating source code...");
 
         //clear the folder of previous C# files
-        string decompiledSourcePath = workingDirectory + @"\DecompiledSource";
+        string decompiledSourcePath = workingDirectory + "/DecompiledSource";
         if (Directory.Exists(decompiledSourcePath))
         {
             Directory.Delete(decompiledSourcePath, true);
@@ -433,7 +433,7 @@ public partial class Program
             string code = decompiler.DecompileWholeModuleAsString();
 
             //save the code to a folder
-            string path = workingDirectory + @"\DecompiledSource\" + Path.GetFileNameWithoutExtension(assembly) + ".cs";
+            string path = workingDirectory + "/DecompiledSource/" + Path.GetFileNameWithoutExtension(assembly) + ".cs";
 
             //make sure folder exists
             Directory.CreateDirectory(Path.GetDirectoryName(path));
@@ -442,7 +442,7 @@ public partial class Program
         }
 
         //make a gitignore file
-        string gitignore = workingDirectory + @"\DecompiledSource\.gitignore";
+        string gitignore = workingDirectory + "/DecompiledSource/.gitignore";
         File.WriteAllText(gitignore, "*");
 
         Console.WriteLine("Generated source code");
