@@ -45,7 +45,12 @@ public partial class Program
 
         //try to make a basepath
         string workingDirectory = Environment.CurrentDirectory;
-        string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
+        //check if we can see the Packages folder
+        if(!Directory.Exists(basePath + @"\Packages"))
+        {
+            //if we cant, then we are in the wrong directory, so go up a few directories
+            basePath = Directory.GetParent(workingDirectory).Parent.Parent.Parent.Parent.FullName;
+        }
         Console.WriteLine("Working Directory: " + projectDirectory);
         basePath = projectDirectory;
         XMLPath = basePath + XMLPath;
