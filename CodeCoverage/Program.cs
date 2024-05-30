@@ -24,7 +24,7 @@ public partial class Program
     //static string testAssemblyPath = workingDirectory + @"\Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase.dll";
     static string workingDirectory = Environment.CurrentDirectory;
 
-    static string XMLPath = @"\Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation";
+    static string XMLPath = "Packages/com.happyrobot33.vrcsdkdocumentation/Editor/Documentation";
 
     static List<string> typeMembers = new List<string>();
     static List<string> fieldMembers = new List<string>();
@@ -49,16 +49,17 @@ public partial class Program
         //see if the packages folder exists
         if(!Directory.Exists(Path.Combine(workingDirectory, "Packages")))
         {
-            //list everything in this directory
-            string[] directories = Directory.GetDirectories(workingDirectory);
-            foreach (string directory in directories)
-            {
-                Console.WriteLine("Directory: " + directory);
-            }
             //if we cant, then we are in the wrong directory, so go up a few directories
             workingDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
         }
         Console.WriteLine("Working Directory: " + workingDirectory);
+        //list everything in this directory
+        string[] directories = Directory.GetDirectories(workingDirectory);
+        foreach (string directory in directories)
+        {
+            Console.WriteLine("Directory: " + directory);
+        }
+
         XMLPath = Path.Combine(workingDirectory, XMLPath);
 
         //populate the namespace blacklist
