@@ -64,11 +64,10 @@ jobs:
           # Semantic version range syntax or exact version of a dotnet version
           dotnet-version: '8.x'
 
-      - name: Change dir
-        run: cd $GITHUB_WORKSPACE/CodeCoverage
-
       - name: Dotnet Run
-        run: dotnet run --project $GITHUB_WORKSPACE/CodeCoverage/CodeCoverage.csproj
+        run: |
+        cd $GITHUB_WORKSPACE/CodeCoverage
+        dotnet run --project $GITHUB_WORKSPACE/CodeCoverage/CodeCoverage.csproj
 
       - name: Setup Pages
         uses: actions/configure-pages@v3
