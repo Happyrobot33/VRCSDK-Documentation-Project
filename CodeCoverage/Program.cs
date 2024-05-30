@@ -19,9 +19,10 @@ public partial class Program
     const string blue = "\x1b[34m";
     const string reset = "\x1b[39m";
 
-    static string basePath = @"E:\Storage\Personal\Coding\VRChat\VRCSDK-Documentation-Project";
+    //static string basePath = @"E:\Storage\Personal\Coding\VRChat\VRCSDK-Documentation-Project";
     static List<string> assemblys = new List<string>();
-    //static string testAssemblyPath = basePath + @"\Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase.dll";
+    //static string testAssemblyPath = workingDirectory + @"\Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase.dll";
+    static string workingDirectory = Environment.CurrentDirectory;
 
     static string XMLPath = @"\Packages\com.happyrobot33.vrcsdkdocumentation\Editor\Documentation";
 
@@ -43,17 +44,15 @@ public partial class Program
         //clear the terminal
         Console.Clear();
 
-        //try to make a basepath
-        string workingDirectory = Environment.CurrentDirectory;
         //check if we can see the Packages folder
-        if(!Directory.Exists(basePath + @"\Packages"))
+        Console.WriteLine("Initial Working Directory: " + workingDirectory);
+        if(!Directory.Exists(workingDirectory + @"\Packages"))
         {
             //if we cant, then we are in the wrong directory, so go up a few directories
-            basePath = Directory.GetParent(workingDirectory).Parent.Parent.Parent.Parent.FullName;
+            workingDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
         }
-        Console.WriteLine("Working Directory: " + projectDirectory);
-        basePath = projectDirectory;
-        XMLPath = basePath + XMLPath;
+        Console.WriteLine("Working Directory: " + workingDirectory);
+        XMLPath = workingDirectory + XMLPath;
 
         //populate the namespace blacklist
         namespaceBlacklist.Add("VRC.SDKBase.Validation.*");
@@ -139,11 +138,11 @@ public partial class Program
         #endregion
 
         //load assemblys
-        assemblys.Add(basePath + @"\Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase.dll");
-        assemblys.Add(basePath + @"\Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase-Editor.dll");
-        assemblys.Add(basePath + @"\Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3.dll");
-        assemblys.Add(basePath + @"\Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3-Editor.dll");
-        //assemblys.Add(basePath + @"\Packages\com.vrchat.worlds\Runtime\Udon\External\VRC.Udon.Common.dll");
+        assemblys.Add(workingDirectory + @"\Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase.dll");
+        assemblys.Add(workingDirectory + @"\Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase-Editor.dll");
+        assemblys.Add(workingDirectory + @"\Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3.dll");
+        assemblys.Add(workingDirectory + @"\Packages\com.vrchat.worlds\Runtime\VRCSDK\Plugins\VRCSDK3-Editor.dll");
+        //assemblys.Add(workingDirectory + @"\Packages\com.vrchat.worlds\Runtime\Udon\External\VRC.Udon.Common.dll");
 
         //generate the source code for documentation purposes
         GenerateSourceCode();
@@ -309,9 +308,9 @@ public partial class Program
         Console.WriteLine(string.Format("{0}Found {1} fields, {2} propertys, {3} methods, {4} events, {5} types to generate for {6}{7}", orange, fieldsGen.Count, propertysGen.Count, methodsGen.Count, eventsGen.Count, typesGen.Count, pathToGenerate, reset));
 
         //generate a XML file next to where this is
-        //string xmlPath = basePath + @"\GeneratedXML\" + pathToGenerate + ".xml";
+        //string xmlPath = workingDirectory + @"\GeneratedXML\" + pathToGenerate + ".xml";
         //generate the name as just the class name
-        string xmlPath = basePath + @"\GeneratedXML\" + pathToGenerate.Split('.').Last() + ".xml";
+        string xmlPath = workingDirectory + @"\GeneratedXML\" + pathToGenerate.Split('.').Last() + ".xml";
 
         //make sure the folder exists
         Directory.CreateDirectory(Path.GetDirectoryName(xmlPath));
@@ -408,7 +407,7 @@ public partial class Program
         Console.WriteLine("Generating source code...");
 
         //clear the folder of previous C# files
-        string decompiledSourcePath = basePath + @"\DecompiledSource";
+        string decompiledSourcePath = workingDirectory + @"\DecompiledSource";
         if (Directory.Exists(decompiledSourcePath))
         {
             Directory.Delete(decompiledSourcePath, true);
@@ -426,7 +425,7 @@ public partial class Program
             string code = decompiler.DecompileWholeModuleAsString();
 
             //save the code to a folder
-            string path = basePath + @"\DecompiledSource\" + Path.GetFileNameWithoutExtension(assembly) + ".cs";
+            string path = workingDirectory + @"\DecompiledSource\" + Path.GetFileNameWithoutExtension(assembly) + ".cs";
 
             //make sure folder exists
             Directory.CreateDirectory(Path.GetDirectoryName(path));
@@ -435,7 +434,7 @@ public partial class Program
         }
 
         //make a gitignore file
-        string gitignore = basePath + @"\DecompiledSource\.gitignore";
+        string gitignore = workingDirectory + @"\DecompiledSource\.gitignore";
         File.WriteAllText(gitignore, "*");
 
         Console.WriteLine("Generated source code");
