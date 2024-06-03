@@ -15,7 +15,6 @@
         [NoScaleOffset] _OcclusionMap("Occlusion(G)", 2D) = "white" {}
         _OcclusionStrength("Strength", Range(0.0, 1.0)) = 1.0
 
-        [Toggle(_EMISSION)]_EnableEmission("Enable Emission", int) = 0
         [NoScaleOffset] _EmissionMap("Emission(RGB)", 2D) = "white" {}
         _EmissionColor("Emission Color", Color) = (1,1,1)
 

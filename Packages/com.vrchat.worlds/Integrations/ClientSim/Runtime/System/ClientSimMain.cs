@@ -2,12 +2,14 @@ using System.Collections;
 using System.IO;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using VRC.Core;
+using VRC.Economy;
+using VRC.SDK3.Network;
 using VRC.SDK3.Platform;
 using VRC.SDK3.Video.Components.AVPro;
 using VRC.SDKBase;
 using VRC.SDKBase.Platform;
 using VRC.Udon;
-using VRC.Economy;
 
 namespace VRC.SDK3.ClientSim
 {
@@ -77,7 +79,11 @@ namespace VRC.SDK3.ClientSim
             {
                 throw new ClientSimException("Cannot create an instance of ClientSim while one already exists.");
             }
-            
+
+            // Configure Delegates for Allowlisted URL Validation
+            VRCUrl.DomainExplicitAllowlistDelegate = () => UrlAllowlistConfig.DomainExplicitAllowlist;
+            VRCUrl.DomainWildcardAllowlistDelegate = () => UrlAllowlistConfig.DomainWildcardAllowlist;
+
             GameObject systemPrefab = Resources.Load<GameObject>(_systemPrefabPath);
 
             if (systemPrefab == null)
@@ -111,6 +117,8 @@ namespace VRC.SDK3.ClientSim
                     Debug.LogError($"Play mode Stopped because: {e.Message}");
                     UnityEditor.EditorApplication.isPlaying = false;
                 }
+#else
+                Debug.LogError($"Tried to initialize ClientSim outside of the Unity Editor: {e.Message}");
 #endif
             }
         }
@@ -411,6 +419,11 @@ namespace VRC.SDK3.ClientSim
             return obj.GetInstanceID().ToString();
         }
 
+        private static void CallNetworkConfigure(VRCNetworkBehaviour behaviour)
+        {
+            behaviour.NetworkConfigure();
+        }
+
         #region VRChat SDK Links
 
         // If adding to this list, be sure to also remove the link in the RemoveSDKLinks method 
@@ -423,12 +436,16 @@ namespace VRC.SDK3.ClientSim
             Networking._GetOwner += _playerManager.GetOwner;
             Networking._IsOwner += _playerManager.IsOwner;
             Networking._SetOwner += ClientSimPlayerManager.SetOwner;
+            Networking._GetMaster += _playerManager.GetMaster;
+            Networking._GetInstanceOwner += _playerManager.GetInstanceOwner;
             
             Networking._IsInstanceOwner += _playerManager.IsInstanceOwner;
             Networking._IsObjectReady += IsObjectReady;
             Networking._IsNetworkSettled += IsNetworkReady;
             
             Networking._GetUniqueName += GetUniqueStringForObject;
+
+            VRCNetworkBehaviour.OnNetworkBehaviourAwake += CallNetworkConfigure;
             
             VRCStation.Initialize += ClientSimStationHelper.InitializeStations;
             VRCStation.useStationDelegate += ClientSimStationHelper.UseStation;
@@ -461,6 +478,7 @@ namespace VRC.SDK3.ClientSim
             VRCPlayerApi._GetPlayerId += _playerManager.GetPlayerID;
             VRCPlayerApi._GetPlayerById += _playerManager.GetPlayerByID;
             VRCPlayerApi._isMasterDelegate += _playerManager.IsMaster;
+            VRCPlayerApi._isSuspendedDelegate += _playerManager.IsSuspended;
             VRCPlayerApi._TakeOwnership += ClientSimPlayerManager.SetOwner;
             VRCPlayerApi._IsOwner += _playerManager.IsOwner;
             VRCPlayerApi._isInstanceOwnerDelegate += _playerManager.IsInstanceOwner;
@@ -529,12 +547,18 @@ namespace VRC.SDK3.ClientSim
             VRCPlayerApi._SetAvatarAudioGain += ClientSimPlayerManager.SetAvatarAudioGain;
             VRCPlayerApi._SetAvatarAudioForceSpatial += ClientSimPlayerManager.SetAvatarAudioForceSpatial;
             VRCPlayerApi._SetAvatarAudioCustomCurve += ClientSimPlayerManager.SetAvatarAudioCustomCurve;
-            
-            VRCPlayerApi._SetVoiceLowpass += ClientSimPlayerManager.SetVoiceLowpass;
-            VRCPlayerApi._SetVoiceVolumetricRadius += ClientSimPlayerManager.SetVoiceVolumetricRadius;
-            VRCPlayerApi._SetVoiceDistanceFar += ClientSimPlayerManager.SetVoiceDistanceFar;
-            VRCPlayerApi._SetVoiceDistanceNear += ClientSimPlayerManager.SetVoiceDistanceNear;
+
             VRCPlayerApi._SetVoiceGain += ClientSimPlayerManager.SetVoiceGain;
+            VRCPlayerApi._SetVoiceDistanceNear += ClientSimPlayerManager.SetVoiceDistanceNear;
+            VRCPlayerApi._SetVoiceDistanceFar += ClientSimPlayerManager.SetVoiceDistanceFar;
+            VRCPlayerApi._SetVoiceVolumetricRadius += ClientSimPlayerManager.SetVoiceVolumetricRadius;
+            VRCPlayerApi._SetVoiceLowpass += ClientSimPlayerManager.SetVoiceLowpass;
+
+            VRCPlayerApi._GetVoiceGain += ClientSimPlayerManager.GetVoiceGain;
+            VRCPlayerApi._GetVoiceDistanceNear += ClientSimPlayerManager.GetVoiceDistanceNear;
+            VRCPlayerApi._GetVoiceDistanceFar += ClientSimPlayerManager.GetVoiceDistanceFar;
+            VRCPlayerApi._GetVoiceVolumetricRadius += ClientSimPlayerManager.GetVoiceVolumetricRadius;
+            VRCPlayerApi._GetVoiceLowpass += ClientSimPlayerManager.GetVoiceLowpass;
 
             VRCPlayerApi._GetCurrentLanguage += ClientSimPlayerManager.GetCurrentLanguage;
             VRCPlayerApi._GetAvailableLanguages += ClientSimPlayerManager.GetAvailableLanguages;
@@ -570,7 +594,9 @@ namespace VRC.SDK3.ClientSim
             Networking._IsNetworkSettled -= IsNetworkReady;
             
             Networking._GetUniqueName -= GetUniqueStringForObject;
-            
+
+            VRCNetworkBehaviour.OnNetworkBehaviourAwake -= CallNetworkConfigure;
+
             VRCStation.Initialize -= ClientSimStationHelper.InitializeStations;
             VRCStation.useStationDelegate -= ClientSimStationHelper.UseStation;
             VRCStation.exitStationDelegate -= ClientSimStationHelper.ExitStation;

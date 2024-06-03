@@ -19,9 +19,7 @@ public partial class Program
     const string Blue = "\x1b[34m";
     const string Reset = "\x1b[39m";
 
-    //static string basePath = @"E:\Storage\Personal\Coding\VRChat\VRCSDK-Documentation-Project";
     static List<string> assemblys = new List<string>();
-    //static string testAssemblyPath = workingDirectory + @"\Packages\com.vrchat.base\Runtime\VRCSDK\Plugins\VRCSDKBase.dll";
     static string workingDirectory = Environment.CurrentDirectory;
 
     static string XMLPath = "Packages/com.happyrobot33.vrcsdkdocumentation/Editor/Documentation";

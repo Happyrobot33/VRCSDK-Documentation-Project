@@ -174,7 +174,9 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI
                 "Event_OnPurchaseUse",
                 "Event_OnPurchaseExpired",
                 "Event_OnListPurchases",
-                "Event_OnListAvailableProducts"
+                "Event_OnListAvailableProducts",
+                "Event_OnMasterTransferred",
+                "Event_OnPlayerSuspendChanged",
             };
 
                 // Don't show for any of these

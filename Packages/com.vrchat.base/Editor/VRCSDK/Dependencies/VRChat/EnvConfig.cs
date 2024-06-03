@@ -72,7 +72,7 @@ namespace VRC.Editor
         };
 
         private static bool _requestConfigureSettings = true;
-
+        
         static EnvConfig()
         {
             EditorApplication.update += EditorUpdate;
@@ -124,7 +124,7 @@ namespace VRC.Editor
 
             if(!VRC.Core.ConfigManager.RemoteConfig.IsInitialized())
             {
-                VRC.Core.API.SetOnlineMode(true, "vrchat");
+                VRC.Core.API.SetOnlineMode(true);
                 VRC.Core.ConfigManager.RemoteConfig.Init();
             }
 
@@ -1058,10 +1058,10 @@ namespace VRC.Editor
             #pragma warning restore 618
             }
             
-            #if (UNITY_ANDROID || UNITY_IOS) && !VRC_DISABLE_MOBILE_GRAPHICS_JOBS
-            PlayerSettings.graphicsJobs = true;
-            #else
+            #if VRC_DISABLE_GRAPHICS_JOBS
             PlayerSettings.graphicsJobs = false;
+            #else
+            PlayerSettings.graphicsJobs = true;
             #endif
 
             PlayerSettings.gpuSkinning = true;
@@ -1084,6 +1084,9 @@ namespace VRC.Editor
                 AssetDatabase.CreateAsset(generalSettings, "Assets/XR/XRGeneralSettings.asset");
                 AssetDatabase.SaveAssets();
                 EditorBuildSettings.AddConfigObject(XRGeneralSettings.k_SettingsKey, generalSettings, true);
+                
+                // Re-retrieve the config object so it won't crash CreateDefaultSettingsForBuildTarget
+                EditorBuildSettings.TryGetConfigObject(XRGeneralSettings.k_SettingsKey, out generalSettings);
             }
             
             if(!generalSettings.HasSettingsForBuildTarget(BuildTargetGroup.Standalone))

@@ -70,23 +70,26 @@
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Components3\VRCMidiEditor.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\SampleImporter.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\WorldBuilderConstants.cs" />
+    <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Components3\VRCSpatialAudioSourceEditor3.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\SDK3ImportFix.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Components3\VRCPlayerStationEditor3.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Components3\VRCSceneDescriptorEditor3.cs" />
+    <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Components3\VRCPickupEditor3.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\VRCSceneTemplateInitializer.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Elements\WorldBuildSuccessNotification\WorldBuildSuccessNotification.cs" />
+    <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Components3\VRCInspectorBase.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Components3\VRCMidiEditorVisualizer.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\VRCMidiWindow.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\VRCDefaultWorldSceneTemplatePipeline.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Public SDK API\IVRCSdkWorldBuilderApi.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Components3\VRCDestructibleUdonEditor.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\VRCPackageSettings.cs" />
+    <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Components3\VRCPortalMarkerEditor.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\PublishConfirmationWindow.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\VRCSdkControlPanelWorldBuilder.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\VRCSdkControlPanelWorldBuilderV3.cs" />
-    <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Components3\VRC_PickupEditor3.cs" />
-    <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Components3\VRC_SpatialAudioSourceEditor3.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Elements\WorldUploadSuccessNotification\WorldUploadSuccessNotification.cs" />
+    <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Components3\VRCTMP.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Elements\WorldUploadSuccessNotification\Resources\WorldUploadSuccessNotificationStyles.uss" />
@@ -1157,6 +1160,7 @@
     <ProjectReference Include="UniTask.csproj" />
     <ProjectReference Include="Unity.TextMeshPro.csproj" />
     <ProjectReference Include="Unity.Postprocessing.Runtime.csproj" />
+    <ProjectReference Include="Unity.TextMeshPro.Editor.csproj" />
     <ProjectReference Include="UnityEditor.UI.csproj" />
     <ProjectReference Include="UnityEngine.UI.csproj" />
     <ProjectReference Include="UnityEditor.TestRunner.csproj" />

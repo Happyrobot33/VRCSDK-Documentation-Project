@@ -526,11 +526,37 @@ namespace VRC.SDK3.Editor
                 for (int i = uiDefaultGraphics.Count - 1; i >= 0; i--)
                 {
                     // Only keep Graphic components using UI/Default
-                    // We test materialForRendering as well to avoid interfering with TMP
-                    bool usingDefaultUi = uiDefaultGraphics[i].material != null &&
-                                          uiDefaultGraphics[i].material.shader.name == "UI/Default" &&
-                                          uiDefaultGraphics[i].materialForRendering != null &&
-                                          uiDefaultGraphics[i].materialForRendering.shader.name == "UI/Default";
+                    // Since material is virtual and could be overridden by anything, protect with try-catch
+                    // in case it throws.
+                    bool usingDefaultUi;
+                    try
+                    {
+                        const string defaultMaterialName = "UI/Default";
+
+                        Graphic graphic = uiDefaultGraphics[i];
+                        if (graphic is TMPro.TMP_SubMeshUI tmpSubMeshUi)
+                        {
+                            // Special treatment of this TMP type, because this class will throw when accessing material
+                            // if sharedMaterial is null...
+                            usingDefaultUi = tmpSubMeshUi.sharedMaterial != null &&
+                                             tmpSubMeshUi.sharedMaterial.shader.name == defaultMaterialName;
+                        }
+                        else
+                        {
+                            usingDefaultUi = uiDefaultGraphics[i].material != null &&
+                                             uiDefaultGraphics[i].material.shader.name == defaultMaterialName &&
+                                             uiDefaultGraphics[i].materialForRendering != null &&
+                                             uiDefaultGraphics[i].materialForRendering.shader.name == defaultMaterialName;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogException(ex);
+
+                        // We can't tell if this is default or not. Just treat it as not default and leave it alone.
+                        usingDefaultUi = false;
+                    }
+
                     if (!usingDefaultUi)
                     {
                         uiDefaultGraphics.RemoveAt(i);
@@ -1718,7 +1744,7 @@ namespace VRC.SDK3.Editor
             try
             {
                 await VRCApi.UnpublishWorld(_worldData.ID);
-                await _builder.ShowBuilderNotification("Published world to Community Labs",
+                await _builder.ShowBuilderNotification("Unpublished world",
                     new GenericBuilderNotification(
                         "Your world is private. You can still access it via direct links", null,
                         "See it on the VRChat Website",

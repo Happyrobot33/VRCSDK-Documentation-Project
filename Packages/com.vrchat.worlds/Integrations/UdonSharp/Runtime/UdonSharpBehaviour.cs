@@ -196,6 +196,7 @@ namespace UdonSharp
         [PublicAPI] public virtual void OnAvatarEyeHeightChanged(VRC.SDKBase.VRCPlayerApi player, float prevEyeHeightAsMeters) { }
         [PublicAPI] public virtual void OnDrop() { }
         [PublicAPI] public virtual void OnOwnershipTransferred(VRC.SDKBase.VRCPlayerApi player) { }
+        [PublicAPI] public virtual void OnMasterTransferred(VRC.SDKBase.VRCPlayerApi newMaster) { }
         [PublicAPI] public virtual void OnPickup() { }
         [PublicAPI] public virtual void OnPickupUseDown() { }
         [PublicAPI] public virtual void OnPickupUseUp() { }
@@ -227,6 +228,7 @@ namespace UdonSharp
         [PublicAPI] public virtual void OnImageLoadError(VRC.SDK3.Image.IVRCImageDownload result) { }
         [PublicAPI] public virtual void OnStringLoadSuccess(VRC.SDK3.StringLoading.IVRCStringDownload result) { }
         [PublicAPI] public virtual void OnStringLoadError(VRC.SDK3.StringLoading.IVRCStringDownload result) { }
+        [PublicAPI] public virtual void OnPlayerSuspendChanged(VRC.SDKBase.VRCPlayerApi player) { }
 
         [PublicAPI] public virtual void OnPostSerialization(VRC.Udon.Common.SerializationResult result) { }
         [PublicAPI] public virtual bool OnOwnershipRequest(VRC.SDKBase.VRCPlayerApi requestingPlayer, VRC.SDKBase.VRCPlayerApi requestedOwner) => true;

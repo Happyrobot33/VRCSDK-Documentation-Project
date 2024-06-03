@@ -2018,49 +2018,40 @@ namespace UdonSharpEditor
                 where type.IsSubclassOf(typeof(UdonSharpBehaviour))
                 select type;
 
+            void AddRequiredFieldType(Type type, Type subclass)
+            {
+                if (!_RequireFieldLookup.TryGetValue(type, out List<Type> types))
+                {
+                    types = new List<Type>();
+                    _RequireFieldLookup.Add(type, types);
+                }
+
+                types.Add(subclass);
+            }
+
             foreach (var subclass in subclasses)
             {
-                RequireComponent components = Attribute.GetCustomAttribute(subclass,typeof(RequireComponent)) as RequireComponent;
-                
-                if(components == null)
+                RequireComponent[] components =
+                    Attribute.GetCustomAttributes(subclass, typeof(RequireComponent)) as RequireComponent[];
+
+                if (components == null)
                     continue;
-                
-                if (components.m_Type0.IsSubclassOf(typeof(UdonSharpBehaviour)))
+
+                foreach (RequireComponent component in components)
                 {
-                    if (!_RequireFieldLookup.ContainsKey(components.m_Type0))
+                    if (component.m_Type0.IsSubclassOf(typeof(UdonSharpBehaviour)))
                     {
-                        List<Type> types = new List<Type>() { subclass };
-                        _RequireFieldLookup.Add(components.m_Type0, types);
+                        AddRequiredFieldType(component.m_Type0, subclass);
                     }
-                    else
+
+                    if (component.m_Type1 != null && component.m_Type1.IsSubclassOf(typeof(UdonSharpBehaviour)))
                     {
-                        _RequireFieldLookup[components.m_Type0].Add(subclass);
+                        AddRequiredFieldType(component.m_Type1, subclass);
                     }
-                }
-                
-                if (components.m_Type1 != null && components.m_Type1.IsSubclassOf(typeof(UdonSharpBehaviour)))
-                {
-                    if (!_RequireFieldLookup.ContainsKey(components.m_Type1))
+
+                    if (component.m_Type2 != null && component.m_Type2.IsSubclassOf(typeof(UdonSharpBehaviour)))
                     {
-                        List<Type> types = new List<Type>() { subclass };
-                        _RequireFieldLookup.Add(components.m_Type1, types);
-                    }
-                    else
-                    {
-                        _RequireFieldLookup[components.m_Type1].Add(subclass);
-                    }
-                }
-                
-                if (components.m_Type2 != null && components.m_Type2.IsSubclassOf(typeof(UdonSharpBehaviour)))
-                {
-                    if (!_RequireFieldLookup.ContainsKey(components.m_Type2))
-                    {
-                        List<Type> types = new List<Type>() { subclass };
-                        _RequireFieldLookup.Add(components.m_Type2, types);
-                    }
-                    else
-                    {
-                        _RequireFieldLookup[components.m_Type2].Add(subclass);
+                        AddRequiredFieldType(component.m_Type2, subclass);
                     }
                 }
             }

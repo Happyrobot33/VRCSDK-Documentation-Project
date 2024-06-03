@@ -19,7 +19,7 @@ MonoBehaviour:
   dependencies:
   - dependency: {fileID: 102900000, guid: 4ecd63eff847044b68db9453ce219299, type: 3}
     instantiationMode: 1
-  - dependency: {fileID: 11400000, guid: 7c96644d5f8aa8440a68c824e0f1869f, type: 2}
+  - dependency: {fileID: 11400000, guid: a82912e628ffbe845afde2e220e1a277, type: 2}
     instantiationMode: 1
   - dependency: {fileID: 2100000, guid: 74de320d298ce3e498b0401ec1ffcb7f, type: 2}
     instantiationMode: 0
@@ -29,15 +29,10 @@ MonoBehaviour:
     instantiationMode: 0
   - dependency: {fileID: 2100000, guid: 1c987494452b85f4ab4cac3322415907, type: 2}
     instantiationMode: 0
-  - dependency: {fileID: 4890085278179872738, guid: 7774fab823fc47d4283c662c6d671e8d,
-      type: 2}
-    instantiationMode: 0
   - dependency: {fileID: 11400000, guid: 566cc00e27d5822449529a3785eae366, type: 2}
     instantiationMode: 1
   - dependency: {fileID: 2100000, guid: 21221da753878694b9b9518a540dda85, type: 2}
     instantiationMode: 0
-  - dependency: {fileID: 11400000, guid: cec97ddcfff3bd34f816c9edeee9842d, type: 2}
-    instantiationMode: 1
   - dependency: {fileID: 2800000, guid: 5e07d6e71c9ed3f409237935b1c7a96e, type: 3}
     instantiationMode: 0
   - dependency: {fileID: 2100000, guid: fd20e45036ef323459e8286e9c23c02c, type: 2}
@@ -46,13 +41,15 @@ MonoBehaviour:
     instantiationMode: 0
   - dependency: {fileID: 2800000, guid: 4ba9f24739c8721499ae85110ba2157d, type: 3}
     instantiationMode: 0
-  - dependency: {fileID: 2800000, guid: b2c2c1a52cdb75943958a408093dee04, type: 3}
-    instantiationMode: 0
+  - dependency: {fileID: 11400000, guid: 21a13e0a0a257474f97830fdcc78b27e, type: 2}
+    instantiationMode: 1
   - dependency: {fileID: 102900000, guid: 661092b4961be7145bfbe56e1e62337b, type: 3}
     instantiationMode: 1
+  - dependency: {fileID: 2800000, guid: b2c2c1a52cdb75943958a408093dee04, type: 3}
+    instantiationMode: 0
   templatePipeline: {fileID: 11500000, guid: bf20236fb08516648b2ad94610a4d752, type: 3}
   badge: {fileID: 8988753837962126725}
-  addToDefaults: 0
+  addToDefaults: 1
 --- !u!28 &8988753837962126725
 Texture2D:
   m_ObjectHideFlags: 0

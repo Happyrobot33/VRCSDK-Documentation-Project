@@ -21,7 +21,7 @@ public partial class VRCSdkControlPanel : EditorWindow, IVRCSdkPanelApi
     {
         if (!ConfigManager.RemoteConfig.IsInitialized())
         {
-            VRC.Core.API.SetOnlineMode(true, "vrchat");
+            VRC.Core.API.SetOnlineMode(true);
             ConfigManager.RemoteConfig.Init(() => ShowControlPanel());
             return;
         }

@@ -70,6 +70,7 @@
     <Compile Include="Packages\com.vrchat.worlds\Runtime\Udon\Serialization\Formatters\UdonGameObjectComponentReferenceFormatter.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Runtime\Udon\UdonManager.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Runtime\Udon\EventProxies\OnAudioFilterReadProxy.cs" />
+    <Compile Include="Packages\com.vrchat.worlds\Runtime\Udon\INetworkReadyReceiver.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Runtime\Udon\EventProxies\AbstractUdonBehaviourEventProxy.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Runtime\Udon\EventProxies\OnCollisionStayProxy.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Runtime\Udon\WrapperModules\ExternVRCInstantiate.cs" />
@@ -88,7 +89,6 @@
     <None Include="Packages\com.vrchat.worlds\Runtime\Udon\External\VRC.Udon.VRCWrapperModules.dll" />
     <None Include="Packages\com.vrchat.worlds\Runtime\Udon\External\VRC.Udon.Wrapper.dll" />
     <None Include="Packages\com.vrchat.worlds\Runtime\Udon\External\VRC.Udon.Common.dll" />
-    <None Include="Packages\com.vrchat.worlds\Runtime\Udon\External\VRC.Udon.Common.xml" />
     <None Include="Packages\com.vrchat.worlds\Runtime\Udon\VRC.Udon.asmdef" />
     <None Include="Packages\com.vrchat.worlds\Runtime\Udon\External\VRC.Udon.VM.dll" />
     <None Include="Packages\com.vrchat.worlds\Runtime\Udon\External\VRC.Udon.Security.dll" />

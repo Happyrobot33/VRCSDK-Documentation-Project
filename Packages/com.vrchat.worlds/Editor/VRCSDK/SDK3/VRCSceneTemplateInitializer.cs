@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.SceneTemplate;
 using UnityEngine;
+using VRC.SDKBase;
 
 /// <summary>Initialize the default VRC world scene from a template when the project is first launched</summary>
 [InitializeOnLoad]
@@ -22,8 +24,8 @@ public class VRCSceneTemplateInitializer
                 EditorApplication.delayCall += () =>
                 {
                     var template = (SceneTemplateAsset)AssetDatabase.LoadAssetAtPath(SceneTemplatePath, typeof(SceneTemplateAsset));
-                    SceneTemplateService.Instantiate(template, false, ScenePath);
-                    Debug.Log("Initialized default VRC world scene");
+                    var result = SceneTemplateService.Instantiate(template, false, ScenePath);
+                    Debug.Log($"Initialized {result.sceneAsset.name}");
                 };
             }
         }

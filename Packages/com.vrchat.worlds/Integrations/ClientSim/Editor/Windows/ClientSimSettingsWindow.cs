@@ -384,9 +384,8 @@ namespace VRC.SDK3.ClientSim.Editor
                 _settings.showTooltips = EditorGUILayout.Toggle(_showTooltipsGuiContent, _settings.showTooltips);
                 _settings.invertMouseLook = EditorGUILayout.Toggle(_invertMouseLookGuiContent, _settings.invertMouseLook);
                 _settings.playerStartHeight = EditorGUILayout.FloatField(_playerHeightGuiContent, _settings.playerStartHeight);
-                
-                selectedLanguageIndex = EditorGUILayout.Popup(_currentLanguageGuiContent, selectedLanguageIndex, _settings.availableLanguages);
-                _settings.currentLanguage = _settings.availableLanguages[selectedLanguageIndex];
+                selectedLanguageIndex = EditorGUILayout.Popup(_currentLanguageGuiContent, selectedLanguageIndex, _settings.GetAvailableDisplayLanguages());
+                _settings.currentLanguage = _settings.GetLanguage(selectedLanguageIndex);
 
                 EditorGUI.EndDisabledGroup();
 

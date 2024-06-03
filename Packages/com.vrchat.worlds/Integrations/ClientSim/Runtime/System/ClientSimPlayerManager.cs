@@ -195,6 +195,18 @@ namespace VRC.SDK3.ClientSim
             return GetPlayerByID(_masterID);
         }
 
+        public VRCPlayerApi GetInstanceOwner()
+        {
+            foreach (var player in _players.Values)
+            {
+                if (player.GetClientSimPlayer().isInstanceOwner)
+                {
+                    return player;
+                }
+            }
+            return null;
+        }
+
         public VRCPlayerApi LocalPlayer()
         {
             return _localPlayer;
@@ -235,6 +247,11 @@ namespace VRC.SDK3.ClientSim
         public bool IsLocalPlayerMaster()
         {
             return _localPlayerID == _masterID;
+        }
+
+        public bool IsSuspended(VRCPlayerApi player)
+        {
+            return player.GetClientSimPlayer().isSuspended;
         }
         
         public VRCPlayerApi GetOwner(GameObject obj)
@@ -653,31 +670,36 @@ namespace VRC.SDK3.ClientSim
             player.GetClientSimPlayer().audioData.SetAvatarAudioCustomCurve(value);
         }
 
-        public static void SetVoiceLowpass(VRCPlayerApi player, bool value)
-        {
-            player.GetClientSimPlayer().audioData.SetVoiceLowpass(value);
-        }
-
-        public static void SetVoiceVolumetricRadius(VRCPlayerApi player, float value)
-        {
-            player.GetClientSimPlayer().audioData.SetVoiceVolumetricRadius(value);
-        }
-
-        public static void SetVoiceDistanceFar(VRCPlayerApi player, float value)
-        {
-            player.GetClientSimPlayer().audioData.SetVoiceDistanceFar(value);
-        }
-
-        public static void SetVoiceDistanceNear(VRCPlayerApi player, float value)
-        {
-            player.GetClientSimPlayer().audioData.SetVoiceDistanceNear(value);
-        }
-
-        public static void SetVoiceGain(VRCPlayerApi player, float value)
-        {
+        public static void SetVoiceGain(VRCPlayerApi player, float value) =>
             player.GetClientSimPlayer().audioData.SetVoiceGain(value);
-        }
-        
+
+        public static void SetVoiceDistanceNear(VRCPlayerApi player, float value) =>
+            player.GetClientSimPlayer().audioData.SetVoiceDistanceNear(value);
+
+        public static void SetVoiceDistanceFar(VRCPlayerApi player, float value) =>
+            player.GetClientSimPlayer().audioData.SetVoiceDistanceFar(value);
+
+        public static void SetVoiceVolumetricRadius(VRCPlayerApi player, float value) =>
+            player.GetClientSimPlayer().audioData.SetVoiceVolumetricRadius(value);
+
+        public static void SetVoiceLowpass(VRCPlayerApi player, bool value) =>
+            player.GetClientSimPlayer().audioData.SetVoiceLowpass(value);
+
+        public static float GetVoiceGain(VRCPlayerApi player) =>
+            player.GetClientSimPlayer().audioData.GetVoiceGain();
+
+        public static float GetVoiceDistanceNear(VRCPlayerApi player) => 
+            player.GetClientSimPlayer().audioData.GetVoiceDistanceNear();
+
+        public static float GetVoiceDistanceFar(VRCPlayerApi player) =>
+            player.GetClientSimPlayer().audioData.GetVoiceDistanceFar();
+
+        public static float GetVoiceVolumetricRadius(VRCPlayerApi player) =>
+            player.GetClientSimPlayer().audioData.GetVoiceVolumetricRadius();
+
+        public static bool GetVoiceLowpass(VRCPlayerApi player) =>
+            player.GetClientSimPlayer().audioData.GetVoiceLowpass();
+
         public static string GetCurrentLanguage()
         {
             return ClientSimSettings.Instance.currentLanguage;

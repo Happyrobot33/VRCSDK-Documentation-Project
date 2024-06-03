@@ -13,7 +13,6 @@ public class TestUScript : UdonSharpBehaviour
 {
     void Start()
     {
-        new VRCUrl("https://google.com");
     }
 
     /*

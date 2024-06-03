@@ -1037,34 +1037,40 @@ public partial class VRCSdkControlPanel : EditorWindow
 
     public static List<TextureImporter> GetOversizeTextureImporters(List<Renderer> renderers)
     {
+        HashSet<Material> uniqueMaterials = new HashSet<Material>();
         List<TextureImporter> badTextureImporters = new List<TextureImporter>();
-        List<Object> badTextures = new List<Object>();
-        foreach (Renderer r in renderers)
+
+        // Collect all unique materials from renderers
+        foreach (Renderer renderer in renderers)
         {
-            foreach (Material m in r.sharedMaterials)
+            foreach (Material material in renderer.sharedMaterials)
             {
-                if (!m)
-                    continue;
-                int[] texIDs = m.GetTexturePropertyNameIDs();
-                if (texIDs == null)
-                    continue;
-                foreach (int i in texIDs)
-                {
-                    Texture t = m.GetTexture(i);
-                    if (!t)
-                        continue;
-                    string path = AssetDatabase.GetAssetPath(t);
-                    if (string.IsNullOrEmpty(path))
-                        continue;
-                    TextureImporter importer = AssetImporter.GetAtPath(path) as TextureImporter;
-                    if (importer != null && importer.maxTextureSize > MAX_SDK_TEXTURE_SIZE)
-                    {
-                        badTextureImporters.Add(importer);
-                        badTextures.Add(t);
-                    }
-                }
+                if (!material) { continue;}
+
+                uniqueMaterials.Add(material);
             }
         }
+
+        // Check textures in each unique material
+        foreach (Material material in uniqueMaterials)
+        {
+            int[] texIDs = material.GetTexturePropertyNameIDs();
+            foreach (int texID in texIDs)
+            {
+                Texture texture = material.GetTexture(texID);
+                if (!texture) { continue; }
+
+                string path = AssetDatabase.GetAssetPath(texture);
+                if (string.IsNullOrEmpty(path)) { continue; }
+
+                TextureImporter importer = AssetImporter.GetAtPath(path) as TextureImporter;
+                if (importer == null || importer.maxTextureSize <= MAX_SDK_TEXTURE_SIZE)
+                { continue; }
+
+                badTextureImporters.Add(importer);
+            }
+        }
+
         return badTextureImporters;
     }
 

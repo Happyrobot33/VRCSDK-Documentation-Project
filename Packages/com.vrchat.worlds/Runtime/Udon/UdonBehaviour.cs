@@ -29,6 +29,9 @@ using UnityEditor.SceneManagement;
 namespace VRC.Udon
 {
     public sealed class UdonBehaviour : AbstractUdonBehaviour, ISerializationCallbackReceiver
+#if VRC_CLIENT
+        , INetworkReadyReceiver
+#endif
     {
         #region Odin Serialized Fields
 
@@ -164,6 +167,8 @@ namespace VRC.Udon
         public int ProgramId => serializedProgramAsset != null ? serializedProgramAsset.GetInstanceID() : 0;
 
         public ulong ProgramSize => serializedProgramAsset != null ? serializedProgramAsset.GetSerializedProgramSize() : 0L;
+
+        public bool IsInitialized => _initialized;
 
         #endregion
 
@@ -916,7 +921,7 @@ namespace VRC.Udon
 
 #if VRC_CLIENT
         [PublicAPI]
-        private void OnNetworkReady()
+        public void OnNetworkReady()
         {
             _isReady = true;
         }
@@ -981,7 +986,7 @@ namespace VRC.Udon
                 return;
             }
 
-            RunEvent("_onDeserialization", ("result", result));
+            RunEvent(UdonManager.UDON_EVENT_ONDESERIALIZATION, ("result", result));
         }
 
         #endregion
@@ -1041,9 +1046,8 @@ namespace VRC.Udon
             }
             catch (UdonVMException error)
             {
-                string errorStr = error.ToString();
                 Logger.LogError(
-                    "An exception occurred during Udon execution, this UdonBehaviour will be halted.\n" + errorStr,
+                    "An exception occurred during Udon execution, this UdonBehaviour will be halted.\n" + error,
                     _debugLevel,
                     this);
 
@@ -1051,8 +1055,9 @@ namespace VRC.Udon
                 enabled = false;
             }
 
+            // pi: note that _udonVM can be null here if the UdonBehaviour destroys itself during the Interpret call
             _udonManager.currentlyExecuting = originalExecuting;
-            if (originalAddress < 0xFFFFFFFC)
+            if (originalAddress < 0xFFFFFFFC && _udonVM != null)
             {
                 _udonVM.SetProgramCounter(originalAddress);
             }

@@ -273,7 +273,7 @@ public partial class VRCSdkControlPanel : EditorWindow
         }
         else
         {
-            VRC.Core.API.SetOnlineMode(true, "vrchat");
+            VRC.Core.API.SetOnlineMode(true);
             VRC.Core.ConfigManager.RemoteConfig.Init();
         }
 
@@ -286,17 +286,19 @@ public partial class VRCSdkControlPanel : EditorWindow
     private const string ENTER_2FA_CODE_TITLE_STRING = "Enter a numeric code from your authenticator app.";
     private const string ENTER_2FA_CODE_LABEL_STRING = "Code:";
 
+    private const string ENTER_2FA_CODE_GUI_EVENT = "Authentication Code Field";
+
     private const string ENTER_EMAIL_2FA_CODE_TITLE_STRING = "Check your email for a numeric code.";
 
     private const string CHECKING_2FA_CODE_STRING = "Checking code...";
-    private const string ENTER_2FA_CODE_INVALID_CODE_STRING = "Invalid Code";
+    private const string ENTER_2FA_CODE_INVALID_CODE_STRING = "Oops, that code didn't work.\nTry again!";
 
     private const string ENTER_2FA_CODE_VERIFY_STRING = "Verify";
     private const string ENTER_2FA_CODE_CANCEL_STRING = "Cancel";
     private const string ENTER_2FA_CODE_HELP_STRING = "Help";
 
     private const int WARNING_ICON_SIZE = 60;
-    private const int WARNING_FONT_HEIGHT = 18;
+    private const int WARNING_FONT_HEIGHT = 14;
 
     static private Texture2D warningIconGraphic;
 
@@ -306,6 +308,7 @@ public partial class VRCSdkControlPanel : EditorWindow
     static private int previousAuthenticationCodeLength = 0;
     static bool checkingCode;
     static string authenticationCode = "";
+    static string lastCheckedAuthenticationCode = "";
 
     static System.Action onAuthenticationVerifiedAction;
 
@@ -321,6 +324,7 @@ public partial class VRCSdkControlPanel : EditorWindow
         {
             _twoFactorAuthenticationEntryType = value;
             authenticationCode = "";
+            lastCheckedAuthenticationCode = "";
             if (_twoFactorAuthenticationEntryType == TwoFactorType.None && !authorizationCodeWasVerified)
                 Logout();
         }
@@ -374,28 +378,29 @@ public partial class VRCSdkControlPanel : EditorWindow
         // Invalid code text
         if (entered2faCodeIsInvalid)
         {
-            GUIStyle s = new GUIStyle(EditorStyles.label);
-            s.alignment = TextAnchor.UpperLeft;
-            s.normal.textColor = Color.red;
-            s.fontSize = WARNING_FONT_HEIGHT;
-            s.padding = new RectOffset(0, 0, (WARNING_ICON_SIZE - s.fontSize) / 2, 0);
-            s.fixedHeight = WARNING_ICON_SIZE;
+            GUIStyle s = new GUIStyle(EditorStyles.label)
+            {
+                normal =
+                {
+                    textColor = new Color(1,0.3f,0.3f)
+                },
+                fontSize = WARNING_FONT_HEIGHT,
+                fixedHeight = WARNING_ICON_SIZE
+            };
 
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-
-            EditorGUILayout.BeginVertical();
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.BeginHorizontal();
-            var textDimensions = s.CalcSize(new GUIContent(ENTER_2FA_CODE_INVALID_CODE_STRING));
-            GUILayout.Label(new GUIContent(warningIconGraphic), GUILayout.Width(WARNING_ICON_SIZE), GUILayout.Height(WARNING_ICON_SIZE));
-            EditorGUILayout.LabelField(ENTER_2FA_CODE_INVALID_CODE_STRING, s, GUILayout.Width(textDimensions.x));
-            EditorGUILayout.EndHorizontal();
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndVertical();
-
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                GUILayout.FlexibleSpace();
+                using (new EditorGUILayout.VerticalScope())
+                {
+                    using (new EditorGUILayout.HorizontalScope())
+                    {
+                        GUILayout.Label(new GUIContent(warningIconGraphic), GUILayout.Width(WARNING_ICON_SIZE), GUILayout.Height(WARNING_ICON_SIZE));
+                        EditorGUILayout.LabelField(ENTER_2FA_CODE_INVALID_CODE_STRING, s);
+                    }
+                }
+                GUILayout.FlexibleSpace();
+            }
         }
         else if (checkingCode)
         {
@@ -439,12 +444,16 @@ public partial class VRCSdkControlPanel : EditorWindow
         GUILayout.Space(ENTER_2FA_CODE_BORDER_SIZE);
         GUILayout.FlexibleSpace();
         Vector2 size = EditorStyles.boldLabel.CalcSize(new GUIContent(ENTER_2FA_CODE_LABEL_STRING));
+        
         EditorGUILayout.LabelField(ENTER_2FA_CODE_LABEL_STRING, EditorStyles.boldLabel, GUILayout.MaxWidth(size.x));
         authenticationCode = EditorGUILayout.TextField(authenticationCode);
-
+        
+        
         // Verify 2FA code button
-        if (GUILayout.Button(ENTER_2FA_CODE_VERIFY_STRING, GUILayout.Width(ENTER_2FA_CODE_VERIFY_BUTTON_WIDTH)))
+        if (lastCheckedAuthenticationCode != authenticationCode && IsValidAuthenticationCodeFormat()
+            || GUILayout.Button(ENTER_2FA_CODE_VERIFY_STRING, GUILayout.Width(ENTER_2FA_CODE_VERIFY_BUTTON_WIDTH)))
         {
+            lastCheckedAuthenticationCode = authenticationCode;
             checkingCode = true;
             string authCodeType = API2FA.TIME_BASED_ONE_TIME_PASSWORD_AUTHENTICATION;
             switch (twoFactorType)

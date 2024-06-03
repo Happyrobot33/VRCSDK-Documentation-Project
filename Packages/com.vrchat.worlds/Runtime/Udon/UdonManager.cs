@@ -66,9 +66,13 @@ namespace VRC.Udon
 
         private bool _isUdonEnabled = true;
 
+        private bool _isRunningEvent;
+
         private readonly Dictionary<Scene, Dictionary<GameObject, HashSet<UdonBehaviour>>>
             _sceneUdonBehaviourDirectories =
                 new Dictionary<Scene, Dictionary<GameObject, HashSet<UdonBehaviour>>>();
+
+        private readonly HashSet<UdonBehaviour> _udonBehavioursToRegister = new HashSet<UdonBehaviour>();
 
         #region Private Update Data
 
@@ -115,7 +119,16 @@ namespace VRC.Udon
 
         [PublicAPI]
         public const string UDON_EVENT_ONPLAYERRESPAWN = "_onPlayerRespawn";
-        
+
+        [PublicAPI]
+        public const string UDON_EVENT_ONPLAYERDATAUPDATED = "_onPlayerDataUpdated";
+
+        [PublicAPI]
+        public const string UDON_EVENT_ONDESERIALIZATION = "_onDeserialization";
+
+        [PublicAPI]
+        public const string UDON_EVENT_ONOBJECTRESTORED = "_onObjectRestored";
+
         [PublicAPI]
         public const string UDON_EVENT_ONSCREENUPDATE = "_onScreenUpdate";
 
@@ -403,6 +416,21 @@ namespace VRC.Udon
         #endregion
 
         #region Input Methods
+
+
+        public T GetWrapperModule<T>(string wrapperModuleName) where T : IUdonWrapperModule
+        {
+            try
+            {
+                return (T)_udonClientInterface.GetWrapper().GetWrapperModuleByName(wrapperModuleName);
+            }
+            catch(Exception e)
+            {
+                UnityEngine.Debug.LogException(e);
+            }
+
+            return default(T);
+        }
 
         [PublicAPI]
         public void RegisterInput(UdonBehaviour udonBehaviour, string udonEventName, bool doRegister)
@@ -766,6 +794,16 @@ namespace VRC.Udon
         [PublicAPI]
         public void RegisterUdonBehaviour(UdonBehaviour udonBehaviour)
         {
+            // if an event is currently being processed, wait till after to add it to our dictionaries
+            // we still need to call InitializeUdonContent though, so code in the event executing can access the behaviour immediately
+            // InitializeUdonContent can be called multiple times with no issue
+            if (_isRunningEvent)
+            {
+                udonBehaviour.InitializeUdonContent();
+                _udonBehavioursToRegister.Add(udonBehaviour);
+                return;
+            }
+            
             GameObject udonBehaviourGameObject = udonBehaviour.gameObject;
             Scene udonBehaviourScene = udonBehaviourGameObject.scene;
             if(!_sceneUdonBehaviourDirectories.TryGetValue(
@@ -791,13 +829,38 @@ namespace VRC.Udon
             udonBehaviour.InitializeUdonContent();
         }
 
+        [PublicAPI]
+        public void UnregisterUdonBehaviour(UdonBehaviour udonBehaviour)
+        {
+            GameObject udonBehaviourGameObject = udonBehaviour.gameObject;
+            Scene udonBehaviourScene = udonBehaviourGameObject.scene;
+            if(!_sceneUdonBehaviourDirectories.TryGetValue(
+                   udonBehaviourScene,
+                   out Dictionary<GameObject, HashSet<UdonBehaviour>> sceneUdonBehaviourDirectory))
+            {
+                return;
+            }
+            sceneUdonBehaviourDirectory.Remove(udonBehaviourGameObject);
+            _udonBehavioursToRegister.Remove(udonBehaviour);
+        }
+
+        
+        private void CheckUdonBehavioursToRegister()
+        {
+            if (_udonBehavioursToRegister.Count > 0)
+            {
+                _udonBehavioursToRegister.ForEach(RegisterUdonBehaviour);
+                _udonBehavioursToRegister.Clear();
+            }
+        }
+
         public List<UdonBehaviour> UdonBehavioursInScene = new List<UdonBehaviour>();
         [PublicAPI]
         public List<UdonBehaviour> GetUdonBehavioursInScene()
         {
             UdonBehavioursInScene.Clear();
             foreach(Dictionary<GameObject, HashSet<UdonBehaviour>> sceneUdonBehaviourDirectory in
-                    _sceneUdonBehaviourDirectories.Values)
+                _sceneUdonBehaviourDirectories.Values)
             {
                 foreach(HashSet<UdonBehaviour> udonBehaviourList in sceneUdonBehaviourDirectory.Values)
                 {
@@ -819,8 +882,9 @@ namespace VRC.Udon
         [PublicAPI]
         public void RunEvent(string eventName)
         {
+            _isRunningEvent = true;
             foreach(Dictionary<GameObject, HashSet<UdonBehaviour>> sceneUdonBehaviourDirectory in
-                    _sceneUdonBehaviourDirectories.Values)
+                _sceneUdonBehaviourDirectories.Values)
             {
                 foreach(HashSet<UdonBehaviour> udonBehaviourList in sceneUdonBehaviourDirectory.Values)
                 {
@@ -833,12 +897,15 @@ namespace VRC.Udon
                     }
                 }
             }
+            _isRunningEvent = false;
+            CheckUdonBehavioursToRegister();
         }
 
         [PublicAPI]
         public void RunEvent<T0>(string eventName, (string symbolName, T0 value) parameter0)
         {
-            foreach(Dictionary<GameObject, HashSet<UdonBehaviour>> sceneUdonBehaviourDirectory in
+            _isRunningEvent = true;
+            foreach(Dictionary<GameObject, HashSet<UdonBehaviour>> sceneUdonBehaviourDirectory in 
                 _sceneUdonBehaviourDirectories.Values)
             {
                 foreach(HashSet<UdonBehaviour> udonBehaviourList in sceneUdonBehaviourDirectory.Values)
@@ -852,11 +919,14 @@ namespace VRC.Udon
                     }
                 }
             }
+            _isRunningEvent = false;
+            CheckUdonBehavioursToRegister();
         }
 
         [PublicAPI]
         public void RunEvent<T0, T1>(string eventName, (string symbolName, T0 value) parameter0, (string symbolName, T1 value) parameter1)
         {
+            _isRunningEvent = true;
             foreach(Dictionary<GameObject, HashSet<UdonBehaviour>> sceneUdonBehaviourDirectory in
                 _sceneUdonBehaviourDirectories.Values)
             {
@@ -871,11 +941,14 @@ namespace VRC.Udon
                     }
                 }
             }
+            _isRunningEvent = false;
+            CheckUdonBehavioursToRegister();
         }
 
         [PublicAPI]
         public void RunEvent<T0, T1, T2>(string eventName, (string symbolName, T0 value) parameter0, (string symbolName, T1 value) parameter1, (string symbolName, T2 value) parameter2)
         {
+            _isRunningEvent = true;
             foreach(Dictionary<GameObject, HashSet<UdonBehaviour>> sceneUdonBehaviourDirectory in
                 _sceneUdonBehaviourDirectories.Values)
             {
@@ -890,11 +963,14 @@ namespace VRC.Udon
                     }
                 }
             }
+            _isRunningEvent = false;
+            CheckUdonBehavioursToRegister();
         }
 
         [PublicAPI]
         public void RunEvent(string eventName, params (string symbolName, object value)[] eventParameters)
         {
+            _isRunningEvent = true;
             foreach(Dictionary<GameObject, HashSet<UdonBehaviour>> sceneUdonBehaviourDirectory in
                 _sceneUdonBehaviourDirectories.Values)
             {
@@ -909,6 +985,8 @@ namespace VRC.Udon
                     }
                 }
             }
+            _isRunningEvent = false;
+            CheckUdonBehavioursToRegister();
         }
 
         //Run an udon event on a specific gameObject

@@ -73,10 +73,8 @@
     <Compile Include="Packages\com.vrchat.base\Runtime\VRCSDK\Sample Assets\Shaders\Mobile\GUI\StandardLiteShaderGUI.cs" />
     <Compile Include="Packages\com.vrchat.base\Runtime\VRCSDK\Dependencies\VRChat\Scripts\RuntimeBlueprintCreation.cs" />
     <Compile Include="Packages\com.vrchat.base\Runtime\VRCSDK\Dependencies\VRChat\Scripts\RuntimeAPICreation.cs" />
-    <Compile Include="Packages\com.vrchat.base\Runtime\VRCSDK\Dependencies\VRChat\Scripts\Validation\ValidationUtils.cs" />
     <Compile Include="Packages\com.vrchat.base\Runtime\VRCSDK\Dependencies\VRChat\Scripts\CommunityLabsConstants.cs" />
     <Compile Include="Packages\com.vrchat.base\Runtime\VRCSDK\Dependencies\Oculus\Spatializer\Scripts\ONSPSettings.cs" />
-    <Compile Include="Packages\com.vrchat.base\Runtime\VRCSDK\Dependencies\VRChat\Scripts\Validation\ShaderValidation.cs" />
     <Compile Include="Packages\com.vrchat.base\Runtime\VRCSDK\Dependencies\VRChat\Scripts\MaterialFallback\FallbackMaterialCache.cs" />
     <Compile Include="Packages\com.vrchat.base\Runtime\VRCSDK\Dependencies\VRChat\Scripts\AudioManagerSettings.cs" />
     <Compile Include="Packages\com.vrchat.base\Runtime\VRCSDK\Dependencies\VRChat\Scripts\RuntimeWorldCreation.cs" />

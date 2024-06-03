@@ -444,6 +444,12 @@ namespace VRC.SDKBase.Validation
             "VRC.SDK3.Components.VRCObjectSync",
             "VRC.SDK3.Components.VRCObjectPool",
             "VRC.SDK3.Components.VRCInputFieldKeyboardOverride",
+#if VRC_ENABLE_PLAYER_PERSISTENCE
+            "VRC.SDK3.Components.VRCPlayerObject",
+#endif
+#if VRC_ENABLE_PLAYER_PERSISTENCE || VRC_ENABLE_INSTANCE_PERSISTENCE
+            "VRC.SDK3.Components.VRCDisablePersistence",
+#endif
             "VRC.SDK3.Video.Components.VRCUnityVideoPlayer",
             "VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer",
             "VRC.SDK3.Video.Components.AVPro.VRCAVProVideoScreen",
@@ -459,6 +465,10 @@ namespace VRC.SDKBase.Validation
             "UnityEngine.Animations.RotationConstraint",
             "UnityEngine.Animations.ScaleConstraint",
             "UnityEngine.ParticleSystemForceField",
+            "Unity.AI.Navigation.NavMeshSurface",
+            "Unity.AI.Navigation.NavMeshLink",
+            "Unity.AI.Navigation.NavMeshModifier",
+            "Unity.AI.Navigation.NavMeshModifierVolume",
             "Cinemachine.Cinemachine3rdPersonAim",
             "Cinemachine.CinemachineBlendListCamera",
             "Cinemachine.CinemachineBrain",
@@ -551,7 +561,12 @@ namespace VRC.SDKBase.Validation
 
             foreach(GameObject target in targets)
             {
+#if VRC_CLIENT
                 ValidationUtils.RemoveIllegalComponents(target, tagWhitelistedTypes ?? whitelist, retry, true);
+#else
+                ValidationUtils.RemoveIllegalComponents(target, tagWhitelistedTypes ?? whitelist, retry, true, excludeEditorOnly:true, allowRemovingAssets:false);
+#endif
+
                 SecurityScan(target);
                 AddScanned(target);
 
@@ -597,7 +612,12 @@ namespace VRC.SDKBase.Validation
                 return;
             }
 
+#if VRC_CLIENT
             ValidationUtils.RemoveIllegalComponents(target, whitelist);
+#else
+            ValidationUtils.RemoveIllegalComponents(target, whitelist, excludeEditorOnly:true, allowRemovingAssets:false);
+#endif
+
             SecurityScan(target);
 #if VRC_CLIENT && UDON
             if (isSDK3)
@@ -620,7 +640,7 @@ namespace VRC.SDKBase.Validation
         [PublicAPI]
         public static IEnumerable<Shader> FindIllegalShaders(GameObject target)
         {
-            return ShaderValidation.FindIllegalShaders(target, ShaderWhiteList);
+            return ValidationUtils.FindIllegalShaders(target, ShaderWhiteList);
         }
 
         private static void SecurityScan(GameObject target)
