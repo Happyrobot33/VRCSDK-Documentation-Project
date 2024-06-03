@@ -5,6 +5,9 @@ using System.Collections.Generic;
 //xml
 using System.Xml;
 using VRC.PackageManagement.Core;
+using VRC.Udon.EditorBindings;
+using System.Linq;
+using VRC.Udon.Graph;
 
 //TODO: Make the VSCode compatibility features optional and controllable in the unity editor preferences section
 namespace Happyrobot33.VRCSDKDocumentationProject
@@ -19,6 +22,9 @@ namespace Happyrobot33.VRCSDKDocumentationProject
         public static string OnGeneratedSlnSolution(string path, string content)
         {
             Debug.Log("Injecting XML documentation....");
+
+            //GenerateExternalNodeDefinitionsList();
+
             //save the start tick
             s_startTick = Environment.TickCount;
             //clear the excludes
@@ -26,6 +32,68 @@ namespace Happyrobot33.VRCSDKDocumentationProject
             PathsToCheck.Clear();
             return content;
         }
+
+        /* /// <summary>
+        /// Generates a external file list of all the node definitions
+        /// </summary>
+        private static void GenerateExternalNodeDefinitionsList()
+        {
+            try {
+                //Ripped directly from U#, hopefully doesnt break
+                UdonEditorInterface _editorInterfaceInstance = new UdonEditorInterface();
+                var nodeDefinitions = new HashSet<string>(_editorInterfaceInstance.GetNodeDefinitions().Select(e => e.fullName));
+                IEnumerable<UdonNodeDefinition> nodeDefinitionsArray = _editorInterfaceInstance.GetNodeDefinitions();
+
+                string output = "";
+                foreach (UdonNodeDefinition nodeDefinition in nodeDefinitionsArray)
+                {
+                    output += UnSanitizeNode(nodeDefinition) + "\n";
+                }
+
+                //print size
+                Debug.Log("Node Definitions: " + nodeDefinitions.Count);
+                //get the root of the unity project
+                string root = System.IO.Path.GetDirectoryName(Application.dataPath);
+
+                //write to file at root
+                System.IO.File.WriteAllText(root + "/NodeDefinitions.txt", output);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("Failed to generate node definitions list: " + e.Message);
+            }
+        }
+
+        private static string UnSanitizeNode(UdonNodeDefinition def)
+        {
+            string SanitizedName = def.fullName;
+            //check if its a type first by if it has a . in the name
+            if (SanitizedName.Contains(".") == false)
+            {
+                //return the type name for now
+                return def.fullName;
+            }
+
+            //example method
+            //UnityEngineAnimatorControllerParameterArray.__SetValue__SystemObject_SystemInt32_SystemInt32_SystemInt32__SystemVoid
+            // ^ class name                                 ^ method name   ^-parameters-^----------^----------^           ^ return type
+
+            string classname = SanitizedName.Substring(0, SanitizedName.IndexOf('.'));
+            string methodname = SanitizedName.Substring(SanitizedName.IndexOf("__") + 2);
+            string parameters = methodname.Substring(methodname.IndexOf("__") + 2);
+            methodname = methodname.Substring(0, methodname.IndexOf("__"));
+
+            //remove the return type at the end of the parameters
+            parameters = parameters.Substring(0, parameters.LastIndexOf("__") != -1 ? parameters.LastIndexOf("__") : parameters.Length);
+
+            //convert _ to ", " for parameters
+            parameters = parameters.Replace("_", ", ");
+
+            string output = string.Format("{0}.{1}({2})", classname, methodname, parameters);
+
+            return output;
+        } */
+
 
         public static string OnGeneratedCSProject(string path, string content)
         {
