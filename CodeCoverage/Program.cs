@@ -12,12 +12,12 @@ using ICSharpCode.Decompiler.TypeSystem;
 
 public partial class Program
 {
-    const string green = "\x1b[32m";
-    const string yellow = "\x1b[33m";
-    const string orange = "\x1b[38;5;208m";
-    const string red = "\x1b[31m";
-    const string blue = "\x1b[34m";
-    const string reset = "\x1b[39m";
+    const string Green = "\x1b[32m";
+    const string Yellow = "\x1b[33m";
+    const string Orange = "\x1b[38;5;208m";
+    const string Red = "\x1b[31m";
+    const string Blue = "\x1b[34m";
+    const string Reset = "\x1b[39m";
 
     //static string basePath = @"E:\Storage\Personal\Coding\VRChat\VRCSDK-Documentation-Project";
     static List<string> assemblys = new List<string>();
@@ -237,7 +237,7 @@ public partial class Program
         //get all classes
         foreach (namespaceAssemblyData data in assemblyData)
         {
-            Console.WriteLine(string.Format("{0}Generating XML files for {1}{2}", blue, data.namespaceName, reset));
+            Console.WriteLine(string.Format("{0}Generating XML files for {1}{2}", Blue, data.namespaceName, Reset));
             foreach (ITypeDefinition type in data.publicTypes)
             {
                 //skip if the type is not a normal class, so skipping things like enums
@@ -313,7 +313,7 @@ public partial class Program
             }
         }
 
-        Console.WriteLine(string.Format("{0}Found {1} fields, {2} propertys, {3} methods, {4} events, {5} types to generate for {6}{7}", orange, fieldsGen.Count, propertysGen.Count, methodsGen.Count, eventsGen.Count, typesGen.Count, pathToGenerate, reset));
+        Console.WriteLine(string.Format("{0}Found {1} fields, {2} propertys, {3} methods, {4} events, {5} types to generate for {6}{7}", Orange, fieldsGen.Count, propertysGen.Count, methodsGen.Count, eventsGen.Count, typesGen.Count, pathToGenerate, Reset));
 
         //generate a XML file next to where this is
         //string xmlPath = workingDirectory + @"\GeneratedXML\" + pathToGenerate + ".xml";
@@ -353,7 +353,7 @@ public partial class Program
         //check if there is anything actually in the XML
         if (generatedMembersNode.ChildNodes.Count == 0)
         {
-            Console.WriteLine(string.Format("{0}Skipping {1} as it has no members left to document!{2}", green, pathToGenerate, reset));
+            Console.WriteLine(string.Format("{0}Skipping {1} as it has no members left to document!{2}", Green, pathToGenerate, Reset));
             //delete the file if it exists
             if (File.Exists(xmlPath))
             {
@@ -371,7 +371,7 @@ public partial class Program
     {
         if (existingMembers.Contains(type + GetXMLNameString(element)))
         {
-            Console.WriteLine(string.Format("{0}Skipping {1} as it is already documented{2}", yellow, element.Name, reset));
+            Console.WriteLine(string.Format("{0}Skipping {1} as it is already documented{2}", Yellow, element.Name, Reset));
             return;
         }
 
@@ -481,171 +481,6 @@ public partial class Program
         }
 
         return searchString;
-    }
-
-    /// <summary>
-    /// A class to store the coverage data of a namespace
-    /// </summary>
-    private class namespaceCoverageData
-    {
-        public namespaceAssemblyData publicData;
-        public string namespaceName;
-        public List<string> types;
-        public List<string> fields;
-        public List<string> propertys;
-        public List<string> methods;
-        public List<string> events;
-
-        public namespaceCoverageData(namespaceAssemblyData publicData, string namespaceName, List<string> typeCount, List<string> fieldCount, List<string> propertyCount, List<string> methodCount, List<string> eventCount)
-        {
-            this.publicData = publicData;
-            this.namespaceName = namespaceName;
-            this.types = typeCount;
-            this.fields = fieldCount;
-            this.propertys = propertyCount;
-            this.methods = methodCount;
-            this.events = eventCount;
-
-            //if namespace is empty, then just represent it with "root"
-            if (namespaceName == "")
-            {
-                this.namespaceName = "<root>";
-            }
-        }
-
-        const string Tab = "   ";
-
-        //make a comparer to a namespacePublicData object
-        public string CompareTo(namespaceAssemblyData data)
-        {
-            //only compare if there is any reason to, for example if 0/0, then just dont compare
-            string result = "";
-
-            //determine the total coverage of the namespace
-            int total = GetTotalElements();
-            int totalData = data.GetTotalElements();
-
-            result += string.Format("Namespace: {0} ({1}/{2} ({3}%)\n", namespaceName, total, totalData, CalculateCoveragePercentage(total, totalData));
-            if (data.publicTypes.Count > 0)
-            {
-                result += string.Format("{0}Public Types: {1}/{2} ({3}%)\n", Tab, types.Count, data.publicTypes.Count, CalculateCoveragePercentage(types.Count, data.publicTypes.Count));
-                result += CreateDefinitionList(types, data.publicTypes);
-            }
-
-            if (data.publicFields.Count > 0)
-            {
-                result += string.Format("{0}Public Fields: {1}/{2} ({3}%)\n", Tab, fields.Count, data.publicFields.Count, CalculateCoveragePercentage(fields.Count, data.publicFields.Count));
-                result += CreateDefinitionList(fields, data.publicFields);
-            }
-            if (data.publicProperties.Count > 0)
-            {
-                result += string.Format("{0}Public Properties: {1}/{2} ({3}%)\n", Tab, propertys.Count, data.publicProperties.Count, CalculateCoveragePercentage(propertys.Count, data.publicProperties.Count));
-                result += CreateDefinitionList(propertys, data.publicProperties);
-            }
-            if (data.publicMethods.Count > 0)
-            {
-                result += string.Format("{0}Public Methods: {1}/{2} ({3}%)\n", Tab, methods.Count, data.publicMethods.Count, CalculateCoveragePercentage(methods.Count, data.publicMethods.Count));
-                result += CreateDefinitionList(methods, data.publicMethods);
-            }
-            if (data.publicEvents.Count > 0)
-            {
-                result += string.Format("{0}Public Events: {1}/{2} ({3}%)\n", Tab, events.Count, data.publicEvents.Count, CalculateCoveragePercentage(events.Count, data.publicEvents.Count));
-                result += CreateDefinitionList(events, data.publicEvents);
-            }
-
-
-            return result;
-        }
-
-        public int GetTotalElements()
-        {
-            return types.Count + fields.Count + propertys.Count + methods.Count + events.Count;
-        }
-
-
-        private string CalculateCoveragePercentage(int namespaceDataCount, int assemblyDataCount)
-        {
-            return (namespaceDataCount / (float)assemblyDataCount * 100).ToString("0.00");
-        }
-
-
-        private string CreateDefinitionList<T>(List<string> definedList, List<T> namedElements)
-        {
-            string result = "";
-            foreach (INamedElement namedElement in namedElements)
-            {
-                //determine if we have this type defined already
-                bool defined = false;
-                foreach (string name in definedList)
-                {
-                    if (name == namedElement.Name)
-                    {
-                        defined = true;
-                        break;
-                    }
-                }
-                //display a checkmark or a X depending on if it is defined. Make sure its only in ascii, and no unicode
-                string definedString = defined ? green + "Y" : red + "N";
-                definedString += reset;
-
-                IField field = namedElement as IField;
-                IType symbol = field != null ? field.ReturnType : null;
-                string kind = symbol != null ? symbol.Kind.ToString() : "";
-
-                //make sure the kind ends on the same ammount of characters
-                while (kind.Length < 10)
-                {
-                    kind += " ";
-                }
-
-                //format the kind as yellow
-                kind = yellow + kind + reset;
-
-
-                result += String.Format("{0}{0}{1} {2} {3}\n", Tab, definedString, kind, GetXMLNameString(namedElement));
-            }
-
-            return result;
-        }
-
-        public override string ToString()
-        {
-            return CompareTo(publicData);
-        }
-    }
-
-    /// <summary>
-    /// A class to store the public data of a namespace
-    /// </summary>
-    private class namespaceAssemblyData
-    {
-        public string namespaceName;
-        public List<IField> publicFields;
-        public List<IProperty> publicProperties;
-        public List<IEvent> publicEvents;
-        public List<ITypeDefinition> publicTypes;
-        public List<IMethod> publicMethods;
-
-        public namespaceAssemblyData(string namespaceName)
-        {
-            this.namespaceName = namespaceName;
-            publicFields = new List<IField>();
-            publicProperties = new List<IProperty>();
-            publicEvents = new List<IEvent>();
-            publicTypes = new List<ITypeDefinition>();
-            publicMethods = new List<IMethod>();
-
-            publicFields.Sort((x, y) => x.Name.CompareTo(y.Name));
-            publicProperties.Sort((x, y) => x.Name.CompareTo(y.Name));
-            publicEvents.Sort((x, y) => x.Name.CompareTo(y.Name));
-            publicTypes.Sort((x, y) => x.Name.CompareTo(y.Name));
-            publicMethods.Sort((x, y) => x.Name.CompareTo(y.Name));
-        }
-
-        public int GetTotalElements()
-        {
-            return publicFields.Count + publicProperties.Count + publicEvents.Count + publicTypes.Count + publicMethods.Count;
-        }
     }
 
     private static void PopulateAssemblyData(string testAssemblyPath, ref List<namespaceAssemblyData> dict)
