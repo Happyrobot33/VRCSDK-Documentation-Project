@@ -1,4 +1,9 @@
 <members>
+  <member name="F:VRC.SDKBase.VRC_UiShape.AllowFocusView">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
   <member name="P:VRC.SDKBase.VRC_UiShape.RootCanvas">
     <docURL>???</docURL>
     <incomplete />

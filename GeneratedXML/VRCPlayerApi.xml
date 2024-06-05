@@ -9,6 +9,11 @@
     <incomplete />
     <summary>This is not documented properly yet</summary>
   </member>
+  <member name="P:VRC.SDKBase.VRCPlayerApi.isSuspended">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
   <member name="M:VRC.SDKBase.VRCPlayerApi.GetPlayerByGameObject(UnityEngine.GameObject)">
     <docURL>???</docURL>
     <incomplete />
@@ -98,6 +103,31 @@
     <summary>This is not documented properly yet</summary>
   </member>
   <member name="M:VRC.SDKBase.VRCPlayerApi.RemoveFromList">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRCPlayerApi.GetVoiceGain">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRCPlayerApi.GetVoiceDistanceNear">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRCPlayerApi.GetVoiceDistanceFar">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRCPlayerApi.GetVoiceVolumetricRadius">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="M:VRC.SDKBase.VRCPlayerApi.GetVoiceLowpass">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>

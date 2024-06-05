@@ -44,6 +44,16 @@
     <incomplete />
     <summary>This is not documented properly yet</summary>
   </member>
+  <member name="P:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.VideoWidth">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.VideoHeight">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
   <member name="M:VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer.LoadURL(VRC.SDKBase.VRCUrl)">
     <docURL>???</docURL>
     <incomplete />

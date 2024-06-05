@@ -1,0 +1,28 @@
+<members>
+  <member name="M:VRC.SDK3.Components.VRCTMPDropdownExtension.AddOptions(TMPro.TMP_Dropdown,System.String[])">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+    <param name="dropdown">???</param>
+    <param name="options">???</param>
+  </member>
+  <member name="M:VRC.SDK3.Components.VRCTMPDropdownExtension.AddOptions(TMPro.TMP_Dropdown,TMPro.OptionData[])">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+    <param name="dropdown">???</param>
+    <param name="options">???</param>
+  </member>
+  <member name="M:VRC.SDK3.Components.VRCTMPDropdownExtension.AddOptions(TMPro.TMP_Dropdown,UnityEngine.Sprite[])">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+    <param name="dropdown">???</param>
+    <param name="options">???</param>
+  </member>
+  <member name="T:VRC.SDK3.Components.VRCTMPDropdownExtension">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+</members>

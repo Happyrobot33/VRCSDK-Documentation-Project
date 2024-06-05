@@ -24,6 +24,16 @@
     <incomplete />
     <summary>This is not documented properly yet</summary>
   </member>
+  <member name="P:VRC.SDK3.Video.Components.VRCUnityVideoPlayer.VideoWidth">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Video.Components.VRCUnityVideoPlayer.VideoHeight">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
   <member name="M:VRC.SDK3.Video.Components.VRCUnityVideoPlayer.LoadURL(VRC.SDKBase.VRCUrl)">
     <docURL>???</docURL>
     <incomplete />

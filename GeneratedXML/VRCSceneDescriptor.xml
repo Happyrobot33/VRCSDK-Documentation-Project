@@ -1,4 +1,9 @@
 <members>
+  <member name="F:VRC.SDK3.Components.VRCSceneDescriptor.NavigationAreas">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
   <member name="M:VRC.SDK3.Components.VRCSceneDescriptor..ctor">
     <docURL>???</docURL>
     <incomplete />

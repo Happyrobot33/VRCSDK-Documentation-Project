@@ -4,6 +4,16 @@
     <incomplete />
     <summary>This is not documented properly yet</summary>
   </member>
+  <member name="M:VRC.SDK3.Network.VRCNetworkBehaviour.Awake">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="E:VRC.SDK3.Network.VRCNetworkBehaviour.OnNetworkBehaviourAwake">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
   <member name="T:VRC.SDK3.Network.VRCNetworkBehaviour">
     <docURL>???</docURL>
     <incomplete />

@@ -1,11 +1,12 @@
 <members>
-  <member name="M:VRC.ValidationHelpers.GetAssetBundleSizeLimit(VRC.ContentType,System.Boolean,System.Boolean)">
+  <member name="M:VRC.ValidationHelpers.GetAssetBundleSizeLimit(VRC.ContentType,System.Boolean,System.Boolean,System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
     <param name="contentType">???</param>
     <param name="mobilePlatform">???</param>
     <param name="compressed">???</param>
+    <param name="reduced">???</param>
   </member>
   <member name="M:VRC.ValidationHelpers.GetAssetBundleOverSizeLimitMessage(VRC.ContentType,System.Boolean,System.Boolean)">
     <docURL>???</docURL>
@@ -24,7 +25,7 @@
     <param name="mobilePlatform">???</param>
     <param name="compressed">???</param>
   </member>
-  <member name="M:VRC.ValidationHelpers.GetAssetBundleOverSizeLimitMessageSDKWarning(VRC.ContentType,System.Int32,System.Boolean,System.Boolean)">
+  <member name="M:VRC.ValidationHelpers.GetAssetBundleOverSizeLimitMessageSDKWarning(VRC.ContentType,System.Int32,System.Boolean,System.Boolean,System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
@@ -32,6 +33,7 @@
     <param name="contentSize">???</param>
     <param name="mobilePlatform">???</param>
     <param name="compressed">???</param>
+    <param name="reduced">???</param>
   </member>
   <member name="M:VRC.ValidationHelpers.FormatFileSize(System.Int64,System.Boolean,System.Int32,System.String)">
     <docURL>???</docURL>

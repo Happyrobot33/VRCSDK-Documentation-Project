@@ -99,7 +99,17 @@
     <param name="globalRateLimit">???</param>
     <param name="targets">???</param>
   </member>
+  <member name="M:VRC.SDKBase.RPCIgnoredType..ctor">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
   <member name="T:VRC.SDKBase.RPC">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="T:VRC.SDKBase.RPCIgnoredType">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>

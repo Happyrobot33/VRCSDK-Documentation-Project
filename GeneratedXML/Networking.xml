@@ -4,6 +4,16 @@
     <incomplete />
     <summary>This is not documented properly yet</summary>
   </member>
+  <member name="P:VRC.SDKBase.Networking.Master">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDKBase.Networking.InstanceOwner">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
   <member name="M:VRC.SDKBase.Networking.Instantiate(VRC.SDKBase.VRC_EventHandler.VrcBroadcastType,System.String,UnityEngine.Vector3,UnityEngine.Quaternion)">
     <docURL>???</docURL>
     <incomplete />

@@ -34,6 +34,16 @@
     <incomplete />
     <summary>This is not documented properly yet</summary>
   </member>
+  <member name="P:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.VideoWidth">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
+  <member name="P:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.VideoHeight">
+    <docURL>???</docURL>
+    <incomplete />
+    <summary>This is not documented properly yet</summary>
+  </member>
   <member name="M:VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer.SetIndexMarker(System.Single)">
     <docURL>???</docURL>
     <incomplete />
