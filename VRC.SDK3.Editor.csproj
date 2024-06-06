@@ -73,8 +73,8 @@
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Components3\VRCSpatialAudioSourceEditor3.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\SDK3ImportFix.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Components3\VRCPlayerStationEditor3.cs" />
-    <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Components3\VRCSceneDescriptorEditor3.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Components3\VRCPickupEditor3.cs" />
+    <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Components3\VRCSceneDescriptorEditor3.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\VRCSceneTemplateInitializer.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Elements\WorldBuildSuccessNotification\WorldBuildSuccessNotification.cs" />
     <Compile Include="Packages\com.vrchat.worlds\Editor\VRCSDK\SDK3\Components3\VRCInspectorBase.cs" />

@@ -1,38 +1,9 @@
 <members>
-  <member name="P:VRC.SDKBase.VRCUrl.DomainExplicitAllowlistDelegate">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="P:VRC.SDKBase.VRCUrl.DomainWildcardAllowlistDelegate">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:VRC.SDKBase.VRCUrl.TryCreateAllowlistedVRCUrl(System.String,VRC.SDKBase.VRCUrl@)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="url">???</param>
-    <param name="vrcUrl">???</param>
-  </member>
   <member name="M:VRC.SDKBase.VRCUrl.IsNullOrEmpty(VRC.SDKBase.VRCUrl)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
     <param name="vrcUrl">???</param>
-  </member>
-  <member name="M:VRC.SDKBase.VRCUrl.IsAllowlistedUri(System.Uri)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="uri">???</param>
-  </member>
-  <member name="M:VRC.SDKBase.VRCUrl..ctor(System.String)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="url">???</param>
   </member>
   <member name="M:VRC.SDKBase.VRCUrl.Get">
     <docURL>???</docURL>

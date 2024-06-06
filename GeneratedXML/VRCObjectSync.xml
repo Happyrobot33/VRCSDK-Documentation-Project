@@ -4,21 +4,6 @@
     <incomplete />
     <summary>This is not documented properly yet</summary>
   </member>
-  <member name="P:VRC.SDK3.Components.VRCObjectSync.SetKinematicHook">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="P:VRC.SDK3.Components.VRCObjectSync.SetGravityHook">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="P:VRC.SDK3.Components.VRCObjectSync.FlagDiscontinuityHook">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
   <member name="M:VRC.SDK3.Components.VRCObjectSync.SetKinematic(System.Boolean)">
     <docURL>???</docURL>
     <incomplete />
@@ -43,16 +28,6 @@
     <param name="targetLocation">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.VRCObjectSync.Respawn">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:VRC.SDK3.Components.VRCObjectSync.NetworkConfigure">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:VRC.SDK3.Components.VRCObjectSync..ctor">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>

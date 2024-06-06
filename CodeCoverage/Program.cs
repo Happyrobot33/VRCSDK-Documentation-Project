@@ -1,4 +1,8 @@
-﻿// import ICSharpCode.Decompiler
+﻿//This being active will run the coverage code on the entire SDK, regardless of if it is accessible in U# or not
+//It being inactive will only run the coverage code on the parts of the SDK that are accessible in U#, given the correct file exists
+//#define FULL_SDK_COVERAGE_MODE
+
+// import ICSharpCode.Decompiler
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,6 +34,8 @@ public partial class Program
     static List<string> methodMembers = new List<string>();
     static List<string> eventMembers = new List<string>();
 
+    static List<NodeDefinition> nodeDefinitions = new List<NodeDefinition>();
+
     const string incompleteMarker = "incomplete";
 
     /// <summary>
@@ -39,13 +45,10 @@ public partial class Program
 
     public static void Main(string[] args)
     {
-        //clear the terminal
-        Console.Clear();
-
         //check if we can see the Packages folder
         Console.WriteLine("Initial Working Directory: " + workingDirectory);
         //see if the packages folder exists
-        if(!Directory.Exists(Path.Combine(workingDirectory, "Packages")))
+        if (!Directory.Exists(Path.Combine(workingDirectory, "Packages")))
         {
             //if we cant, then we are in the wrong directory, so go up a few directories
             workingDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
@@ -152,6 +155,22 @@ public partial class Program
 
         //generate the source code for documentation purposes
         GenerateSourceCode();
+
+        //load the node definitions file at the root of the project
+        string nodeDefinitionsPath = workingDirectory + "/NodeDefinitions.txt";
+        if (File.Exists(nodeDefinitionsPath))
+        {
+            Console.WriteLine("Loading Node Definitions...");
+            string[] nodeDefinitionsStrings = File.ReadAllLines(nodeDefinitionsPath);
+            foreach (string nodeDefinition in nodeDefinitionsStrings)
+            {
+                #if !FULL_SDK_COVERAGE_MODE
+                nodeDefinitions.Add(new NodeDefinition(nodeDefinition));
+                #endif
+            }
+
+            Console.WriteLine("Loaded " + nodeDefinitions.Count + " Node Definitions");
+        }
 
         //make the dictionary to store the public data
         List<namespaceAssemblyData> assemblyData = new List<namespaceAssemblyData>();
@@ -531,7 +550,24 @@ public partial class Program
             //find the correct entry for this namespace
             namespaceAssemblyData entry = dict.Find(x => x.namespaceName == namespaceName);
 
-            entry.publicProperties.AddRange(type.Properties.Where(x => x.Accessibility == Accessibility.Public));
+            foreach (IProperty property in type.Properties)
+            {
+                if (property.Accessibility == Accessibility.Public)
+                {
+                    //check if our node definitions contains it
+                    if (NodeDefinitionExists(property, out NodeDefinition def))
+                    {
+                        Console.WriteLine(string.Format("{0}Node Definition found for {1} ({2}){3}", Green, property.FullName, def, Reset));
+                    }
+                    else
+                    {
+                        Console.WriteLine(string.Format("{0}Node Definition not found for {1} ({2}){3}", Red, property.FullName, def, Reset));
+                        continue;
+                    }
+
+                    entry.publicProperties.Add(property);
+                }
+            }
 
             //loop through the public methods, and get all .ctor methods
             foreach (IMethod method in type.Methods)
@@ -546,6 +582,17 @@ public partial class Program
                             //if it is, skip it
                             continue;
                         }
+                    }
+
+                    //check if our node definitions contains it
+                    if (NodeDefinitionExists(method, out NodeDefinition def))
+                    {
+                        Console.WriteLine(string.Format("{0}Node Definition found for {1} ({2}){3}", Green, method.FullName, def, Reset));
+                    }
+                    else
+                    {
+                        Console.WriteLine(string.Format("{0}Node Definition not found for {1} ({2}){3}", Red, method.FullName, def, Reset));
+                        continue;
                     }
 
                     entry.publicMethods.Add(method);
@@ -569,13 +616,54 @@ public partial class Program
                         }
                     }
 
-                    if (symbol.Kind != TypeKind.Delegate)
+                    if (symbol.Kind == TypeKind.Delegate)
                     {
-                        entry.publicFields.Add(field);
+                        continue;
                     }
+
+                    //check if our node definitions contains it
+                    if (NodeDefinitionExists(field, out NodeDefinition def))
+                    {
+                        Console.WriteLine(string.Format("{0}Node Definition found for {1} ({2}){3}", Green, field.FullName, def, Reset));
+                    }
+                    else
+                    {
+                        Console.WriteLine(string.Format("{0}Node Definition not found for {1} ({2}){3}", Red, field.FullName, def, Reset));
+                        continue;
+                    }
+
+                    entry.publicFields.Add(field);
                 }
             }
-            entry.publicEvents.AddRange(type.Events.Where(x => x.Accessibility == Accessibility.Public));
+            //entry.publicEvents.AddRange(type.Events.Where(x => x.Accessibility == Accessibility.Public));
+            foreach (IEvent @event in type.Events)
+            {
+                if (@event.Accessibility == Accessibility.Public)
+                {
+                    //check if our node definitions contains it
+                    if (NodeDefinitionExists(@event, out NodeDefinition def))
+                    {
+                        Console.WriteLine(string.Format("{0}Node Definition found for {1} ({2}){3}", Green, @event.FullName, def, Reset));
+                    }
+                    else
+                    {
+                        Console.WriteLine(string.Format("{0}Node Definition not found for {1} ({2}){3}", Red, @event.FullName, def, Reset));
+                        continue;
+                    }
+
+                    entry.publicEvents.Add(@event);
+                }
+            }
+
+            if(NodeDefinitionExists(type, out NodeDefinition defin))
+            {
+                Console.WriteLine(string.Format("{0}Node Definition found for {1} ({2}){3}", Green, type.FullName, defin, Reset));
+            }
+            else
+            {
+                Console.WriteLine(string.Format("{0}Node Definition not found for {1} ({2}){3}", Red, type.FullName, defin, Reset));
+            }
+
             entry.publicTypes.Add(type);
         }
     }
@@ -600,6 +688,38 @@ public partial class Program
                 return "Event";
             default:
                 return null;
+        }
+    }
+
+    private static bool NodeDefinitionExists<T>(T elem, out NodeDefinition def)
+    {
+        //if there is no node definitions, then always return true with a null definition
+        if (nodeDefinitions.Count == 0)
+        {
+            def = null;
+            return true;
+        }
+
+        switch (elem)
+        {
+            case IType type:
+                def = NodeDefinition.ConvertToNodeDefinition(type);
+                return nodeDefinitions.Contains(def);
+            case IField field:
+                def = NodeDefinition.ConvertToNodeDefinition(field);
+                return nodeDefinitions.Contains(def);
+            case IProperty property:
+                def = NodeDefinition.ConvertToNodeDefinition(property);
+                return nodeDefinitions.Contains(def);
+            case IMethod method:
+                def = NodeDefinition.ConvertToNodeDefinition(method);
+                return nodeDefinitions.Contains(def);
+            case IEvent @event:
+                def = NodeDefinition.ConvertToNodeDefinition(@event);
+                return nodeDefinitions.Contains(def);
+            default:
+                def = null;
+                return false;
         }
     }
 }

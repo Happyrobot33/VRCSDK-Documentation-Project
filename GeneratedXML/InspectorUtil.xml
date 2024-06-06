@@ -1,33 +1,4 @@
 <members>
-  <member name="F:InspectorUtil.EditableArray.array">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:InspectorUtil.EditableArray.maxElements">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:InspectorUtil.QuaternionAsEulerField(UnityEditor.SerializedProperty)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="property">???</param>
-  </member>
-  <member name="M:InspectorUtil.DrawEditableArray(UnityEditor.Editor,InspectorUtil.EditableArray,System.Int32@)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="editor">???</param>
-    <param name="data">???</param>
-    <param name="selected">???</param>
-  </member>
-  <member name="M:InspectorUtil.EditableArray..ctor">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
   <member name="T:InspectorUtil">
     <docURL>???</docURL>
     <incomplete />

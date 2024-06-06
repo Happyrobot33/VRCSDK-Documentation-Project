@@ -1,31 +1,4 @@
 <members>
-  <member name="F:VRC.SDKBase.VRC_ObjectSpawn.ObjectPrefab">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:VRC.SDKBase.VRC_ObjectSpawn.SpawnObject">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:VRC.SDKBase.VRC_ObjectSpawn.SpawnObject(UnityEngine.Vector3,UnityEngine.Quaternion)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="position">???</param>
-    <param name="rotation">???</param>
-  </member>
-  <member name="M:VRC.SDKBase.VRC_ObjectSpawn.DestroySpawnedObjects">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:VRC.SDKBase.VRC_ObjectSpawn.ProvideEvents">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
   <member name="T:VRC.SDKBase.VRC_ObjectSpawn">
     <docURL>???</docURL>
     <incomplete />

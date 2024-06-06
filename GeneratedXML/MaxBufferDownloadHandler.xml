@@ -1,32 +1,4 @@
 <members>
-  <member name="F:VRC.SDK3.StringLoading.MaxBufferDownloadHandler.lengthFail">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="P:VRC.SDK3.StringLoading.MaxBufferDownloadHandler.downloadedBytes">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="P:VRC.SDK3.StringLoading.MaxBufferDownloadHandler.downloadedText">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:VRC.SDK3.StringLoading.MaxBufferDownloadHandler..ctor(System.Int32)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="max">???</param>
-  </member>
-  <member name="M:VRC.SDK3.StringLoading.MaxBufferDownloadHandler..ctor(System.Int32,System.Byte[])">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="max">???</param>
-    <param name="buffer">???</param>
-  </member>
   <member name="T:VRC.SDK3.StringLoading.MaxBufferDownloadHandler">
     <docURL>???</docURL>
     <incomplete />

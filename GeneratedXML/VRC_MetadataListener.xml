@@ -1,15 +1,4 @@
 <members>
-  <member name="P:VRC.SDKBase.VRC_MetadataListener.currentMetadata">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:VRC.SDKBase.VRC_MetadataListener.TriggerUpdate(System.Collections.Generic.Dictionary)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="data">???</param>
-  </member>
   <member name="T:VRC.SDKBase.VRC_MetadataListener">
     <docURL>???</docURL>
     <incomplete />

@@ -1036,54 +1036,58 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="VRC.Udon.Editor.csproj" />
     <ProjectReference Include="Unity.XR.Management.csproj" />
-    <ProjectReference Include="Happyrobot33.VRCSDKDocumentationProject.csproj" />
     <ProjectReference Include="com.unity.cinemachine.editor.csproj" />
     <ProjectReference Include="UdonSharp.Editor.csproj" />
-    <ProjectReference Include="VRC.ClientSim.Editor.csproj" />
     <ProjectReference Include="Unity.Postprocessing.Runtime.csproj" />
+    <ProjectReference Include="Unity.Burst.Editor.csproj" />
+    <ProjectReference Include="Unity.AI.Navigation.csproj" />
+    <ProjectReference Include="Unity.Rider.Editor.csproj" />
+    <ProjectReference Include="VRC.SDKBase.Editor.BuildPipeline.csproj" />
+    <ProjectReference Include="Unity.Mathematics.Editor.csproj" />
+    <ProjectReference Include="Unity.XR.Management.Editor.csproj" />
+    <ProjectReference Include="Unity.Collections.csproj" />
+    <ProjectReference Include="VRC.Udon.Serialization.OdinSerializer.csproj" />
+    <ProjectReference Include="com.vrchat.core.vpm-resolver.Editor.csproj" />
+    <ProjectReference Include="VRC.SDKBase.Editor.csproj" />
+    <ProjectReference Include="Unity.Collections.Editor.csproj" />
+    <ProjectReference Include="Unity.TextMeshPro.csproj" />
+    <ProjectReference Include="VRC.Udon.csproj" />
+    <ProjectReference Include="UdonSharp.Runtime.csproj" />
+    <ProjectReference Include="Unity.AI.Navigation.Editor.ConversionSystem.csproj" />
+    <ProjectReference Include="Unity.XR.Oculus.Editor.csproj" />
+    <ProjectReference Include="VRC.Udon.Editor.csproj" />
+    <ProjectReference Include="Happyrobot33.VRCSDKDocumentationProject.csproj" />
+    <ProjectReference Include="VRC.ClientSim.Editor.csproj" />
+    <ProjectReference Include="UnityEngine.XR.LegacyInputHelpers.csproj" />
     <ProjectReference Include="UniTask.DOTween.csproj" />
     <ProjectReference Include="Unity.Burst.csproj" />
-    <ProjectReference Include="Unity.Burst.Editor.csproj" />
-    <ProjectReference Include="UnityEngine.XR.LegacyInputHelpers.csproj" />
     <ProjectReference Include="Unity.Timeline.Editor.csproj" />
     <ProjectReference Include="UnityEditor.SpatialTracking.csproj" />
-    <ProjectReference Include="UniTask.csproj" />
     <ProjectReference Include="Unity.VisualStudio.Editor.csproj" />
+    <ProjectReference Include="UniTask.csproj" />
     <ProjectReference Include="UnityEditor.UI.csproj" />
     <ProjectReference Include="UnityEngine.SpatialTracking.csproj" />
     <ProjectReference Include="VRC.SDK3.csproj" />
-    <ProjectReference Include="Unity.Rider.Editor.csproj" />
     <ProjectReference Include="UnityEngine.UI.csproj" />
     <ProjectReference Include="UnityEditor.XR.LegacyInputHelpers.csproj" />
     <ProjectReference Include="VRC.SDKBase.Editor.ShaderStripping.csproj" />
-    <ProjectReference Include="VRC.SDKBase.Editor.BuildPipeline.csproj" />
-    <ProjectReference Include="Unity.Mathematics.Editor.csproj" />
     <ProjectReference Include="Unity.Timeline.csproj" />
     <ProjectReference Include="Unity.InputSystem.csproj" />
     <ProjectReference Include="Unity.InputSystem.ForUI.csproj" />
     <ProjectReference Include="Unity.XR.Oculus.csproj" />
     <ProjectReference Include="VRC.SDKBase.csproj" />
     <ProjectReference Include="UniTask.Linq.csproj" />
-    <ProjectReference Include="Unity.XR.Management.Editor.csproj" />
-    <ProjectReference Include="Unity.Collections.csproj" />
-    <ProjectReference Include="VRC.Udon.Serialization.OdinSerializer.csproj" />
+    <ProjectReference Include="Unity.AI.Navigation.Updater.csproj" />
     <ProjectReference Include="Unity.Postprocessing.Editor.csproj" />
-    <ProjectReference Include="com.vrchat.core.vpm-resolver.Editor.csproj" />
     <ProjectReference Include="UniTask.TextMeshPro.csproj" />
-    <ProjectReference Include="Unity.Collections.Editor.csproj" />
-    <ProjectReference Include="VRC.SDKBase.Editor.csproj" />
     <ProjectReference Include="Unity.Mathematics.csproj" />
-    <ProjectReference Include="Unity.TextMeshPro.csproj" />
     <ProjectReference Include="Unity.TextMeshPro.Editor.csproj" />
+    <ProjectReference Include="Unity.AI.Navigation.Editor.csproj" />
     <ProjectReference Include="UniTask.Addressables.csproj" />
     <ProjectReference Include="VRC.ClientSim.csproj" />
-    <ProjectReference Include="UdonSharp.Runtime.csproj" />
     <ProjectReference Include="VRC.SDK3.Editor.csproj" />
-    <ProjectReference Include="VRC.Udon.csproj" />
     <ProjectReference Include="Cinemachine.csproj" />
-    <ProjectReference Include="Unity.XR.Oculus.Editor.csproj" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <ItemGroup>

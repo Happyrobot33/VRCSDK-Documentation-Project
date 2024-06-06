@@ -1,33 +1,4 @@
 <members>
-  <member name="M:VRC.SDKBase.Editor.BuildPipeline.VRCBuildPipelineCallbacks.OnVRCSDKBuildRequested(VRC.SDKBase.Editor.BuildPipeline.VRCSDKRequestedBuildType)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="requestedBuildType">???</param>
-  </member>
-  <member name="M:VRC.SDKBase.Editor.BuildPipeline.VRCBuildPipelineCallbacks.OnPreprocessAvatar(UnityEngine.GameObject)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="avatarGameObject">???</param>
-  </member>
-  <member name="M:VRC.SDKBase.Editor.BuildPipeline.VRCBuildPipelineCallbacks.OnPostprocessAvatar">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:VRC.SDKBase.Editor.BuildPipeline.VRCBuildPipelineCallbacks.OnPreprocessScene(UnityEngine.SceneManagement.Scene)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="scene">???</param>
-  </member>
-  <member name="M:VRC.SDKBase.Editor.BuildPipeline.VRCBuildPipelineCallbacks.OnPostprocessScene(UnityEngine.SceneManagement.Scene)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="scene">???</param>
-  </member>
   <member name="T:VRC.SDKBase.Editor.BuildPipeline.VRCBuildPipelineCallbacks">
     <docURL>???</docURL>
     <incomplete />

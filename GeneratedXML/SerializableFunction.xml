@@ -1,21 +1,4 @@
 <members>
-  <member name="F:VRC.SDK3.Editor.SerializableFunction.className">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Editor.SerializableFunction.methodName">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:VRC.SDK3.Editor.SerializableFunction..ctor(System.String,System.String)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="_className">???</param>
-    <param name="_methodName">???</param>
-  </member>
   <member name="T:VRC.SDK3.Editor.SerializableFunction">
     <docURL>???</docURL>
     <incomplete />

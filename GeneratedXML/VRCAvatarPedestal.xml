@@ -1,21 +1,9 @@
 <members>
-  <member name="M:VRC.SDK3.Components.VRCAvatarPedestal.SwitchAvatar(System.String,VRC.SDKBase.VRCPlayerApi)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="id">???</param>
-    <param name="instigator">???</param>
-  </member>
   <member name="M:VRC.SDK3.Components.VRCAvatarPedestal.SwitchAvatar(System.String)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
     <param name="id">???</param>
-  </member>
-  <member name="M:VRC.SDK3.Components.VRCAvatarPedestal..ctor">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
   </member>
   <member name="T:VRC.SDK3.Components.VRCAvatarPedestal">
     <docURL>???</docURL>

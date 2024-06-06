@@ -1,26 +1,4 @@
 <members>
-  <member name="F:VRC.SDK3.Midi.MidiRawDataProcessor.allBlocks">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Midi.MidiRawDataProcessor.tracks">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="P:VRC.SDK3.Midi.MidiRawDataProcessor.Bpm">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:VRC.SDK3.Midi.MidiRawDataProcessor..ctor(Midi.ParsedMidiFile,VRC.SDK3.Midi.MidiImportSettings)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="midiFile">???</param>
-    <param name="midiImportSettings">???</param>
-  </member>
   <member name="T:VRC.SDK3.Midi.MidiRawDataProcessor">
     <docURL>???</docURL>
     <incomplete />

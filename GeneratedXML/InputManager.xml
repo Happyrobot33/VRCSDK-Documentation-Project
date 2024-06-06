@@ -9,19 +9,6 @@
     <incomplete />
     <summary>This is not documented properly yet</summary>
   </member>
-  <member name="M:VRC.SDKBase.InputManager.GetBoolInputSetting(VRC.SDKBase.VRCInputSetting)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="setting">???</param>
-  </member>
-  <member name="M:VRC.SDKBase.InputManager.SetBoolInputSetting(VRC.SDKBase.VRCInputSetting,System.Boolean)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="setting">???</param>
-    <param name="enabled">???</param>
-  </member>
   <member name="M:VRC.SDKBase.InputManager.EnableObjectHighlight(UnityEngine.GameObject,System.Boolean)">
     <docURL>???</docURL>
     <incomplete />

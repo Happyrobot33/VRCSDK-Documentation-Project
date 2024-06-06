@@ -23,7 +23,7 @@ namespace Happyrobot33.VRCSDKDocumentationProject
         {
             Debug.Log("Injecting XML documentation....");
 
-            //GenerateExternalNodeDefinitionsList();
+            GenerateExternalNodeDefinitionsList();
 
             //save the start tick
             s_startTick = Environment.TickCount;
@@ -33,7 +33,7 @@ namespace Happyrobot33.VRCSDKDocumentationProject
             return content;
         }
 
-        /* /// <summary>
+        /// <summary>
         /// Generates a external file list of all the node definitions
         /// </summary>
         private static void GenerateExternalNodeDefinitionsList()
@@ -47,11 +47,11 @@ namespace Happyrobot33.VRCSDKDocumentationProject
                 string output = "";
                 foreach (UdonNodeDefinition nodeDefinition in nodeDefinitionsArray)
                 {
-                    output += UnSanitizeNode(nodeDefinition) + "\n";
+                    output += nodeDefinition.fullName + "\n";
                 }
 
                 //print size
-                Debug.Log("Node Definitions: " + nodeDefinitions.Count);
+                Debug.Log("Node Definitions Parsed: " + nodeDefinitions.Count);
                 //get the root of the unity project
                 string root = System.IO.Path.GetDirectoryName(Application.dataPath);
 
@@ -63,36 +63,6 @@ namespace Happyrobot33.VRCSDKDocumentationProject
                 Debug.LogWarning("Failed to generate node definitions list: " + e.Message);
             }
         }
-
-        private static string UnSanitizeNode(UdonNodeDefinition def)
-        {
-            string SanitizedName = def.fullName;
-            //check if its a type first by if it has a . in the name
-            if (SanitizedName.Contains(".") == false)
-            {
-                //return the type name for now
-                return def.fullName;
-            }
-
-            //example method
-            //UnityEngineAnimatorControllerParameterArray.__SetValue__SystemObject_SystemInt32_SystemInt32_SystemInt32__SystemVoid
-            // ^ class name                                 ^ method name   ^-parameters-^----------^----------^           ^ return type
-
-            string classname = SanitizedName.Substring(0, SanitizedName.IndexOf('.'));
-            string methodname = SanitizedName.Substring(SanitizedName.IndexOf("__") + 2);
-            string parameters = methodname.Substring(methodname.IndexOf("__") + 2);
-            methodname = methodname.Substring(0, methodname.IndexOf("__"));
-
-            //remove the return type at the end of the parameters
-            parameters = parameters.Substring(0, parameters.LastIndexOf("__") != -1 ? parameters.LastIndexOf("__") : parameters.Length);
-
-            //convert _ to ", " for parameters
-            parameters = parameters.Replace("_", ", ");
-
-            string output = string.Format("{0}.{1}({2})", classname, methodname, parameters);
-
-            return output;
-        } */
 
 
         public static string OnGeneratedCSProject(string path, string content)

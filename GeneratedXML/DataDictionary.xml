@@ -1,15 +1,4 @@
 <members>
-  <member name="P:VRC.SDK3.Data.DataDictionary.IsReadOnly">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="P:VRC.SDK3.Data.DataDictionary.Item">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="key">???</param>
-  </member>
   <member name="M:VRC.SDK3.Data.DataDictionary.TryGetValue(VRC.SDK3.Data.DataToken,VRC.SDK3.Data.TokenType,VRC.SDK3.Data.DataToken@)">
     <docURL>???</docURL>
     <incomplete />
@@ -34,36 +23,6 @@
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:VRC.SDK3.Data.DataDictionary.GetEnumerator">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:VRC.SDK3.Data.DataDictionary.Add(System.Collections.Generic.KeyValuePair)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="item">???</param>
-  </member>
-  <member name="M:VRC.SDK3.Data.DataDictionary.Contains(System.Collections.Generic.KeyValuePair)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="item">???</param>
-  </member>
-  <member name="M:VRC.SDK3.Data.DataDictionary.CopyTo(System.Collections.Generic.KeyValuePair[],System.Int32)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="array">???</param>
-    <param name="arrayIndex">???</param>
-  </member>
-  <member name="M:VRC.SDK3.Data.DataDictionary.Remove(System.Collections.Generic.KeyValuePair)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="item">???</param>
   </member>
   <member name="M:VRC.SDK3.Data.DataDictionary..ctor">
     <docURL>???</docURL>

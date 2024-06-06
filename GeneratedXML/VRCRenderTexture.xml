@@ -25,16 +25,6 @@
     <summary>This is not documented properly yet</summary>
     <param name="renderTexture">???</param>
   </member>
-  <member name="E:VRC.SDKBase.VRCRenderTexture.OnGetTemporaryRenderTexture">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="E:VRC.SDKBase.VRCRenderTexture.OnReleaseTemporaryRenderTexture">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
   <member name="T:VRC.SDKBase.VRCRenderTexture">
     <docURL>???</docURL>
     <incomplete />

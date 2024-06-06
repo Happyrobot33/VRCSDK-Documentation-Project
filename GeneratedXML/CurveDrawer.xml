@@ -1,17 +1,4 @@
 <members>
-  <member name="M:VRC.SDKBase.Editor.PropertyDrawers.CurveDrawer.OnGUI(UnityEngine.Rect,UnityEditor.SerializedProperty,UnityEngine.GUIContent)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="position">???</param>
-    <param name="property">???</param>
-    <param name="label">???</param>
-  </member>
-  <member name="M:VRC.SDKBase.Editor.PropertyDrawers.CurveDrawer..ctor">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
   <member name="T:VRC.SDKBase.Editor.PropertyDrawers.CurveDrawer">
     <docURL>???</docURL>
     <incomplete />

@@ -1,14 +1,4 @@
 <members>
-  <member name="F:VRC.SDKBase.VRCTriggerRelay.triggersInside">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDKBase.VRCTriggerRelay.currentIdx">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
   <member name="T:VRC.SDKBase.VRCTriggerRelay">
     <docURL>???</docURL>
     <incomplete />

@@ -1,20 +1,4 @@
 <members>
-  <member name="F:VRC.SDK3.Midi.MidiFileImporter.ImportSettings">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:VRC.SDK3.Midi.MidiFileImporter.OnImportAsset(UnityEditor.AssetImporters.AssetImportContext)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="ctx">???</param>
-  </member>
-  <member name="M:VRC.SDK3.Midi.MidiFileImporter..ctor">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
   <member name="T:VRC.SDK3.Midi.MidiFileImporter">
     <docURL>???</docURL>
     <incomplete />

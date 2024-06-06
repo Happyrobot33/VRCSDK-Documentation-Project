@@ -1,26 +1,4 @@
 <members>
-  <member name="M:VRC.SDK3.Image.ImageDownloader.TrimCache(System.Int32)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="size">???</param>
-  </member>
-  <member name="M:VRC.SDK3.Image.ImageDownloader.DownloadImage(System.String,System.Int32,System.Action,System.Action,System.String,System.Boolean)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="imageUrl">???</param>
-    <param name="imageSize">???</param>
-    <param name="onImageDownload">???</param>
-    <param name="onImageDownloadFailed">???</param>
-    <param name="fallbackImageUrl">???</param>
-    <param name="isRetry">???</param>
-  </member>
-  <member name="M:VRC.SDK3.Image.ImageDownloader..ctor">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
   <member name="T:VRC.SDK3.Image.ImageDownloader">
     <docURL>???</docURL>
     <incomplete />

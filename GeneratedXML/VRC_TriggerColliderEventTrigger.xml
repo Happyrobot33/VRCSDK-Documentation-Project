@@ -1,29 +1,4 @@
 <members>
-  <member name="F:VRC.SDKBase.VRC_TriggerColliderEventTrigger.EnterEventName">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDKBase.VRC_TriggerColliderEventTrigger.ExitEventName">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDKBase.VRC_TriggerColliderEventTrigger.TriggerIndividuals">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDKBase.VRC_TriggerColliderEventTrigger.layers">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDKBase.VRC_TriggerColliderEventTrigger.Handler">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
   <member name="T:VRC.SDKBase.VRC_TriggerColliderEventTrigger">
     <docURL>???</docURL>
     <incomplete />

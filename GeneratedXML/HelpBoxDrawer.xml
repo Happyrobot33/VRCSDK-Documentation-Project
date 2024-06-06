@@ -1,20 +1,4 @@
 <members>
-  <member name="M:VRC.SDKBase.Editor.PropertyDrawers.HelpBoxDrawer.GetHeight">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:VRC.SDKBase.Editor.PropertyDrawers.HelpBoxDrawer.OnGUI(UnityEngine.Rect)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="position">???</param>
-  </member>
-  <member name="M:VRC.SDKBase.Editor.PropertyDrawers.HelpBoxDrawer..ctor">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
   <member name="T:VRC.SDKBase.Editor.PropertyDrawers.HelpBoxDrawer">
     <docURL>???</docURL>
     <incomplete />

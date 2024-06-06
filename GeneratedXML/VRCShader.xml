@@ -1,49 +1,4 @@
 <members>
-  <member name="F:VRC.SDKBase.VRCShader.ShaderVariableType.Integer">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDKBase.VRCShader.ShaderVariableType.Float">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDKBase.VRCShader.ShaderVariableType.Texture">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDKBase.VRCShader.ShaderVariableType.Color">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDKBase.VRCShader.ShaderVariableType.Vector">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDKBase.VRCShader.ShaderVariableType.Matrix">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDKBase.VRCShader.ShaderVariableType.FloatArray">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDKBase.VRCShader.ShaderVariableType.VectorArray">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDKBase.VRCShader.ShaderVariableType.MatrixArray">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
   <member name="M:VRC.SDKBase.VRCShader.PropertyToID(System.String)">
     <docURL>???</docURL>
     <incomplete />
@@ -112,16 +67,6 @@
     <summary>This is not documented properly yet</summary>
     <param name="nameID">???</param>
     <param name="value">???</param>
-  </member>
-  <member name="M:VRC.SDKBase.VRCShader.ClearGlobalVariableWhitelist">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="E:VRC.SDKBase.VRCShader.OnSetGlobalShaderVariable">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
   </member>
   <member name="T:VRC.SDKBase.VRCShader">
     <docURL>???</docURL>

@@ -4,122 +4,7 @@
     <incomplete />
     <summary>This is not documented properly yet</summary>
   </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.ContentType.Standard">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.ContentType.Autocorrected">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.ContentType.IntegerNumber">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.ContentType.DecimalNumber">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.ContentType.Alphanumeric">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.ContentType.Name">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.ContentType.EmailAddress">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.ContentType.Password">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.ContentType.Pin">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.ContentType.Custom">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.InputType.Standard">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.InputType.AutoCorrect">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.InputType.Password">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.CharacterValidation.None">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.CharacterValidation.Integer">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.CharacterValidation.Decimal">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.CharacterValidation.Alphanumeric">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.CharacterValidation.Name">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.CharacterValidation.EmailAddress">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.LineType.SingleLine">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.LineType.MultiLineSubmit">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDK3.Components.VRCUrlInputField.LineType.MultiLineNewline">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
   <member name="P:VRC.SDK3.Components.VRCUrlInputField.shouldHideMobileInput">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="P:VRC.SDK3.Components.VRCUrlInputField.text">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
@@ -164,26 +49,6 @@
     <incomplete />
     <summary>This is not documented properly yet</summary>
   </member>
-  <member name="P:VRC.SDK3.Components.VRCUrlInputField.onEndEdit">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="P:VRC.SDK3.Components.VRCUrlInputField.onValueChange">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="P:VRC.SDK3.Components.VRCUrlInputField.onValueChanged">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="P:VRC.SDK3.Components.VRCUrlInputField.onValidateInput">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
   <member name="P:VRC.SDK3.Components.VRCUrlInputField.characterLimit">
     <docURL>???</docURL>
     <incomplete />
@@ -200,16 +65,6 @@
     <summary>This is not documented properly yet</summary>
   </member>
   <member name="P:VRC.SDK3.Components.VRCUrlInputField.inputType">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="P:VRC.SDK3.Components.VRCUrlInputField.touchScreenKeyboard">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="P:VRC.SDK3.Components.VRCUrlInputField.keyboardType">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
@@ -235,21 +90,6 @@
     <summary>This is not documented properly yet</summary>
   </member>
   <member name="P:VRC.SDK3.Components.VRCUrlInputField.wasCanceled">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="P:VRC.SDK3.Components.VRCUrlInputField.caretPosition">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="P:VRC.SDK3.Components.VRCUrlInputField.selectionAnchorPosition">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="P:VRC.SDK3.Components.VRCUrlInputField.selectionFocusPosition">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
@@ -300,24 +140,6 @@
     <summary>This is not documented properly yet</summary>
     <param name="url">???</param>
   </member>
-  <member name="M:VRC.SDK3.Components.VRCUrlInputField.MoveTextEnd(System.Boolean)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="shift">???</param>
-  </member>
-  <member name="M:VRC.SDK3.Components.VRCUrlInputField.MoveTextStart(System.Boolean)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="shift">???</param>
-  </member>
-  <member name="M:VRC.SDK3.Components.VRCUrlInputField.ScreenToLocal(UnityEngine.Vector2)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="screen">???</param>
-  </member>
   <member name="M:VRC.SDK3.Components.VRCUrlInputField.OnBeginDrag(UnityEngine.EventSystems.PointerEventData)">
     <docURL>???</docURL>
     <incomplete />
@@ -341,12 +163,6 @@
     <incomplete />
     <summary>This is not documented properly yet</summary>
     <param name="eventData">???</param>
-  </member>
-  <member name="M:VRC.SDK3.Components.VRCUrlInputField.ProcessEvent(UnityEngine.Event)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="e">???</param>
   </member>
   <member name="M:VRC.SDK3.Components.VRCUrlInputField.OnUpdateSelected(UnityEngine.EventSystems.BaseEventData)">
     <docURL>???</docURL>
@@ -415,21 +231,6 @@
     <summary>This is not documented properly yet</summary>
   </member>
   <member name="M:VRC.SDK3.Components.VRCUrlInputField.CalculateLayoutInputVertical">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:VRC.SDK3.Components.VRCUrlInputField.SubmitEvent..ctor">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:VRC.SDK3.Components.VRCUrlInputField.OnChangeEvent..ctor">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="E:VRC.SDK3.Components.VRCUrlInputField.onSelected">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>

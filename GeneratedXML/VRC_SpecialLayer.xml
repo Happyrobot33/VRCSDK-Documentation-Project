@@ -1,34 +1,4 @@
 <members>
-  <member name="F:VRC.SDKBase.VRC_SpecialLayer.specialLayer">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDKBase.VRC_SpecialLayer.VRCLayer.Environment">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDKBase.VRC_SpecialLayer.VRCLayer.Interactive">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDKBase.VRC_SpecialLayer.VRCLayer.Walkthrough">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="F:VRC.SDKBase.VRC_SpecialLayer.VRCLayer.Pickup">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
-  <member name="M:VRC.SDKBase.VRC_SpecialLayer.Apply">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
   <member name="T:VRC.SDKBase.VRC_SpecialLayer">
     <docURL>???</docURL>
     <incomplete />

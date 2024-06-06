@@ -1,32 +1,10 @@
 <members>
-  <member name="P:VRC.SDK3.StringLoading.VRCStringDownloader.StartDownload">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
   <member name="M:VRC.SDK3.StringLoading.VRCStringDownloader.LoadUrl(VRC.SDKBase.VRCUrl,VRC.Udon.Common.Interfaces.IUdonEventReceiver)">
     <docURL>???</docURL>
     <incomplete />
     <summary>This is not documented properly yet</summary>
     <param name="url">???</param>
     <param name="udonBehaviour">???</param>
-  </member>
-  <member name="M:VRC.SDK3.StringLoading.VRCStringDownloader.AddToManager(VRC.SDK3.StringLoading.IVRCStringDownload)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="download">???</param>
-  </member>
-  <member name="M:VRC.SDK3.StringLoading.VRCStringDownloader.RemoveFromManager(VRC.SDK3.StringLoading.IVRCStringDownload)">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-    <param name="download">???</param>
-  </member>
-  <member name="M:VRC.SDK3.StringLoading.VRCStringDownloader.ClearQueue">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
   </member>
   <member name="T:VRC.SDK3.StringLoading.VRCStringDownloader">
     <docURL>???</docURL>

@@ -1,9 +1,4 @@
 <members>
-  <member name="F:VRC.SDKBase.VRC_Label.label">
-    <docURL>???</docURL>
-    <incomplete />
-    <summary>This is not documented properly yet</summary>
-  </member>
   <member name="T:VRC.SDKBase.VRC_Label">
     <docURL>???</docURL>
     <incomplete />
