@@ -76,7 +76,7 @@ jobs:
         with:
           working-directory: "./docs/"
           doxyfile-path: "./Doxyfile"
-          enable-latex: true
+          enable-latex: false
 
       #Copy docs into the website
       - name: Copy Docs
