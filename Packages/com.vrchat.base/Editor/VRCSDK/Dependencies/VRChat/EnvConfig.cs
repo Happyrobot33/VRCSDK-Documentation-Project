@@ -72,7 +72,7 @@ namespace VRC.Editor
         };
 
         private static bool _requestConfigureSettings = true;
-        
+
         static EnvConfig()
         {
             EditorApplication.update += EditorUpdate;
@@ -1211,6 +1211,20 @@ namespace VRC.Editor
                 defines.Remove("VRC_SDK_VRCSDK3");
             }
 
+            // TODO remove once player persistence is enabled by default
+            if(assemblies.Any(assembly => assembly.GetType("VRC.SDK3.ClientSim.Persistence.ClientSimPlayerDataStorage") != null))
+            {
+                if(!defines.Contains("VRC_ENABLE_PLAYER_PERSISTENCE", StringComparer.OrdinalIgnoreCase))
+                {
+                    defines.Add("VRC_ENABLE_PLAYER_PERSISTENCE");
+                    definesChanged = true;
+                }
+            }
+            else if(defines.Contains("VRC_ENABLE_PLAYER_PERSISTENCE"))
+            {
+                defines.Remove("VRC_ENABLE_PLAYER_PERSISTENCE");
+            }
+            
             if(definesChanged)
             {
                 PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, string.Join(";", defines.ToArray()));

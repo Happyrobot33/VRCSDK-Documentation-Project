@@ -6,13 +6,17 @@ using System.Threading;
 using Unity.Profiling;
 using UnityEngine;
 using VRC.Compression;
+using VRC.SDK3.Components;
 using VRC.Udon.Common;
 using VRC.Udon.Common.Interfaces;
 using VRC.Udon.Serialization.OdinSerializer;
+using VRC.Udon.Serialization.OdinSerializer.Utilities;
+
+[assembly: UdonSignatureHolderMarker(typeof(VRC.Udon.ProgramSources.SerializedUdonProgramAsset))]
 
 namespace VRC.Udon.ProgramSources
 {
-    public sealed class SerializedUdonProgramAsset : AbstractSerializedUdonProgramAsset
+    public sealed class SerializedUdonProgramAsset : AbstractSerializedUdonProgramAsset, IUdonSignatureHolder
     {
         private static readonly Lazy<int> _debugLevel = new Lazy<int>(InitializeLogging);
         private static int DebugLevel => _debugLevel.Value;
@@ -27,6 +31,9 @@ namespace VRC.Udon.ProgramSources
         private string serializedProgramBytesString;
 
         [SerializeField, HideInInspector]
+        private byte[] serializedSignature;
+
+        [SerializeField, HideInInspector]
         private List<UnityEngine.Object> programUnityEngineObjects;
 
         // Store the serialization DataFormat that was actually used to serialize the program.
@@ -38,32 +45,12 @@ namespace VRC.Udon.ProgramSources
         // Cache the deserialized program and a serialized copy of its IUdonHeap to more efficiently create clones of the IUdonProgram.
         private (IUdonProgram program, byte[] serializedHeap, List<UnityEngine.Object> serializedHeapUnityEngineObjects)? _serializationCache = null;
 
-        // Create a DeserializationContext for each thread to avoid race conditions.
-        private ThreadLocal<DeserializationContext> _heapCopyDeserializationContextThreadLocal;
+        private int _mainThreadId;
 
-        private void Awake()
+        private void OnEnable()
         {
-            int mainThreadId = Thread.CurrentThread.ManagedThreadId;
-            _heapCopyDeserializationContextThreadLocal = new ThreadLocal<DeserializationContext>(
-                () =>
-                {
-                    DeserializationContext context = new DeserializationContext
-                    {
-                        Config =
-                        {
-                            SerializationPolicy = SerializationPolicies.Everything,
-                            DebugContext =
-                            {
-                                // Make other threads more sensitive to errors and warnings to catch Odin complaining about Unity not allowing certain properties to be set from other threads.
-                                ErrorHandlingPolicy = Thread.CurrentThread.ManagedThreadId == mainThreadId ? ErrorHandlingPolicy.Resilient : ErrorHandlingPolicy.ThrowOnWarningsAndErrors
-                            }
-                        }
-                    };
-
-                    return context;
-                });
-
-            #if VRC_CLIENT
+            _mainThreadId = Thread.CurrentThread.ManagedThreadId;
+#if VRC_CLIENT
             try
             {
                 ulong totalProgramSize = GetSerializedProgramSize();
@@ -97,7 +84,7 @@ namespace VRC.Udon.ProgramSources
             {
                 Core.Logger.LogWarning($"Failed to deserialize Udon Program due to :\n{e}.", DebugLevel);
             }
-            #endif
+#endif
         }
 
         [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
@@ -159,11 +146,20 @@ namespace VRC.Udon.ProgramSources
                     IUdonHeap udonHeapCopy;
                     using(_retrieveProgramCopyHeapProfilerMarker.Auto())
                     {
-                        udonHeapCopy = SerializationUtility.DeserializeValue<IUdonHeap>(
-                            serializedHeap,
-                            serializationDataFormat,
-                            serializedHeapUnityEngineObjects,
-                            _heapCopyDeserializationContextThreadLocal.Value);
+                        using (var cachedContext = Cache<DeserializationContext>.Claim())
+                        {
+                            var context = cachedContext.Value;
+                            context.Config.SerializationPolicy = SerializationPolicies.Everything;
+                            context.Config.DebugContext.ErrorHandlingPolicy =
+                                Thread.CurrentThread.ManagedThreadId == _mainThreadId
+                                    ? ErrorHandlingPolicy.Resilient
+                                    : ErrorHandlingPolicy.ThrowOnWarningsAndErrors;
+                            udonHeapCopy = SerializationUtility.DeserializeValue<IUdonHeap>(
+                                serializedHeap,
+                                serializationDataFormat,
+                                serializedHeapUnityEngineObjects,
+                                context);
+                        }
                     }
 
                     // Everything except the byte code array and IUdonHeap are immutable so they don't need to be cloned.
@@ -234,7 +230,7 @@ namespace VRC.Udon.ProgramSources
             {
                 return SerializationUtility.DeserializeValue<IUdonProgram>(serializedProgramBytes, serializationDataFormat, programUnityEngineObjects);
             }
-        }     
+        }
 
         /// <summary>
         /// Finds the total size of this serialized Udon program.
@@ -267,14 +263,40 @@ namespace VRC.Udon.ProgramSources
             return hashCode;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
+#if VRC_CLIENT
             serializedProgramCompressedBytes = null;
             serializedProgramBytesString = null;
-            _serializationCache = null;
             programUnityEngineObjects = null;
-            _heapCopyDeserializationContextThreadLocal?.Value?.Reset();
-            _heapCopyDeserializationContextThreadLocal?.Dispose();
+#endif
+            _serializationCache = null;
         }
+
+#region IUdonSignatureHolder
+        void IUdonSignatureHolder.EnsureGZipFormat()
+        {
+            if ((serializedProgramCompressedBytes == null || serializedProgramCompressedBytes.Length == 0) && !string.IsNullOrEmpty(serializedProgramBytesString))
+            {
+                Core.Logger.Log($"Converting SerializedUdonProgramAsset '{name}' to compressed format");
+                serializedProgramCompressedBytes = GZip.Compress(Convert.FromBase64String(serializedProgramBytesString));
+            }
+            serializedProgramBytesString = null; // always clear, compressedBytes format has priority in case somehow both get set
+        }
+
+        byte[] IUdonSignatureHolder.Signature
+        {
+            get => serializedSignature;
+            set => serializedSignature = value;
+        }
+
+        byte[] IUdonSignatureHolder.SignedData => serializedProgramCompressedBytes;
+
+        // in client only, allow skipping signature validation for internal behaviours (like stations)
+        public bool IsInternallyValidated { get; private set; } = false;
+    #if VRC_CLIENT
+        public void SetInternallyValidated() => IsInternallyValidated = true;
+    #endif
+#endregion
     }
 }

@@ -352,13 +352,18 @@ public partial class VRCSdkControlPanel : EditorWindow
         {
             PopulateSdkBuilders();
         }
+        bool hasShownAnySettings = false;
         for (int i = 0; i < _sdkBuilders.Length; i++)
         {
             IVRCSdkControlPanelBuilder builder = _sdkBuilders[i];
-            builder.ShowSettingsOptions();
-            if (i < _sdkBuilders.Length - 1)
+            if (builder.IsValidBuilder(out _))
             {
-                EditorGUILayout.Separator();
+                if (hasShownAnySettings)
+                {
+                    EditorGUILayout.Separator();
+                }
+                builder.ShowSettingsOptions();
+                hasShownAnySettings = true;
             }
         }
     }
@@ -1065,6 +1070,45 @@ public partial class VRCSdkControlPanel : EditorWindow
 
                 TextureImporter importer = AssetImporter.GetAtPath(path) as TextureImporter;
                 if (importer == null || importer.maxTextureSize <= MAX_SDK_TEXTURE_SIZE)
+                { continue; }
+
+                badTextureImporters.Add(importer);
+            }
+        }
+
+        return badTextureImporters;
+    }
+
+    public static List<TextureImporter> GetBoxFilteredTextureImporters(List<Renderer> renderers)
+    {
+        HashSet<Material> uniqueMaterials = new HashSet<Material>();
+        List<TextureImporter> badTextureImporters = new List<TextureImporter>();
+
+        // Collect all unique materials from renderers
+        foreach (Renderer renderer in renderers)
+        {
+            foreach (Material material in renderer.sharedMaterials)
+            {
+                if (!material) { continue;}
+
+                uniqueMaterials.Add(material);
+            }
+        }
+
+        // Check textures in each unique material
+        foreach (Material material in uniqueMaterials)
+        {
+            int[] texIDs = material.GetTexturePropertyNameIDs();
+            foreach (int texID in texIDs)
+            {
+                Texture texture = material.GetTexture(texID);
+                if (!texture) { continue; }
+
+                string path = AssetDatabase.GetAssetPath(texture);
+                if (string.IsNullOrEmpty(path)) { continue; }
+
+                TextureImporter importer = AssetImporter.GetAtPath(path) as TextureImporter;
+                if (importer == null || importer.mipmapFilter != TextureImporterMipFilter.BoxFilter || !importer.mipmapEnabled)
                 { continue; }
 
                 badTextureImporters.Add(importer);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
@@ -8,8 +9,11 @@ using VRC.Core;
 using VRC.Editor;
 using VRC.SDKBase.Editor;
 
+[assembly:InternalsVisibleTo("VRC.ExampleCentral.Editor")]
+
 /// This class sets up the basic panel layout and draws the main tabs
 /// Implementation of each tab is handled within other files extending this partial class
+
 
 [ExecuteInEditMode]
 public partial class VRCSdkControlPanel : EditorWindow, IVRCSdkPanelApi
@@ -17,7 +21,7 @@ public partial class VRCSdkControlPanel : EditorWindow, IVRCSdkPanelApi
     public static VRCSdkControlPanel window;
 
     [MenuItem("VRChat SDK/Show Control Panel", false, 600)]
-    static void ShowControlPanel()
+    internal static void ShowControlPanel()
     {
         if (!ConfigManager.RemoteConfig.IsInitialized())
         {
@@ -314,8 +318,6 @@ public partial class VRCSdkControlPanel : EditorWindow, IVRCSdkPanelApi
             }
         
             EditorGUILayout.Space();
-        
-            EnvConfig.SetActiveSDKDefines();
             
             GUILayout.EndVertical();
             GUILayout.FlexibleSpace();
@@ -337,6 +339,8 @@ public partial class VRCSdkControlPanel : EditorWindow, IVRCSdkPanelApi
                     break;
             }
         }));
+        
+        EnvConfig.SetActiveSDKDefines();
     }
 
     private void CreateTabs()

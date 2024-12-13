@@ -448,7 +448,7 @@ namespace VRC.SDKBase.Validation
             "VRC.SDK3.Components.VRCPlayerObject",
 #endif
 #if VRC_ENABLE_PLAYER_PERSISTENCE || VRC_ENABLE_INSTANCE_PERSISTENCE
-            "VRC.SDK3.Components.VRCDisablePersistence",
+            "VRC.SDK3.Components.VRCEnablePersistence",
 #endif
             "VRC.SDK3.Video.Components.VRCUnityVideoPlayer",
             "VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer",

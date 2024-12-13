@@ -215,6 +215,8 @@ namespace UdonSharp
         [PublicAPI] public virtual void OnPreSerialization() { }
         [PublicAPI] public virtual void OnDeserialization() { }
         [PublicAPI] public virtual void OnDeserialization(VRC.Udon.Common.DeserializationResult result) { }
+        [PublicAPI] public virtual void OnPlayerDataUpdated(VRC.SDKBase.VRCPlayerApi player, VRC.SDK3.Persistence.PlayerData.Info[] infos) { }
+        [PublicAPI] public virtual void OnPlayerRestored(VRC.SDKBase.VRCPlayerApi player) { }
         [PublicAPI] public virtual void OnPlayerTriggerEnter(VRC.SDKBase.VRCPlayerApi player) { }
         [PublicAPI] public virtual void OnPlayerTriggerExit(VRC.SDKBase.VRCPlayerApi player) { }
         [PublicAPI] public virtual void OnPlayerTriggerStay(VRC.SDKBase.VRCPlayerApi player) { }
@@ -254,10 +256,12 @@ namespace UdonSharp
         [PublicAPI] public virtual void InputMoveHorizontal(float value, VRC.Udon.Common.UdonInputEventArgs args) { }
         [PublicAPI] public virtual void InputMoveVertical(float value, VRC.Udon.Common.UdonInputEventArgs args) { }
         [PublicAPI] public virtual void InputLookHorizontal(float value, VRC.Udon.Common.UdonInputEventArgs args) { }
-        [PublicAPI] public virtual void InputLookVertical(float value, VRC.Udon.Common.UdonInputEventArgs args) { }                 
+        [PublicAPI] public virtual void InputLookVertical(float value, VRC.Udon.Common.UdonInputEventArgs args) { }
         [PublicAPI] public virtual void OnInputMethodChanged(VRC.SDKBase.VRCInputMethod inputMethod) { }
+        [PublicAPI] public virtual void OnLanguageChanged(string language) { }
         [PublicAPI] public virtual void OnAsyncGpuReadbackComplete(VRC.SDK3.Rendering.VRCAsyncGPUReadbackRequest request) { }
         [PublicAPI] public virtual void OnScreenUpdate(VRC.SDK3.Platform.ScreenUpdateData data) {}
+        [PublicAPI] public virtual void OnVRCPlusMassGift(VRC.SDKBase.VRCPlayerApi gifter, int numGifts) { }
 
         [Obsolete("The OnStationEntered() event is deprecated use the OnStationEntered(VRCPlayerApi player) event instead", true)]
         public virtual void OnStationEntered() { }

@@ -57,7 +57,7 @@ namespace VRC.Core
         private static Dictionary<Type, AllowedMethodFilter> AllowedUnityEventTargetTypes => _allowedUnityEventTargetTypes.Value;
 
         private static Lazy<Dictionary<Type, TypeInfo>> _typesWithUnityEventFields = new Lazy<Dictionary<Type, TypeInfo>>(InitTypesWithUnityEvents);
-        private static Dictionary<Type, TypeInfo> TypesWithUnityEvents = _typesWithUnityEventFields.Value;
+        private static Dictionary<Type, TypeInfo> TypesWithUnityEvents => _typesWithUnityEventFields.Value;
 
         private static readonly Lazy<int> _debugLevel = new Lazy<int>(InitializeLogging);
         private static int DebugLevel => _debugLevel.Value;

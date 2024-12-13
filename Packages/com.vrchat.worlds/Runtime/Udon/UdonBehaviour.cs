@@ -96,7 +96,7 @@ namespace VRC.Udon
                 {
                     foreach(UdonBehaviour ub in behaviours)
                     {
-                    if(ub != null && ub._syncMethod != SyncType.None)
+                        if(ub != null && ub._syncMethod != SyncType.None)
                         {
                             ub._syncMethod = value;
                         }
@@ -104,6 +104,10 @@ namespace VRC.Udon
                 }
             }
         }
+
+        public bool HasDoneStart => _hasDoneStart;
+
+        public bool HasError => _hasError;
 
         public bool SyncIsContinuous => SyncMethod == SyncType.Continuous;
         public bool SyncIsManual => SyncMethod == SyncType.Manual;
@@ -118,7 +122,6 @@ namespace VRC.Udon
 #if UNITY_EDITOR && !VRC_CLIENT
         [SerializeField]
         public AbstractUdonProgramSource programSource;
-
 #endif
 
         #endregion
@@ -183,7 +186,7 @@ namespace VRC.Udon
         private bool _hasDoneStart;
         private bool _initialized;
         private bool _isNetworkingSupported = false;
-
+        
         private bool _hasInteractiveEvents;
         private bool _hasUpdateEvent;
         private bool _hasLateUpdateEvent;
@@ -247,6 +250,7 @@ namespace VRC.Udon
 
             if(_program == null)
             {
+                _udonManager.VerifySignature(serializedProgramAsset as IUdonSignatureHolder);
                 _program = serializedProgramAsset.RetrieveProgram();
             }
 
@@ -453,15 +457,27 @@ namespace VRC.Udon
             bool success = true;
             foreach (string symbolName in symbolTable.GetSymbols())
             {
-                uint symbolAddress = symbolTable.GetAddressFromSymbol(symbolName);
-                object heapValue = heap.GetHeapVariable(symbolAddress);
-                if (!(heapValue is UdonBaseHeapReference udonBaseHeapReference))
+                try
                 {
-                    continue;
-                }
+                    uint symbolAddress = symbolTable.GetAddressFromSymbol(symbolName);
+                    object heapValue = heap.GetHeapVariable(symbolAddress);
+                    if (!(heapValue is UdonBaseHeapReference udonBaseHeapReference))
+                    {
+                        continue;
+                    }
 
-                if (!ResolveUdonHeapReference(heap, symbolAddress, udonBaseHeapReference))
+                    if (!ResolveUdonHeapReference(heap, symbolAddress, udonBaseHeapReference))
+                    {
+                        success = false;
+                    }
+                }
+                catch (Exception e)
                 {
+#if UNITY_EDITOR
+                    Logger.LogError($"{e.Message}\n{e.StackTrace}");
+#else
+                    Logger.LogError(e.Message);
+#endif
                     success = false;
                 }
             }
@@ -662,6 +678,16 @@ namespace VRC.Udon
         {
             serializedPublicVariablesBytesString = null;
             publicVariablesUnityEngineObjects = null;
+            
+            foreach (AbstractUdonBehaviourEventProxy proxy in _eventProxies)
+            {
+                if (proxy)
+                {
+                    Destroy(proxy);
+                }
+            }
+
+            _eventProxies.Clear();
 
             if(_program == null)
             {
@@ -677,14 +703,6 @@ namespace VRC.Udon
 
             _udonVM = null;
             _program = null;
-            
-            foreach (AbstractUdonBehaviourEventProxy proxy in _eventProxies)
-            {
-                if (proxy)
-                {
-                    Destroy(proxy);
-                }
-            }
         }
 
         public void OnDisable()
@@ -962,7 +980,10 @@ namespace VRC.Udon
                 return;
             }
 
-            RunEvent("_onPreSerialization");
+            if (!RunEvent(UdonManager.UDON_EVENT_ONPRESERIALIZATION)
+                && !_hasError
+                && _eventTable.ContainsKey(UdonManager.UDON_EVENT_ONPRESERIALIZATION))
+                Logger.LogErrorFormat("OnPreSerialization event failed for {0}", gameObject.name);
         }
 
         //Called via delegate by UdonSync
@@ -974,7 +995,10 @@ namespace VRC.Udon
                 return;
             }
 
-            RunEvent("_onPostSerialization", ("result", result));
+            if (!RunEvent(UdonManager.UDON_EVENT_ONPOSTSERIALIZATION, ("result", result))
+                && !_hasError
+                && _eventTable.ContainsKey(UdonManager.UDON_EVENT_ONPOSTSERIALIZATION))
+                Logger.LogErrorFormat("OnPostSerialization event failed for {0}", gameObject.name);
         }
 
         //Called via delegate by UdonSync
@@ -986,7 +1010,10 @@ namespace VRC.Udon
                 return;
             }
 
-            RunEvent(UdonManager.UDON_EVENT_ONDESERIALIZATION, ("result", result));
+            if (!RunEvent(UdonManager.UDON_EVENT_ONDESERIALIZATION, ("result", result))
+                && !_hasError
+                && _eventTable.ContainsKey(UdonManager.UDON_EVENT_ONDESERIALIZATION))
+                Logger.LogErrorFormat("OnDeserialization event failed for {0}", gameObject.name);
         }
 
         #endregion
@@ -1032,6 +1059,7 @@ namespace VRC.Udon
 
             try
             {
+                _udonManager.IncrementDepthCount();
                 uint result = _udonVM.Interpret();
                 if (result != 0)
                 {
@@ -1053,6 +1081,10 @@ namespace VRC.Udon
 
                 _hasError = true;
                 enabled = false;
+            }
+            finally
+            {
+                _udonManager.DecrementDepthCount();
             }
 
             // pi: note that _udonVM can be null here if the UdonBehaviour destroys itself during the Interpret call
@@ -1472,6 +1504,7 @@ namespace VRC.Udon
 
                 if(_program == null)
                 {
+                    UdonManager.Instance.VerifySignature(serializedProgramAsset as IUdonSignatureHolder);
                     _program = serializedProgramAsset.RetrieveProgram();
                 }
             }

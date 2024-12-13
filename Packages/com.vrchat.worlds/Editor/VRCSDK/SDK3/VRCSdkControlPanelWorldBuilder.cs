@@ -34,6 +34,8 @@ using Object = UnityEngine.Object;
 using VRC.SDK3A.Editor.Elements;
 using PopupWindow = UnityEditor.PopupWindow;
 using UnityEngine.Rendering.PostProcessing;
+using VRC.SDK3.Editor.Builder;
+using VRC.SDK3.Editor.Exceptions;
 using Button = UnityEngine.UIElements.Button;
 using Toggle = UnityEngine.UIElements.Toggle;
 
@@ -578,33 +580,55 @@ namespace VRC.SDK3.Editor
                         () =>
                         {
                             bool hasReportedMissingBuiltInSsMaterial = false;
-                            // ReSharper disable once CoVariantArrayConversion
-                            Undo.RecordObjects(uiDefaultGraphics.ToArray(), "Switch to Super-Sampled UI");
-                            foreach (Graphic graphic in uiDefaultGraphics)
+                            Undo.SetCurrentGroupName("Switch to Super-Sampled UI");
+                            int groupIndex = Undo.GetCurrentGroup();
+                            try
                             {
-                                Material material = graphic.material;
-                                if (!AssetDatabase.IsMainAsset(material))
+                                foreach (Graphic graphic in uiDefaultGraphics)
                                 {
-                                    // This material isn't a file in the project, most likely the Default UI material built into Unity.
-                                    // We can't modify this, so replace it instead.
-                                    Material replacementMaterial = AssetDatabase.LoadAssetAtPath<Material>("Packages/com.vrchat.worlds/Editor/VRCSDK/SDK3/VRCSuperSampledUIMaterial.mat");
-                                    if (replacementMaterial != null)
+                                    Material material = graphic.material;
+
+                                    EditorUtility.SetDirty(graphic);
+                                    Undo.RecordObject(graphic, $"Assign SSUI to graphic {graphic.name}");
+
+                                    if (!AssetDatabase.IsMainAsset(material))
                                     {
-                                        material = replacementMaterial;
+                                        // This material isn't a file in the project, most likely the Default UI material built into Unity.
+                                        // We can't modify this, so replace it instead.
+                                        Material replacementMaterial =
+                                            AssetDatabase.LoadAssetAtPath<Material>("Packages/com.vrchat.worlds/Editor/VRCSDK/SDK3/VRCSuperSampledUIMaterial.mat");
+                                        if (replacementMaterial != null)
+                                        {
+                                            material = replacementMaterial;
+                                        }
+                                        else
+                                        {
+                                            if (!hasReportedMissingBuiltInSsMaterial)
+                                            {
+                                                Debug.LogWarning("Could not find substitute super-sampled UI material in the worlds package. (VRCSuperSampledUIMaterial)");
+                                                hasReportedMissingBuiltInSsMaterial = true;
+                                            }
+
+                                            continue;
+                                        }
                                     }
                                     else
                                     {
-                                        if (!hasReportedMissingBuiltInSsMaterial)
-                                        {
-                                            Debug.LogWarning("Could not find substitute super-sampled UI material in the worlds package. (VRCSuperSampledUIMaterial)");
-                                            hasReportedMissingBuiltInSsMaterial = true;
-                                        }
-                                        continue;
+                                        // We're about to modify this material in place, so capture it for undo.
+                                        EditorUtility.SetDirty(material);
+                                        Undo.RecordObject(material, $"Assign SSUI to material {material.name}");
                                     }
-                                }
 
-                                material.shader = ssShader;
-                                graphic.material = material;
+                                    material.shader = ssShader;
+                                    graphic.material = material;
+
+                                    // Apply overrides if this graphic is part of a prefab instance.
+                                    PrefabUtility.RecordPrefabInstancePropertyModifications(graphic);
+                                }
+                            }
+                            finally
+                            {
+                                Undo.CollapseUndoOperations(groupIndex);
                             }
                         });
                 }
@@ -621,6 +645,10 @@ namespace VRC.SDK3.Editor
             }
             
             VerifyMaxTextureSize(scene);
+            // Pre-unity 2021 the 'Kaiser' algorithm would introduce a lot of aliasing - disable prior to that
+#if UNITY_2021_1_OR_NEWER
+            VerifyTextureMipFiltering(scene);
+#endif
         }
 
         private void VerifyMaxTextureSize(VRC_SceneDescriptor scene)
@@ -639,6 +667,30 @@ namespace VRC.SDK3.Editor
                     {
                         Undo.RecordObject(t, $"Set Max Texture Size to {VRCSdkControlPanel.MAX_SDK_TEXTURE_SIZE}");
                         t.maxTextureSize = VRCSdkControlPanel.MAX_SDK_TEXTURE_SIZE;
+                        EditorUtility.SetDirty(t);
+                        paths.Add(t.assetPath);
+                    }
+
+                    AssetDatabase.ForceReserializeAssets(paths);
+                    AssetDatabase.Refresh();
+                });
+        }
+
+        private void VerifyTextureMipFiltering(VRC_SceneDescriptor scene)
+        {
+            var badTextureImporters = VRCSdkControlPanel.GetBoxFilteredTextureImporters(GatherComponentsOfTypeInScene<Renderer>());
+            if (badTextureImporters.Count == 0)
+                return;
+
+            _builder.OnGUIInformation(scene, $"This scene uses textures with 'Box' mipmap filtering, which blurs distant textures. Switch to 'Kaiser' for improved sharpness{(VRCPackageSettings.Instance.dpidMipmaps ? " (this will be overriden with the newer 'DPID' algorithm, this can be disabled in the settings)": "")}.",
+                null,
+                () =>
+                {
+                    List<string> paths = new List<string>();
+                    foreach (TextureImporter t in badTextureImporters)
+                    {
+                        Undo.RecordObject(t, $"Set texture filtering to 'Kaiser'");
+                        t.mipmapFilter = TextureImporterMipFilter.KaiserFilter;
                         EditorUtility.SetDirty(t);
                         paths.Add(t.assetPath);
                     }
@@ -1196,7 +1248,7 @@ namespace VRC.SDK3.Editor
                     {
                         // 404 here with a defined blueprint usually means we do not own the content
                         // so we clear the blueprint ID and treat it as a new avatar
-                        Core.Logger.LogError("Attempted to load the data for a world we do not own, clearing blueprint ID");
+                        Core.Logger.LogWarning("Attempted to load the data for a world we do not own, clearing blueprint ID");
                         Undo.RecordObject(_pipelineManagers[0], "Cleared the blueprint ID we do not own");
                         _pipelineManagers[0].blueprintId = "";
                         worldId = "";
@@ -1839,12 +1891,16 @@ namespace VRC.SDK3.Editor
                 _acceptedTerms = evt.newValue;
             });
 
+            // Android doesn't make use of NumClients so this feature doesn't make sense there
+            // Making this a function so updated values for platform/numClients are used when this is changed
+            Func<bool> shouldBuildAndReload = () => (VRCSettings.NumClients == 0 && Tools.Platform != "android");
+
             var numClientsField = root.Q<IntegerField>("num-clients");
             numClientsField.RegisterValueChangedCallback(evt =>
             {
                 VRCSettings.NumClients = Mathf.Clamp(evt.newValue, 0, 8);
                 (evt.target as IntegerField)?.SetValueWithoutNotify(VRCSettings.NumClients);
-                if (VRCSettings.NumClients == 0)
+                if (shouldBuildAndReload())
                 {
                     _testLastBuildButton.text = "Reload Last Build";
                     _buildAndTestButton.text = "Build & Reload";
@@ -1871,10 +1927,10 @@ namespace VRC.SDK3.Editor
             });
             enableWorldReloadToggle.SetValueWithoutNotify(VRCSettings.WatchWorlds);
             
-            _testLastBuildButton.text = VRCSettings.NumClients == 0 ? "Reload Last Build" : "Test Last Build";
+            _testLastBuildButton.text = shouldBuildAndReload() ? "Reload Last Build" : "Test Last Build";
             _testLastBuildButton.clicked += async () =>
             {
-                if (VRCSettings.NumClients == 0)
+                if (shouldBuildAndReload())
                 {
                     // Todo: get this from settings or make key a const
                     string path = EditorPrefs.GetString("lastVRCPath");
@@ -1893,7 +1949,7 @@ namespace VRC.SDK3.Editor
                 }
             };
             
-#if UNITY_ANDROID || UNITY_IOS
+#if UNITY_IOS
             _testLastBuildButton.SetEnabled(false);
             _buildAndTestButton.SetEnabled(false);
             _buildAndTestButton.SetEnabled(false);
@@ -1901,11 +1957,14 @@ namespace VRC.SDK3.Editor
             localTestDisabledText.text = "Building and testing on this platform is not supported.";
 #endif
 
-            _buildAndTestButton.text = VRCSettings.NumClients == 0 ? "Build & Reload" : "Build & Test New Build";
+            _buildAndTestButton.text = shouldBuildAndReload() ? "Build & Reload" : "Build & Test New Build";
             _buildAndTestButton.clicked += async () =>
             {
+                VRC_SdkBuilder.ActiveBuildType = VRC_SdkBuilder.BuildType.Test;
+                
                 async void BuildSuccess(object sender, string path)
                 {
+                    VRC_SdkBuilder.ActiveBuildType = VRC_SdkBuilder.BuildType.None;
                     ProgressBarState = new ProgressBarStateData
                     {
                         Visible = true,
@@ -1929,7 +1988,7 @@ namespace VRC.SDK3.Editor
 
                 try
                 {
-                    if (VRCSettings.NumClients == 0)
+                    if (shouldBuildAndReload())
                     {
                         await Build();
                     }
@@ -1982,10 +2041,14 @@ namespace VRC.SDK3.Editor
 
             _buildAndUploadButton.clicked += async () =>
             {
+                VRC_SdkBuilder.ActiveBuildType = VRC_SdkBuilder.BuildType.Publish;
+
                 UiEnabled = false;
 
                 void BuildSuccess(object sender, string path)
                 {
+                    VRC_SdkBuilder.ActiveBuildType = VRC_SdkBuilder.BuildType.None;
+
                     ProgressBarState = new ProgressBarStateData
                     {
                         Visible = true,
@@ -2030,7 +2093,25 @@ namespace VRC.SDK3.Editor
             root.schedule.Execute(() =>
             {
                 var buildsAllowed = _builder.NoGuiErrorsOrIssues() || APIUser.CurrentUser.developerType == APIUser.DeveloperType.Internal;
-                var localBuildsAllowed = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.StandaloneWindows || EditorUserBuildSettings.activeBuildTarget == BuildTarget.StandaloneWindows64) && buildsAllowed;
+
+                var isWindows = EditorUserBuildSettings.activeBuildTarget == BuildTarget.StandaloneWindows ||
+                                EditorUserBuildSettings.activeBuildTarget == BuildTarget.StandaloneWindows64;
+                var isAndroid = EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android;
+                var localBuildsAllowed = (isWindows || isAndroid) && buildsAllowed;
+
+                if (isAndroid)
+                {
+                    // Hide num clients/forceVR on android as these options don't make sense for that platform
+                    numClientsField.SetVisible(false);
+                    forceNonVrToggle.SetVisible(false);
+                    enableWorldReloadToggle.SetVisible(false);
+                }
+                else
+                {
+                    numClientsField.SetVisible(true);
+                    forceNonVrToggle.SetVisible(true);
+                    enableWorldReloadToggle.SetVisible(true);
+                }
 
                 localTestDisabledBlock.EnableInClassList("d-none", localBuildsAllowed);
                 uploadDisabledBlock.EnableInClassList("d-none", buildsAllowed);
@@ -2117,7 +2198,7 @@ namespace VRC.SDK3.Editor
             
             VRC_SdkBuilder.ClearCallbacks();
             
-            var successTask = new TaskCompletionSource<string>();
+            var successTask = new TaskCompletionSource<(string path, string hash)>();
             var errorTask = new TaskCompletionSource<string>();
             VRC_SdkBuilder.RegisterBuildProgressCallback((sender, status) =>
             {
@@ -2127,9 +2208,9 @@ namespace VRC.SDK3.Editor
             {
                 errorTask.TrySetResult(error);
             });
-            VRC_SdkBuilder.RegisterBuildSuccessCallback((sender, path) =>
+            VRC_SdkBuilder.RegisterBuildSuccessCallback((sender, result) =>
             {
-                successTask.TrySetResult(path);
+                successTask.TrySetResult(result);
             });
             
             VRC_EditorTools.GetSetPanelBuildingMethod().Invoke(_builder, null);
@@ -2138,25 +2219,34 @@ namespace VRC.SDK3.Editor
             OnSdkBuildStateChange?.Invoke(this, _buildState);
             
             await Task.Delay(100);
+
+            bool supportsBuildAndTest = Tools.Platform == "standalonewindows" || Tools.Platform == "android";
             
-            if (runAfterBuild && Tools.Platform != "standalonewindows")
+            if (runAfterBuild && !supportsBuildAndTest)
             {
-                throw new BuilderException("World testing is only supported on Windows");
+                throw await HandleBuildError(new BuilderException("World testing is only supported on Windows and Android"));
             }
 
-            if (!runAfterBuild)
+            try
             {
-                VRC_SdkBuilder.RunExportSceneResource();
+                if (!runAfterBuild)
+                {
+                    VRC_SdkBuilder.RunExportSceneResource();
+                }
+                else
+                {
+                    VRC_SdkBuilder.RunExportSceneResourceAndRun();
+                }
             }
-            else
+            catch (WorldAssetExportException e)
             {
-                VRC_SdkBuilder.RunExportSceneResourceAndRun();
+                throw await HandleBuildError(e);
             }
             
             var result = await Task.WhenAny(successTask.Task, errorTask.Task);
 
-            string bundlePath = null;
-            bundlePath = result == successTask.Task ? successTask.Task.Result : null;
+            string bundlePath = null, worldSignature = null;
+            (bundlePath, worldSignature) = result == successTask.Task ? successTask.Task.Result : (null, null);
             
             VRC_SdkBuilder.ClearCallbacks();
 
@@ -2172,6 +2262,7 @@ namespace VRC.SDK3.Editor
             await FinishBuild();
 
             PathToLastBuild = bundlePath;
+            WorldSignatureOfLastBuild = worldSignature;
 
             return bundlePath;
         }
@@ -2195,7 +2286,7 @@ namespace VRC.SDK3.Editor
             return exception;
         }
         
-        private async Task Upload(VRCWorld world, string bundlePath, string thumbnailPath = null,
+        private async Task Upload(VRCWorld world, string bundlePath, string worldSignature, string thumbnailPath = null,
             CancellationToken cancellationToken = default)
         {
             if (cancellationToken == default)
@@ -2284,13 +2375,13 @@ namespace VRC.SDK3.Editor
                 {
                     thumbnailPath = VRC_EditorTools.CropImage(thumbnailPath, 800, 600);
                     _worldData = await VRCApi.CreateNewWorld(pM.blueprintId, world, bundlePath,
-                        thumbnailPath,
+                        thumbnailPath, worldSignature,
                         (status, percentage) => { OnSdkUploadProgress?.Invoke(this, (status, percentage)); },
                         _worldUploadCancellationToken);
                 }
                 else
                 {
-                    _worldData = await VRCApi.UpdateWorldBundle(pM.blueprintId, world, bundlePath,
+                    _worldData = await VRCApi.UpdateWorldBundle(pM.blueprintId, world, bundlePath, worldSignature,
                         (status, percentage) => { OnSdkUploadProgress?.Invoke(this, (status, percentage)); },
                         _worldUploadCancellationToken);
                 }
@@ -2370,6 +2461,7 @@ namespace VRC.SDK3.Editor
             Core.Logger.Log("Failed to build a world!");
             Core.Logger.LogError(error);
 
+            VRC_SdkBuilder.ActiveBuildType = VRC_SdkBuilder.BuildType.None;
 
             await Task.Delay(100);
             ProgressBarState = false;
@@ -2388,7 +2480,14 @@ namespace VRC.SDK3.Editor
         {
             if (IsNewWorld)
             {
-                _thumbnail.SetImage(_newThumbnailImagePath);
+                if (string.IsNullOrEmpty(_newThumbnailImagePath))
+                {
+                    _thumbnail.ClearImage();
+                }
+                else
+                {
+                    _thumbnail.SetImage(_newThumbnailImagePath);
+                }
             }
             else
             {
@@ -2486,6 +2585,12 @@ namespace VRC.SDK3.Editor
             set => SessionState.SetString("VRC.SDK3.Editor_patToLastBuild", value);
         }
 
+        private static string WorldSignatureOfLastBuild
+        {
+            get => SessionState.GetString("VRC.SDK3.Editor_worldSignatureLastBuild", null);
+            set => SessionState.SetString("VRC.SDK3.Editor_worldSignatureLastBuild", value);
+        }
+
         #endregion
 
         #region Public API
@@ -2516,7 +2621,7 @@ namespace VRC.SDK3.Editor
         {
             var bundlePath = await Build();
             world.UdonProducts = _scenes[0].udonProducts;
-            await Upload(world, bundlePath, thumbnailPath, cancellationToken);
+            await Upload(world, bundlePath, WorldSignatureOfLastBuild, thumbnailPath, cancellationToken);
         }
 
         public async Task UploadLastBuild(VRCWorld world, string thumbnailPath = null,
@@ -2534,6 +2639,7 @@ namespace VRC.SDK3.Editor
             if (!File.Exists(PathToLastBuild))
             {
                 PathToLastBuild = null;
+                WorldSignatureOfLastBuild = null;
                 OnSdkUploadError?.Invoke(this, "No last build found, you must build first");
                 _uploadState = SdkUploadState.Failure;
                 OnSdkUploadStateChange?.Invoke(this, _uploadState);
@@ -2541,7 +2647,7 @@ namespace VRC.SDK3.Editor
                 throw new UploadException("No last build found, you must build first");
             }
 
-            await Upload(world, PathToLastBuild, thumbnailPath, cancellationToken);
+            await Upload(world, PathToLastBuild, WorldSignatureOfLastBuild, thumbnailPath, cancellationToken);
         }
 
         public async Task BuildAndTest()
@@ -2560,6 +2666,7 @@ namespace VRC.SDK3.Editor
             if (!File.Exists(PathToLastBuild))
             {
                 PathToLastBuild = null;
+                WorldSignatureOfLastBuild = null;
                 Core.Logger.LogError("No last build found, you must build first");
                 return Task.CompletedTask;
             }

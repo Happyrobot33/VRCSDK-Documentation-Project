@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEditor;
 using VRC.Core;
 using System.Text.RegularExpressions;
@@ -26,6 +27,10 @@ public partial class VRCSdkControlPanel : EditorWindow
     public static bool FutureProofPublishEnabled { get { return UnityEditor.EditorPrefs.GetBool("futureProofPublish", DefaultFutureProofPublishEnabled); } }
     //public static bool DefaultFutureProofPublishEnabled { get { return !SDKClientUtilities.IsInternalSDK(); } }
     public static bool DefaultFutureProofPublishEnabled { get { return false; } }
+
+    internal static event EventHandler<APIUser> OnPanelLoggedIn;
+    internal static event EventHandler OnPanelLoggedOut;
+    internal static event EventHandler<ApiUserPlatforms> OnUserPlatformsFetched;
 
     static string storedUsername
     {
@@ -99,14 +104,26 @@ public partial class VRCSdkControlPanel : EditorWindow
             return;
 
         if (!APIUser.IsLoggedIn && ApiCredentials.Load())
-            APIUser.InitialFetchCurrentUser((c) =>
+        {
+            APIUser.InitialFetchCurrentUser(c =>
             {
                 window.rootVisualElement.Q<IMGUIContainer>().MarkDirtyRepaint();
-                var apiUser = c.Model as APIUser;
+                if (c.Model is not APIUser apiUser)
+                {
+                    VRC.Core.Logger.LogError("Failed to load user information, please log in again");
+                    return;
+                }
                 AnalyticsSDK.LoggedInUserChanged(apiUser);
-                ApiUserPlatforms.Fetch(apiUser.id, null, null);
+                
+                OnPanelLoggedIn?.Invoke(window, apiUser);
+                ApiUserPlatforms.Fetch(apiUser.id, userPlatforms =>
+                {
+                    OnUserPlatformsFetched?.Invoke(window, userPlatforms);   
+                }, null);
             }, null);
+        }
 
+        // This code proceeds without waiting for the user fetch above to complete
         clientInstallPath = SDKClientUtilities.GetSavedVRCInstallPath();
         if (string.IsNullOrEmpty(clientInstallPath))
             clientInstallPath = SDKClientUtilities.LoadRegistryVRCInstallPath();
@@ -115,24 +132,6 @@ public partial class VRCSdkControlPanel : EditorWindow
         isInitialized = true;
 
         ClearContent();
-    }
-
-    public static bool OnShowStatus()
-    {
-        API.SetOnlineMode(true);
-
-        SignIn(false);
-
-        EditorGUILayout.BeginVertical();
-
-        if (APIUser.IsLoggedIn)
-        {
-            OnCreatorStatusGUI();
-        }
-
-        EditorGUILayout.EndVertical();
-
-        return APIUser.IsLoggedIn;
     }
 
     static bool OnAccountGUI()
@@ -178,6 +177,7 @@ public partial class VRCSdkControlPanel : EditorWindow
                     VRC.Tools.ClearCookies();
                     APIUser.Logout();
                     ClearContent();
+                    OnPanelLoggedOut?.Invoke(window, EventArgs.Empty);
                 }
                 return !signingIn;
             }
@@ -225,7 +225,7 @@ public partial class VRCSdkControlPanel : EditorWindow
         {
             if (GUILayout.Button("More Info..."))
             {
-                VRCSdkControlPanel.ShowContentPublishPermissionsDialog();
+                ShowContentPublishPermissionsDialog();
             }
         }
 
@@ -235,11 +235,11 @@ public partial class VRCSdkControlPanel : EditorWindow
 
     void ShowAccount()
     {
-        if (VRC.Core.ConfigManager.RemoteConfig.IsInitialized())
+        if (ConfigManager.RemoteConfig.IsInitialized())
         {
-            if (VRC.Core.ConfigManager.RemoteConfig.HasKey("sdkUnityVersion"))
+            if (ConfigManager.RemoteConfig.HasKey("sdkUnityVersion"))
             {
-                string sdkUnityVersion = VRC.Core.ConfigManager.RemoteConfig.GetString("sdkUnityVersion");
+                string sdkUnityVersion = ConfigManager.RemoteConfig.GetString("sdkUnityVersion");
                 if (string.IsNullOrEmpty(sdkUnityVersion))
                     EditorGUILayout.LabelField("Could not fetch remote config.");
                 else if (Application.unityVersion != sdkUnityVersion)
@@ -273,8 +273,8 @@ public partial class VRCSdkControlPanel : EditorWindow
         }
         else
         {
-            VRC.Core.API.SetOnlineMode(true);
-            VRC.Core.ConfigManager.RemoteConfig.Init();
+            API.SetOnlineMode(true);
+            ConfigManager.RemoteConfig.Init();
         }
 
         OnAccountGUI();
@@ -565,7 +565,9 @@ public partial class VRCSdkControlPanel : EditorWindow
                 storedUsername = null;
                 storedPassword = null;
                 AnalyticsSDK.LoggedInUserChanged(user);
-
+                
+                OnPanelLoggedIn?.Invoke(window, user);
+                
                 if (!APIUser.CurrentUser.canPublishAllContent)
                 {
                     if (UnityEditor.SessionState.GetString("HasShownContentPublishPermissionsDialogForUser", "") != user.id)
@@ -576,7 +578,9 @@ public partial class VRCSdkControlPanel : EditorWindow
                 }
 
                 // Fetch platforms that the user can publish to
-                ApiUserPlatforms.Fetch(user.id, null, null);
+                ApiUserPlatforms.Fetch(user.id, userPlatforms => {
+                    OnUserPlatformsFetched?.Invoke(window, userPlatforms);
+                }, null);
             },
             delegate (ApiModelContainer<APIUser> c)
             {
@@ -634,6 +638,7 @@ public partial class VRCSdkControlPanel : EditorWindow
         storedPassword = null;
         VRC.Tools.ClearCookies();
         APIUser.Logout();
+        OnPanelLoggedOut?.Invoke(window, EventArgs.Empty);
     }
 
     private void AccountDestroy()

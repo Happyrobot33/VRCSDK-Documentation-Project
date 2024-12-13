@@ -364,6 +364,7 @@ public class VRCNetworkIDUtility : EditorWindow
                 }
             }
         }
+        
     }
 
     void Clear()
@@ -373,6 +374,9 @@ public class VRCNetworkIDUtility : EditorWindow
             networkTarget.NetworkIDCollection.Clear();
             conflicts.Clear();
             fileRefs.Clear();
+            
+            ((Component)networkTarget).gameObject.MarkDirty();
+            PrefabUtility.RecordPrefabInstancePropertyModifications(((Component)networkTarget));
         }
     }
 
@@ -392,6 +396,7 @@ public class VRCNetworkIDUtility : EditorWindow
             if (newIDs.Count() > 0)
             {
                 ((Component)networkTarget).gameObject.MarkDirty();
+                PrefabUtility.RecordPrefabInstancePropertyModifications(((Component)networkTarget));
                 UnityEditor.AssetDatabase.SaveAssets();
             }
         }
@@ -752,6 +757,10 @@ public class VRCNetworkIDUtility : EditorWindow
                 gameObject = desired,
                 SerializedTypeNames = objRef.typeNames
             }).ToList();
+        
+        
+        ((Component)networkTarget).gameObject.MarkDirty();
+        PrefabUtility.RecordPrefabInstancePropertyModifications(((Component)networkTarget));
         
         RemoveFileRef(objRef);
         

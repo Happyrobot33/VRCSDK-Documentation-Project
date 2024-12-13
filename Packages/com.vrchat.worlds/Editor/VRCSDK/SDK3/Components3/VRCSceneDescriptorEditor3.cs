@@ -15,7 +15,6 @@ namespace VRC.SDK3.Editor
     [CustomEditor(typeof(VRCSceneDescriptor))]
     public class VRCSceneDescriptorEditor3 : VRCInspectorBase
     {
-
         private VRCSceneDescriptor sceneDescriptor;
 
         private SerializedProperty propSpawns;
@@ -42,7 +41,9 @@ namespace VRC.SDK3.Editor
         private const int USER_LAYER_START = 22;
         private const int USER_LAYER_COUNT = 10;
 
-
+        private const float HANDLE_SIZE = 0.1f;
+        private static readonly Color RespawnHeightGizmoColor = new(0, 1, 0, 0.25f);
+        private Vector3[] respawnHeightGizmoCorners;
 
         private void OnEnable()
         {
@@ -58,11 +59,14 @@ namespace VRC.SDK3.Editor
             propUnityVersion = serializedObject.FindProperty(nameof(VRCSceneDescriptor.unityVersion));
             propDynamicPrefabs = serializedObject.FindProperty(nameof(VRCSceneDescriptor.DynamicPrefabs));
             propDynamicMaterials = serializedObject.FindProperty(nameof(VRCSceneDescriptor.DynamicMaterials));
-            propNetworkIDs = serializedObject.FindProperty(nameof(VRCSceneDescriptor.NetworkIDCollection));
             propPortraitCameraPositionOffset = serializedObject.FindProperty(nameof(VRCSceneDescriptor.portraitCameraPositionOffset));
             propPortraitCameraRotationOffset = serializedObject.FindProperty(nameof(VRCSceneDescriptor.portraitCameraRotationOffset));
             propInteractPassthrough = serializedObject.FindProperty(nameof(VRCSceneDescriptor.interactThruLayers));
-
+            
+            // Using NetworkIDCollection here doesn't expose the actual list of network IDs in the inspector
+            propNetworkIDs = serializedObject.FindProperty("NetworkIDs");
+            
+            GetRespawnHeightGizmoPlaneCorners(false);
             PopulateUserLayerNames();
             HierarchyChanged();
             EditorApplication.hierarchyChanged += HierarchyChanged;
@@ -71,6 +75,41 @@ namespace VRC.SDK3.Editor
         private void OnDisable()
         {
             EditorApplication.hierarchyChanged -= HierarchyChanged;
+        }
+
+        // draw respawn height y gizmo
+        private void OnSceneGUI()
+        {
+            var handlePosition = new Vector3(
+                sceneDescriptor.transform.position.x, 
+                sceneDescriptor.RespawnHeightY,
+                sceneDescriptor.transform.position.z);
+
+            var handleSize = HandleUtility.GetHandleSize(handlePosition) * HANDLE_SIZE;
+            EditorGUI.BeginChangeCheck();
+            Vector3 newHandlePosition = Handles.FreeMoveHandle(handlePosition, handleSize, Vector3.up, Handles.DotHandleCap);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(sceneDescriptor, "Move Respawn Height Y");
+                sceneDescriptor.RespawnHeightY = newHandlePosition.y;
+                EditorUtility.SetDirty(sceneDescriptor);
+            }
+            
+            GetRespawnHeightGizmoPlaneCorners();
+            Handles.DrawSolidRectangleWithOutline(respawnHeightGizmoCorners, RespawnHeightGizmoColor, Color.green);
+
+            foreach (Transform spawn in sceneDescriptor.spawns)
+            {
+                if (!spawn) continue;
+                Vector3 position = spawn.position;
+                Handles.color = Color.white;
+                Handles.DrawWireDisc(position, Vector3.up, 0.5f);
+                Handles.color = Color.green;
+                Handles.DrawLine(position, position + Vector3.up);
+                Handles.color = Color.blue;
+                Handles.DrawLine(position, position + spawn.forward);
+            }
+            Handles.color = Color.white;
         }
 
         private void HierarchyChanged()
@@ -89,7 +128,6 @@ namespace VRC.SDK3.Editor
             }
         }
 
-
         public override void BuildInspectorGUI()
         {
             base.BuildInspectorGUI();
@@ -101,7 +139,7 @@ namespace VRC.SDK3.Editor
             AddField(propRespawnHeightY);
             AddField(propForbidUserPortals);
             AddField(propObjectBehaviourAtRespawnHeight);
-            AddField(propNetworkIDs);
+            AddField(propNetworkIDs, "Network IDs", "The Network ID Collection");
             
             MaskField fieldPassthrough = new ("Interact Passthrough");
             fieldPassthrough.AddToClassList("unity-base-field__aligned");
@@ -138,6 +176,24 @@ namespace VRC.SDK3.Editor
                     layerNames[i] = layerName;
                 }
             }
+        }
+
+        private void GetRespawnHeightGizmoPlaneCorners(bool checkRespawnHeightChanged = true)
+        {
+            // only get new corners if respawn height has changed
+            if (checkRespawnHeightChanged && 
+                Mathf.Approximately(respawnHeightGizmoCorners[0].y, sceneDescriptor.RespawnHeightY))
+            {
+                return;
+            }
+            
+            respawnHeightGizmoCorners = new[]
+            {
+                new Vector3(sceneDescriptor.transform.position.x-5, sceneDescriptor.RespawnHeightY, sceneDescriptor.transform.position.z-5),
+                new Vector3(sceneDescriptor.transform.position.x-5, sceneDescriptor.RespawnHeightY, sceneDescriptor.transform.position.z+5),
+                new Vector3(sceneDescriptor.transform.position.x+5, sceneDescriptor.RespawnHeightY, sceneDescriptor.transform.position.z+5),
+                new Vector3(sceneDescriptor.transform.position.x+5, sceneDescriptor.RespawnHeightY, sceneDescriptor.transform.position.z-5)
+            };
         }
     }
 }

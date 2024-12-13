@@ -471,7 +471,7 @@ namespace VRC.SDKBase.Editor.Api {
         }
         
         [PublicAPI]
-        public static async Task<VRCWorld> UpdateWorldBundle(string id, VRCWorld data, string pathToBundle,
+        public static async Task<VRCWorld> UpdateWorldBundle(string id, VRCWorld data, string pathToBundle, string worldSignature,
             Action<string, float> onProgress = null, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(pathToBundle))
@@ -507,7 +507,8 @@ namespace VRC.SDKBase.Editor.Api {
                 {"platform", Tools.Platform.ToString()},
                 {"unityVersion", Tools.UnityVersion.ToString()},
                 {"assetVersion", 4},
-                {"udonProducts", data.UdonProducts}
+                {"udonProducts", data.UdonProducts},
+                {"worldSignature", worldSignature},
             };
             Core.Logger.Log($"Updating with new bundle {newBundleUrl}", DebugLevel.API);
             await VRCApi.Put<object, VRCWorld>($"worlds/{id}", bundleUpdateRequest, cancellationToken: cancellationToken);
@@ -516,7 +517,7 @@ namespace VRC.SDKBase.Editor.Api {
         } 
         
         [PublicAPI]
-        public static async Task<VRCWorld> CreateNewWorld(string id, VRCWorld data, string pathToBundle, string pathToImage,
+        public static async Task<VRCWorld> CreateNewWorld(string id, VRCWorld data, string pathToBundle, string pathToImage, string worldSignature,
             Action<string, float> onProgress = null, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(pathToBundle) || string.IsNullOrWhiteSpace(pathToImage))
@@ -560,7 +561,8 @@ namespace VRC.SDKBase.Editor.Api {
                 {"recommendedCapacity", data.RecommendedCapacity},
                 {"previewYoutubeId", data.PreviewYoutubeId},
                 {"assetVersion", 4},
-                {"udonProducts", data.UdonProducts}
+                {"udonProducts", data.UdonProducts},
+                {"worldSignature", worldSignature},
             };
             var createdWorld = await Post<Dictionary<string, object>, VRCWorld>($"worlds", newWorldData, cancellationToken: cancellationToken);
             Core.Logger.Log("Created a new World");
