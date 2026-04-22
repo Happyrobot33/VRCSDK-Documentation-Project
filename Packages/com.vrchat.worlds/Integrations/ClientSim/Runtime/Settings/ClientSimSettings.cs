@@ -101,15 +101,17 @@ namespace VRC.SDK3.ClientSim
         public bool displayLogs = true;
         public bool deleteEditorOnly = true;
         public bool spawnPlayer = true;
-
+        public bool hideMenuOnLaunch = false;
         public bool setTargetFrameRate = true;
         public int targetFrameRate = 90;
 
         public bool stopOnScriptChanges = true;
 
         public bool isInstanceOwner = true;
+        public bool isVRCPlus = true;
         public bool localPlayerIsMaster = true;
         public float initializationDelay = 0.0f;
+
         
         public bool showDesktopReticle = true;
         public bool showTooltips = true;
@@ -177,7 +179,7 @@ namespace VRC.SDK3.ClientSim
         {
             if (ConfigManager.RemoteConfig.IsInitialized())
             {
-                availableLanguages = ConfigManager.RemoteConfig.GetList(AVAILABLE_LANGUAGES_CODES_KEY).ToArray();
+                availableLanguages = ConfigManager.RemoteConfig.GetList(AVAILABLE_LANGUAGES_CODES_KEY).Cast<string>().ToArray();
                 availableDisplayLanguages = availableLanguages.Where(code => LanguageByCode.ContainsKey(code)).Select(code => LanguageByCode[code]).ToArray();
                 return true;
             }

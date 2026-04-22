@@ -285,7 +285,9 @@ namespace Cysharp.Threading.Tasks
             return dest.ToArray();
         }
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        // VRChat: [Horothenic & Truce] Changed it from `BeforeSceneLoad` to `BeforeSplashScreen` because Localization
+        // needs ZLogger and ZLogger needs this, was creating a race condition.
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
         static void Init()
         {
             // capture default(unity) sync-context.
@@ -524,6 +526,14 @@ namespace Cysharp.Threading.Tasks
             {
                 sb.AppendFormat("------{0}------", header.type.Name);
                 sb.AppendLine();
+                
+                if (header.subSystemList is null) 
+                {
+                    sb.AppendFormat("{0} has no subsystems!", header.ToString());
+                    sb.AppendLine();
+                    continue;
+                }
+
                 foreach (var subSystem in header.subSystemList)
                 {
                     sb.AppendFormat("{0}", subSystem.type.Name);
@@ -545,6 +555,11 @@ namespace Cysharp.Threading.Tasks
 
             foreach (var header in playerLoop.subSystemList)
             {
+                if (header.subSystemList is null) 
+                { 
+                    continue;
+                }
+                
                 foreach (var subSystem in header.subSystemList)
                 {
                     if (subSystem.type == typeof(UniTaskLoopRunners.UniTaskLoopRunnerInitialization))

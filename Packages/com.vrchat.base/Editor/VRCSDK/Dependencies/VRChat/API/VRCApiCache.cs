@@ -45,6 +45,11 @@ namespace VRC.SDKBase.Editor.Api
         {
             _cache.Remove(key);
         }
+
+        public static void Clear()
+        {
+            _cache = new Dictionary<string, (DateTime timestamp, object data)>();
+        }
     }
 }
 

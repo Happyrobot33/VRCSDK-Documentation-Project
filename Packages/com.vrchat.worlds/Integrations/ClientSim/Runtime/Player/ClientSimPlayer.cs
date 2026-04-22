@@ -55,6 +55,7 @@ namespace VRC.SDK3.ClientSim
         public bool IsUserVR { get; private set; }
         public bool isInstanceOwner;
         public bool isSuspended;
+        public bool isVRCPlus;
 
         // Public to allow users to edit values in editor.
         public ClientSimPlayerLocomotionData locomotionData = new();
@@ -420,9 +421,10 @@ namespace VRC.SDK3.ClientSim
             }
         }
 
-        public void EnablePlayer(Transform spawnPoint)
+        public void EnablePlayer(Transform spawnPoint, float spawnRadius)
         {
-            playerController.Teleport(spawnPoint, false);
+            Vector3 position = ClientSimPlayerSpawner.GetRandomPositionAroundSpawn(spawnPoint.position, spawnRadius);
+            playerController.Teleport(position, spawnPoint.rotation, false);
             gameObject.SetActive(true);
         }
 

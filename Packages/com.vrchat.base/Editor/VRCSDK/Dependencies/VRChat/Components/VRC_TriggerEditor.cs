@@ -4,7 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 using UnityEditorInternal;
+#if VRC_CLIENT
+using ZLinq;
+#else
 using System.Linq;
+#endif
 using System.Collections.Generic;
 using System.Reflection;
 using System;
@@ -562,7 +566,7 @@ namespace VRCSDK2
                             serializedObject.ApplyModifiedProperties();
                         }, type);
                     }
-                    VRC.SDKBase.IVRCEventProvider[] providers = FindObjectsOfType<MonoBehaviour>().Where(b => b is VRC.SDKBase.IVRCEventProvider).Cast<VRC.SDKBase.IVRCEventProvider>().ToArray();
+                    VRC.SDKBase.IVRCEventProvider[] providers = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).Where(b => b is VRC.SDKBase.IVRCEventProvider).Cast<VRC.SDKBase.IVRCEventProvider>().ToArray();
                     foreach (VRC.SDKBase.IVRCEventProvider provider in providers)
                     {
                         foreach (VRCSDK2.VRC_EventHandler.VrcEvent evt in provider.ProvideEvents())
@@ -998,7 +1002,7 @@ namespace VRCSDK2
                     break;
                 case VRCSDK2.VRC_EventHandler.VrcEventType.SpawnObject:
                     {
-                        VRCSDK2.VRC_SceneDescriptor scene = FindObjectOfType<VRCSDK2.VRC_SceneDescriptor>();
+                        VRCSDK2.VRC_SceneDescriptor scene = FindFirstObjectByType<VRCSDK2.VRC_SceneDescriptor>();
 
                         string path = parameterStringProperty.stringValue;
                         GameObject found = scene != null ? scene.DynamicPrefabs.FirstOrDefault(p => AssetDatabase.GetAssetOrScenePath(p) == path) : null;
@@ -1029,7 +1033,7 @@ namespace VRCSDK2
                     {
                         RenderTargetGameObjectList(parameterObjectsProperty, triggerIdx);
 
-                        VRCSDK2.VRC_SceneDescriptor scene = FindObjectOfType<VRCSDK2.VRC_SceneDescriptor>();
+                        VRCSDK2.VRC_SceneDescriptor scene = FindFirstObjectByType<VRCSDK2.VRC_SceneDescriptor>();
 
                         string path = parameterStringProperty.stringValue;
                         Material found = scene != null ? scene.DynamicMaterials.FirstOrDefault(p => AssetDatabase.GetAssetOrScenePath(p) == path) : null;
@@ -1402,8 +1406,8 @@ namespace VRCSDK2
             if (methods.Count == 0)
                 return;
 
-            List<string> combined = methods
-                .Select(pair => pair.Value.Select(s => pair.Key + "." + s.Name))
+            var combined = methods
+                .Select(pair => pair.Value.Select(s => pair.Key + "." + s.Name).ToList())
                 .Aggregate((a, b) =>
                 {
                     var v = new List<string>();

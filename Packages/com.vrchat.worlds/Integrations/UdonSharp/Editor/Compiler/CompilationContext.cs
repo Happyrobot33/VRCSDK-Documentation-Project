@@ -17,6 +17,7 @@ using UdonSharpEditor;
 using UnityEditor;
 using UnityEditor.Compilation;
 using UnityEngine;
+using VRC.SDK3.UdonNetworkCalling;
 
 namespace UdonSharp.Compiler
 {
@@ -353,7 +354,7 @@ namespace UdonSharp.Compiler
             return $"__{foundID}_{id}";
         }
 
-        private MethodExportLayout BuildMethodLayout(MethodSymbol methodSymbol, Dictionary<string, int> idLookup)
+        private MethodExportLayout BuildMethodLayout(MethodSymbol methodSymbol, Dictionary<string, int> idLookup, Dictionary<string, bool> networkCallableDedup)
         {
             string methodName = methodSymbol.Name;
             string[] paramNames = new string[methodSymbol.Parameters.Length];
@@ -372,9 +373,44 @@ namespace UdonSharp.Compiler
 
                 for (int i = 0; i < paramNames.Length && i < paramArgs.Length; ++i)
                     paramNames[i] = paramArgs[i].Item1;
+
+                if (methodSymbol.SymbolAttributes != null && methodSymbol.HasAttribute<NetworkCallableAttribute>())
+                {
+                    AddDiagnostic(DiagnosticSeverity.Error, methodSymbol.RoslynSymbol.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax()?.GetLocation(),
+                        $"Built-in Udon event '{methodName}' cannot be marked [NetworkCallable].");
+                }
+            }
+            else if (methodSymbol.SymbolAttributes != null && methodSymbol.HasAttribute<NetworkCallableAttribute>())
+            {
+                // Do not mangle network callable methods, we guarantee they are unique later on and other scripts may call them by name
+                // Their parameters are fair game though, as long as we encode the mangled version into the metadata too
+                for (int i = 0; i < paramNames.Length; ++i)
+                    paramNames[i] = GetUniqueID(idLookup, methodSymbol.Parameters[i].Name + "__param");
+
+                // Explicitly forbid overloading even with non-network callable methods (idLookup or unmangled)
+                if (networkCallableDedup.ContainsKey(methodName) || idLookup.ContainsKey(methodName))
+                {
+                    AddDiagnostic(DiagnosticSeverity.Error, methodSymbol.RoslynSymbol.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax()?.GetLocation(),
+                        $"Duplicate network callable method name '{methodName}'. Overloading of any kind is not supported.");
+                }
+
+                // Validate function itself
+                ValidateNetworkCallableMethod(methodSymbol, methodName);
+
+                networkCallableDedup[methodName] = true; // yes, we are network callable
             }
             else
             {
+                // Explicitly forbid overloading with network callable methods, but not if none of the overloads are network callable
+                if (networkCallableDedup.TryGetValue(methodName, out var isNetworkCallable) && isNetworkCallable)
+                {
+                    AddDiagnostic(DiagnosticSeverity.Error, methodSymbol.RoslynSymbol.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax()?.GetLocation(),
+                        $"Duplicate network callable method name '{methodName}'. Overloading of any kind is not supported.");
+                }
+                networkCallableDedup[methodName] = false; // we exist, but we are not network callable
+
+                // Regular method handling with optional mangling:
+
                 if (methodSymbol.Parameters.Length > 0) // Do not mangle 0 parameter methods as they may be called externally
                     methodName = GetUniqueID(idLookup, methodName);
 
@@ -390,6 +426,56 @@ namespace UdonSharp.Compiler
             _layouts.Add(methodSymbol, exportLayout);
 
             return exportLayout;
+        }
+
+        /// <summary>
+        /// We only allow the simplest form of method declaration for [NetworkCallable] to avoid confusing semantics or future compatiblity issues.
+        /// This method checks a given declaration for conformity.
+        /// </summary>
+        private void ValidateNetworkCallableMethod(MethodSymbol methodSymbol, string methodName)
+        {
+            void FailValidation(string error)
+                => AddDiagnostic(DiagnosticSeverity.Error, methodSymbol.RoslynSymbol.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax()?.GetLocation(), error);
+
+            if (methodSymbol.RoslynSymbol.DeclaredAccessibility != Accessibility.Public)
+                FailValidation($"Network callable method '{methodName}' must be public.");
+            if (methodSymbol.IsGenericMethod)
+                FailValidation($"Network callable method '{methodName}' cannot be generic.");
+            if (methodSymbol.IsExtern)
+                FailValidation($"Network callable method '{methodName}' cannot be extern.");
+            if (methodSymbol.IsOperator)
+                FailValidation($"Network callable method '{methodName}' cannot be an operator.");
+            if (methodSymbol.RoslynSymbol.IsVirtual)
+                FailValidation($"Network callable method '{methodName}' cannot be virtual.");
+            if (methodSymbol.RoslynSymbol.IsAbstract)
+                FailValidation($"Network callable method '{methodName}' cannot be abstract.");
+            if (methodSymbol.RoslynSymbol.IsOverride)
+                FailValidation($"Network callable method '{methodName}' cannot be an override.");
+            if (methodSymbol.RoslynSymbol.IsVararg) // this is not `params` but something else cursed :/
+                FailValidation($"Network callable method '{methodName}' cannot be vararg.");
+            if (methodSymbol.RoslynSymbol.IsAsync) // not supported anyway
+                FailValidation($"Network callable method '{methodName}' cannot be async.");
+            if (methodSymbol.RoslynSymbol.IsStatic)
+                FailValidation($"Network callable method '{methodName}' cannot be static.");
+            if (methodSymbol.RoslynSymbol.IsSealed) // what does this mean?
+                FailValidation($"Network callable method '{methodName}' cannot be sealed.");
+            if (methodSymbol.RoslynSymbol.ExplicitInterfaceImplementations.Length > 0)
+                FailValidation($"Network callable method '{methodName}' cannot be an explicit interface implementation.");
+            if (methodSymbol.ReturnType != null)
+                FailValidation($"Network callable method '{methodName}' cannot have a return type.");
+
+            // parameter validation
+            if (methodSymbol.Parameters.Length > 8)
+                FailValidation($"Network callable method '{methodName}' cannot have more than 8 parameters.");
+            foreach (var parameter in methodSymbol.Parameters)
+            {
+                if (parameter.IsByRef)
+                    FailValidation($"Network callable method '{methodName}' cannot have `ref` or `out` parameters.");
+                if (parameter.IsParams)
+                    FailValidation($"Network callable method '{methodName}' cannot use `params`.");
+                if (parameter.DefaultValue != null)
+                    FailValidation($"Network callable method '{methodName}' cannot have parameters with default values.");
+            }
         }
 
         /// <summary>
@@ -409,6 +495,7 @@ namespace UdonSharp.Compiler
                 typeSymbol = typeSymbol.BaseType;
             }
 
+            Dictionary<string, bool> networkCallableDedup = new();
             while (typesToBuild.Count > 0)
             {
                 TypeSymbol currentBuildType = typesToBuild.Pop();
@@ -423,6 +510,8 @@ namespace UdonSharp.Compiler
 
                 Dictionary<MethodSymbol, MethodExportLayout> layouts =
                     new Dictionary<MethodSymbol, MethodExportLayout>();
+
+                networkCallableDedup.Clear();
                 
                 foreach (Symbol symbol in currentBuildType.GetMembers(context))
                 {
@@ -431,7 +520,7 @@ namespace UdonSharp.Compiler
                          methodSymbol.OverridenMethod.ContainingType == _udonSharpBehaviourType || 
                          methodSymbol.OverridenMethod.ContainingType.IsExtern))
                     {
-                        layouts.Add(methodSymbol, BuildMethodLayout(methodSymbol, idCounters));
+                        layouts.Add(methodSymbol, BuildMethodLayout(methodSymbol, idCounters, networkCallableDedup));
                     }
                 }
                 

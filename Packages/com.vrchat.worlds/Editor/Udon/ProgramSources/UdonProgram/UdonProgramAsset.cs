@@ -13,6 +13,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using VRC.SDK3.Components;
 using VRC.SDK3.Image;
+using VRC.SDK3.UdonNetworkCalling;
 using VRC.SDKBase.Editor.Source.Helpers;
 using VRC.Udon.Common;
 using VRC.Udon.Common.Interfaces;
@@ -117,7 +118,7 @@ namespace VRC.Udon.Editor.ProgramSources
                 return;
             }
 
-            SerializedProgramAsset.StoreProgram(program);
+            SerializedProgramAsset.StoreProgram(program, GetLastNetworkCallingMetadata());
             if (this != null)
             {
                 EditorUtility.SetDirty(this);
@@ -126,6 +127,11 @@ namespace VRC.Udon.Editor.ProgramSources
 
         protected virtual void RefreshProgramImpl()
         {
+        }
+        
+        protected virtual NetworkCallingEntrypointMetadata[] GetLastNetworkCallingMetadata()
+        {
+            return null;
         }
 
         [PublicAPI]

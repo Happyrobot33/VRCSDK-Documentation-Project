@@ -18,6 +18,7 @@ namespace VRC.SDK3.Editor
         private VRCSceneDescriptor sceneDescriptor;
 
         private SerializedProperty propSpawns;
+        private SerializedProperty propSpawnRadius;
         private SerializedProperty propSpawnOrder;
         private SerializedProperty propSpawnOrientation;
         private SerializedProperty propReferenceCamera;
@@ -50,6 +51,7 @@ namespace VRC.SDK3.Editor
             sceneDescriptor = (VRCSceneDescriptor)target;
 
             propSpawns = serializedObject.FindProperty(nameof(VRCSceneDescriptor.spawns));
+            propSpawnRadius = serializedObject.FindProperty(nameof(VRCSceneDescriptor.spawnRadius));
             propSpawnOrder = serializedObject.FindProperty(nameof(VRCSceneDescriptor.spawnOrder));
             propSpawnOrientation = serializedObject.FindProperty(nameof(VRCSceneDescriptor.spawnOrientation));
             propReferenceCamera = serializedObject.FindProperty(nameof(VRCSceneDescriptor.ReferenceCamera));
@@ -77,7 +79,6 @@ namespace VRC.SDK3.Editor
             EditorApplication.hierarchyChanged -= HierarchyChanged;
         }
 
-        // draw respawn height y gizmo
         private void OnSceneGUI()
         {
             var handlePosition = new Vector3(
@@ -103,7 +104,17 @@ namespace VRC.SDK3.Editor
                 if (!spawn) continue;
                 Vector3 position = spawn.position;
                 Handles.color = Color.white;
-                Handles.DrawWireDisc(position, Vector3.up, 0.5f);
+                if (sceneDescriptor.spawnRadius > 0)
+                    Handles.DrawWireDisc(position, Vector3.up, sceneDescriptor.spawnRadius);
+                else
+                {
+                    float size = HandleUtility.GetHandleSize(spawn.position) * 0.5f;
+                    Vector3 pos = spawn.position;
+                    Vector3 offset1 = (Vector3.forward + Vector3.right).normalized * size;
+                    Vector3 offset2 = (Vector3.forward - Vector3.right).normalized * size;
+                    Handles.DrawLine(pos + offset1, pos - offset1);
+                    Handles.DrawLine(pos + offset2, pos - offset2);
+                }
                 Handles.color = Color.green;
                 Handles.DrawLine(position, position + Vector3.up);
                 Handles.color = Color.blue;
@@ -133,6 +144,7 @@ namespace VRC.SDK3.Editor
             base.BuildInspectorGUI();
             
             AddField(propSpawns);
+            AddFieldTooltip(propSpawnRadius, "Players spawn at a random spot within the radius. Set to zero to have players spawn at the exact spawn position.");
             AddField(propSpawnOrder);
             AddField(propSpawnOrientation);
             AddField(propReferenceCamera);

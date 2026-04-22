@@ -16,7 +16,7 @@
         _OcclusionStrength("Strength", Range(0.0, 1.0)) = 1.0
 
         [NoScaleOffset] _EmissionMap("Emission(RGB)", 2D) = "white" {}
-        _EmissionColor("Emission Color", Color) = (1,1,1)
+        _EmissionColor("Emission Color", Color) = (0, 0, 0)
 
         [Enum(UV0,0,UV1,1)] _UVSec ("UV Set for secondary textures", Float) = 0
         [NoScaleOffset] _DetailMask("Detail Mask(A)", 2D) = "white" {}
@@ -45,24 +45,28 @@
         LOD 200
 
         CGPROGRAM
-        
-        //#define _DEBUG_VRC 
+
+        //#define _DEBUG_VRC
         #ifdef _DEBUG_VRC
             #define DEBUG_COL(rgb) debugCol = half4(rgb, 1)
             #define DEBUG_VAL(val) debugCol = half4(val, val, val, 1)
                 half4 debugCol = half4(0,0,0,1);
         #else
-            #define DEBUG_COL(rgb) 
+            #define DEBUG_COL(rgb)
             #define DEBUG_VAL(val)
         #endif
-        
+
         #pragma target 3.0
-        #pragma multi_compile _ _EMISSION
-        #pragma multi_compile _ _DETAIL
-        #pragma multi_compile _ _SPECULARHIGHLIGHTS_OFF
-        #pragma multi_compile _ _GLOSSYREFLECTIONS_OFF
-        #pragma multi_compile _ _MONOSH_SPECULAR _MONOSH_NOSPECULAR
-        #pragma multi_compile _ _ENABLE_GEOMETRIC_SPECULAR_AA
+        #pragma shader_feature _ _DETAIL
+        #pragma shader_feature_fragment _ _SPECULARHIGHLIGHTS_OFF
+        #pragma shader_feature_fragment _ _GLOSSYREFLECTIONS_OFF
+        #pragma shader_feature_fragment _ _MONOSH_SPECULAR _MONOSH_NOSPECULAR
+        // due to a Unity bug - we cannot use dynamic_branch in a surface shader in the SDK, as it prevents objects from being baked
+        // any shader with a `dynamic_branch` inside of a Meta pass will fail to compile for lightmapping
+        #pragma shader_feature_fragment _ _ENABLE_GEOMETRIC_SPECULAR_AA
+        #pragma shader_feature_fragment _ _EMISSION
+        #pragma shader_feature_fragment _ DISABLE_VERTEX_COLORING
+        //SDK-SYNC-IGNORE-LINE - unused variants in SDK projects - #pragma multi_compile_fragment _ FORCE_UNITY_DLDR_LIGHTMAP_ENCODING FORCE_UNITY_RGBM_LIGHTMAP_ENCODING FORCE_UNITY_LIGHTMAP_FULL_HDR_ENCODING UNITY_LIGHTMAP_NONE
         //#pragma multi_compile _ _BICUBIC
 
         #if defined(LIGHTMAP_ON)
@@ -77,6 +81,7 @@
         #include "VRChat.cginc"
 
         #pragma surface surf StandardVRC vertex:vert exclude_path:prepass exclude_path:deferred noforwardadd noshadow nodynlightmap nolppv noshadowmask
+        #pragma skip_variants LIGHTMAP_SHADOW_MIXING
 
         // -------------------------------------
 
@@ -106,10 +111,8 @@
         uniform half _SpecularAAScreenSpaceVariance;
         uniform half _SpecularAAThreshold;
 
-#ifdef _EMISSION
         UNITY_DECLARE_TEX2D(_EmissionMap);
         half4 _EmissionColor;
-#endif
 
 #ifdef _DETAIL
         uniform half _UVSec;
@@ -140,7 +143,10 @@
         void surf(Input IN, inout SurfaceOutputStandardVRC o)
         {
             // Albedo comes from a texture tinted by color
-            half4 albedoMap = UNITY_SAMPLE_TEX2D(_MainTex, IN.texcoord0) * _Color * IN.color;
+            half4 albedoMap = UNITY_SAMPLE_TEX2D(_MainTex, IN.texcoord0) * _Color;
+            #if !defined(DISABLE_VERTEX_COLORING) //SDK-SYNC-IGNORE-LINE
+                albedoMap *= IN.color;  //SDK-SYNC-IGNORE-LINE
+            #endif //SDK-SYNC-IGNORE-LINE
             o.Albedo = albedoMap.rgb;
 
             // Metallic and smoothness come from slider variables
@@ -165,10 +171,11 @@
                 o.Normal = half3(0, 0, 1);
             }
 
-            #ifdef _ENABLE_GEOMETRIC_SPECULAR_AA
-                o.SpecularAAVariance = _SpecularAAScreenSpaceVariance;
-                o.SpecularAAThreshold = _SpecularAAThreshold;
-            #endif
+            #if defined(_ENABLE_GEOMETRIC_SPECULAR_AA) //SDK-SYNC-IGNORE-LINE
+                o.SpecularAA = 1; //SDK-SYNC-IGNORE-LINE
+            #endif //SDK-SYNC-IGNORE-LINE
+            o.SpecularAAVariance = _SpecularAAScreenSpaceVariance;
+            o.SpecularAAThreshold = _SpecularAAThreshold;
 
             #ifdef _DETAIL
                 half4 detailMask = UNITY_SAMPLE_TEX2D(_DetailMask, IN.texcoord0);
@@ -192,9 +199,9 @@
                 }
             #endif
 
-            #ifdef _EMISSION
-                o.Emission = UNITY_SAMPLE_TEX2D(_EmissionMap, IN.texcoord0) * _EmissionColor;
-            #endif
+            #if defined(_EMISSION) //SDK-SYNC-IGNORE-LINE
+                o.Emission = UNITY_SAMPLE_TEX2D(_EmissionMap, IN.texcoord0) * _EmissionColor; //SDK-SYNC-IGNORE-LINE
+            #endif //SDK-SYNC-IGNORE-LINE
         }
         ENDCG
     }

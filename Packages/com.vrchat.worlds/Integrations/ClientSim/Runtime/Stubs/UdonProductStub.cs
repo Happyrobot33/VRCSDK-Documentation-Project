@@ -45,7 +45,9 @@ namespace VRC.SDK3.ClientSim
             string analyticsStoreId = null,
             string analyticsWorldId = null,
             string analyticsGroupId = null,
-            string analyticsCreatorId = null)
+            string analyticsCreatorId = null,
+            string giftingUserId = null,
+            string giftingInstanceId = null)
         {
             throw new NotImplementedException();
         }

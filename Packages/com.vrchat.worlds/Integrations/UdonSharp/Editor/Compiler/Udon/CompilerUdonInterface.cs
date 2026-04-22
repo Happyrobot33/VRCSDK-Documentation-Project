@@ -306,17 +306,12 @@ namespace UdonSharp.Compiler.Udon
 
             string finalFunctionSig = $"{functionNamespace}.{methodName}{paramStr}";
 
-            if (!IsExposedToUdon(finalFunctionSig))
-            {
-                throw new Exception($"Accessor {finalFunctionSig} is not exposed in Udon");
-            }
-
             return finalFunctionSig;
         }
-        
-        public static string GetUdonAccessorName(FieldInfo fieldInfo, FieldAccessorType accessorType)
+
+        public static string GetUdonAccessorName(FieldInfo fieldInfo, FieldAccessorType accessorType, Type declaringTypeOverride = null)
         {
-            Type containingType = fieldInfo.DeclaringType;
+            Type containingType = declaringTypeOverride ?? fieldInfo.DeclaringType;
             
             containingType = UdonSharpUtils.RemapBaseType(containingType);
 
@@ -379,9 +374,9 @@ namespace UdonSharp.Compiler.Udon
         }
         
         // Any changes to the above symbol based method should be ported to this
-        public static string GetUdonMethodName(MethodBase methodInfo)
+        public static string GetUdonMethodName(MethodBase methodInfo, Type declaringTypeOverride = null)
         {
-            Type methodSourceType = methodInfo.DeclaringType;
+            Type methodSourceType = declaringTypeOverride ?? methodInfo.DeclaringType;
             methodSourceType = UdonSharpUtils.RemapBaseType(methodSourceType);
 
             string functionNamespace = SanitizeTypeName(methodSourceType.FullName ?? methodSourceType.Namespace + methodSourceType.Name).Replace("VRCUdonUdonBehaviour", "VRCUdonCommonInterfacesIUdonEventReceiver");

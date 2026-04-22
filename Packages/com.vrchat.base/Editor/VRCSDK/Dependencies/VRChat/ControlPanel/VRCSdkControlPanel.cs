@@ -32,7 +32,7 @@ public partial class VRCSdkControlPanel : EditorWindow, IVRCSdkPanelApi
 
         GetWindow(typeof(VRCSdkControlPanel));
         window.titleContent.text = "VRChat SDK";
-        window.minSize = new Vector2(SdkWindowWidth + 4, 600);
+        window.minSize = new Vector2(SdkWindowWidth + 4, 450);
         window.maxSize = new Vector2(SdkWindowWidth + 4, 2000);
         window.Init();
         window.Show();
@@ -194,6 +194,11 @@ public partial class VRCSdkControlPanel : EditorWindow, IVRCSdkPanelApi
     {
         OnEnableAccount();
         _stylesInitialized = false;
+        OnPanelLoggedIn -= RestoreTab;
+        OnPanelLoggedIn += RestoreTab;
+        OnUserPlatformsFetched -= RefreshPlatformSwitcher;
+        OnUserPlatformsFetched += RefreshPlatformSwitcher;
+        AssemblyReloadEvents.afterAssemblyReload -= BuilderAssemblyReload;
         AssemblyReloadEvents.afterAssemblyReload += BuilderAssemblyReload;
         OnSdkPanelEnable?.Invoke(this, null);
         _panelState = SdkPanelState.Idle;
@@ -203,10 +208,20 @@ public partial class VRCSdkControlPanel : EditorWindow, IVRCSdkPanelApi
 
     private void OnDisable()
     {
+        OnPanelLoggedIn -= RestoreTab;
+        OnUserPlatformsFetched -= RefreshPlatformSwitcher;
         AssemblyReloadEvents.afterAssemblyReload -= BuilderAssemblyReload;
         OnSdkPanelDisable?.Invoke(this, null);
         _panelState = SdkPanelState.Idle;
         OnSdkPanelStateChange?.Invoke(this, _panelState);
+    }
+    
+    private void RestoreTab(object sender, APIUser e)
+    {
+        rootVisualElement.schedule.Execute(() =>
+        {
+            SelectTab(PanelTab.Builder);
+        }).ExecuteLater(200);
     }
 
     private void OnDestroy()
@@ -249,6 +264,14 @@ public partial class VRCSdkControlPanel : EditorWindow, IVRCSdkPanelApi
             }
         }
     }
+    
+    internal enum PanelTab
+    {
+        Account,
+        Builder,
+        ContentManager,
+        Settings
+    }
 
     private void CreateGUI()
     {
@@ -276,8 +299,7 @@ public partial class VRCSdkControlPanel : EditorWindow, IVRCSdkPanelApi
             var currentPanel = VRCSettings.ActiveWindowPanel;
             if (EditorApplication.isPlaying && currentPanel != 0)
             {
-                VRCSettings.ActiveWindowPanel = 0;
-                RenderTabs();
+                SelectTab(PanelTab.Account);
                 return;
             }
             // Check that the tabs are enabled, if not - we must re-render tabs
@@ -288,8 +310,7 @@ public partial class VRCSdkControlPanel : EditorWindow, IVRCSdkPanelApi
             }
             // When the user isn't logged in - we only allow Settings and Authentication tabs to be viewed
             if (APIUser.IsLoggedIn || currentPanel == 0 || currentPanel == 3) return;
-            VRCSettings.ActiveWindowPanel = 0;
-            RenderTabs();
+            SelectTab(PanelTab.Account);
         }).Every(500);
 
         var sdkContainer = rootVisualElement.Q("sdk-container");
@@ -323,17 +344,17 @@ public partial class VRCSdkControlPanel : EditorWindow, IVRCSdkPanelApi
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         
-            switch (VRCSettings.ActiveWindowPanel)
+            switch ((PanelTab) VRCSettings.ActiveWindowPanel)
             {
-                case 1:
+                case PanelTab.Builder:
                     break;
-                case 2:
+                case PanelTab.ContentManager:
                     ShowContent();
                     break;
-                case 3:
+                case PanelTab.Settings:
                     ShowSettings();
                     break;
-                case 0:
+                case PanelTab.Account:
                 default:
                     ShowAccount();
                     break;
@@ -350,7 +371,7 @@ public partial class VRCSdkControlPanel : EditorWindow, IVRCSdkPanelApi
         _contentManagerTabBtn = rootVisualElement.Q<Button>("tab-content-manager");
         _settingsTabBtn = rootVisualElement.Q<Button>("tab-settings");
         
-        _tabButtons = new Button[4]
+        _tabButtons = new[]
         {
             _authenticationTabBtn,
             _buildTabBtn,
@@ -366,31 +387,45 @@ public partial class VRCSdkControlPanel : EditorWindow, IVRCSdkPanelApi
             _tabButtons[i].EnableInClassList("active", currentPanel == btnIndex);
             _tabButtons[i].SetEnabled(APIUser.IsLoggedIn ? _toolbarOptionsLoggedIn[i] : _toolbarOptionsNotLoggedIn[i]);
 
-            _tabButtons[i].clicked += () =>
-            {
-                if (EditorApplication.isPlaying) return;
-                if (VRCSettings.ActiveWindowPanel == btnIndex)
-                {
-                    return;
-                }
-                VRCSettings.ActiveWindowPanel = btnIndex;
-                RenderTabs();
-            };
+            _tabButtons[i].clicked += () => SelectTab((PanelTab) btnIndex);
         }
     }
+    
+    private void SelectTab(PanelTab tab)
+    {
+        if (_tabButtons == null) return;
+        if (EditorApplication.isPlaying) return;
+        if (VRCSettings.ActiveWindowPanel == (int) tab)
+        {
+            return;
+        }
+        VRCSettings.ActiveWindowPanel = (int) tab;
+        RenderTabs();
+    }
+    
+    internal PanelTab CurrentTab => (PanelTab) VRCSettings.ActiveWindowPanel;
 
     private void RenderTabs()
     {
-        var currentPanel = VRCSettings.ActiveWindowPanel;
+        var currentPanel = (PanelTab) VRCSettings.ActiveWindowPanel;
+
+        if (currentPanel != PanelTab.Builder)
+        {
+            if (_defaultHeaderImage == null)
+            {
+                _defaultHeaderImage = Resources.Load<Texture2D>("SDK_Panel_Banner");
+            }
+            rootVisualElement.Q("banner").style.backgroundImage = _defaultHeaderImage;
+        }
         
         for (int i = 0; i < _tabButtons.Length; i++)
         {
-            _tabButtons[i].EnableInClassList("active", currentPanel == i);
+            _tabButtons[i].EnableInClassList("active", currentPanel == (PanelTab) i);
             if (!TabsEnabled) continue;
             _tabButtons[i].SetEnabled(APIUser.IsLoggedIn ? _toolbarOptionsLoggedIn[i] : _toolbarOptionsNotLoggedIn[i]);
         }
 
-        if (currentPanel == 1)
+        if (currentPanel == PanelTab.Builder)
         {
             if (_builderPanel.childCount != 0) return;
             ShowBuilders();

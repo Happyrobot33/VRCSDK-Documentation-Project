@@ -35,6 +35,12 @@ namespace VRC.SDK3.ClientSim
             _parent = parent;
         }
 
+        public static Vector3 GetRandomPositionAroundSpawn(Vector3 spawnPosition, float radius)
+        {
+            Vector2 randomPosition = Random.insideUnitCircle * radius;
+            return new Vector3(randomPosition.x + spawnPosition.x, spawnPosition.y, randomPosition.y + spawnPosition.z);
+        }
+        
         public ClientSimPlayer SpawnPlayer(string playerName, bool isLocal)
         {
             if (!_sceneManager.HasSceneDescriptor())
@@ -49,9 +55,11 @@ namespace VRC.SDK3.ClientSim
             }
 
             Transform spawn = _sceneManager.GetSpawnPoint(!isLocal);
+            float radius = _sceneManager.GetSpawnRadius();
+            Vector3 position = GetRandomPositionAroundSpawn(spawn.position, radius);
             Quaternion rotation = Quaternion.Euler(0, spawn.rotation.eulerAngles.y, 0);
 
-            GameObject playerInstance = Instantiate(playerPrefab, spawn.position, rotation, _parent);
+            GameObject playerInstance = Instantiate(playerPrefab, position, rotation, _parent);
 
             if (_parent == null)
             {

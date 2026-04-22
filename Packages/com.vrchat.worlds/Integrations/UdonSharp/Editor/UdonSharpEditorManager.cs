@@ -11,12 +11,14 @@ using UdonSharp;
 using UdonSharp.Compiler;
 using UdonSharp.Updater;
 using UnityEditor;
+using UnityEditor.Build;
 using UnityEditor.Callbacks;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VRC.SDKBase;
 using VRC.SDKBase.Editor;
+using VRC.SDKBase.Editor.BuildPipeline;
 using VRC.Udon;
 using VRC.Udon.Editor;
 using Object = UnityEngine.Object;
@@ -62,15 +64,17 @@ namespace UdonSharpEditor
             OnSceneBuildInternal(BuildPipeline.isBuildingPlayer);
         }
         
-        private static void OnSceneBuildInternal(bool isBuildingPlayer)
+        private static void OnSceneBuildInternal(bool isBuildingPlayer, GameObject[] gameObjects = null)
         {
-            Scene currentScene = SceneManager.GetActiveScene();
-
-            GameObject[] rootObjects = currentScene.GetRootGameObjects();
-
+            if (gameObjects == null)
+            {
+                Scene currentScene = SceneManager.GetActiveScene();
+                gameObjects = currentScene.GetRootGameObjects();
+            }
+            
             HashSet<UdonBehaviour> allBehaviours = new HashSet<UdonBehaviour>();
 
-            foreach (GameObject rootObject in rootObjects)
+            foreach (GameObject rootObject in gameObjects)
             {
                 foreach (UdonSharpBehaviour behaviour in rootObject.GetComponentsInChildren<UdonSharpBehaviour>(true))
                 {
@@ -98,9 +102,9 @@ namespace UdonSharpEditor
             if (!isBuildingPlayer)
                 return;
 
-            foreach (GameObject rootObject in rootObjects)
+            foreach (GameObject gameObject in gameObjects)
             {
-                foreach (UdonSharpBehaviour behaviour in rootObject.GetComponentsInChildren<UdonSharpBehaviour>(true))
+                foreach (UdonSharpBehaviour behaviour in gameObject.GetComponentsInChildren<UdonSharpBehaviour>(true))
                 {
                     Object.DestroyImmediate(behaviour);
                 }
@@ -117,8 +121,13 @@ namespace UdonSharpEditor
             UdonEditorManager.Instance.RefreshQueuedProgramSources();
         }
 
+        private static BuildTarget _latestAppliedBuildTarget = BuildTarget.NoTarget;
+        private const string HasPendingPlatformSwitchStateKey = "HasPendingPlatformSwitch";
         private static void RunPreAssemblyBuildRefresh()
         {
+            bool switchingPlatforms = _latestAppliedBuildTarget != EditorUserBuildSettings.activeBuildTarget;
+            SessionState.SetBool(HasPendingPlatformSwitchStateKey, switchingPlatforms);
+
             // Make sure in progress compiles finish instead of getting orphaned and leaving Unity in an intermediate state waiting for the compile to finish.
             UdonSharpCompilerV1.WaitForCompile();
         }
@@ -130,7 +139,15 @@ namespace UdonSharpEditor
             InjectUnityEventInterceptors();
             
             if (!RunAllUpgrades())
-                UdonSharpProgramAsset.CompileAllCsPrograms();
+            {
+                // Force if platforms were switched as scripts with platform directives may need recompiling now.
+                bool switchedPlatforms = SessionState.GetBool(HasPendingPlatformSwitchStateKey, false);
+
+                UdonSharpProgramAsset.CompileAllCsPrograms(forceCompile: switchedPlatforms);
+            }
+
+            SessionState.SetBool(HasPendingPlatformSwitchStateKey, false);
+            _latestAppliedBuildTarget = EditorUserBuildSettings.activeBuildTarget;
         }
         
         private static void OnContentPreUpload(object sender, object e)
@@ -832,12 +849,13 @@ namespace UdonSharpEditor
                 return;
             
             BuildTargetGroup buildTargetGroup = BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget);
-            string[] defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup).Split(';');
+            NamedBuildTarget namedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(buildTargetGroup);
+            string[] defines = PlayerSettings.GetScriptingDefineSymbols(namedBuildTarget).Split(';');
 
             if (!defines.Contains("UDONSHARP", StringComparer.OrdinalIgnoreCase))
             {
                 defines = defines.AddItem("UDONSHARP").ToArray();
-                PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, string.Join(";", defines));
+                PlayerSettings.SetScriptingDefineSymbols(namedBuildTarget, string.Join(";", defines));
                 UdonSharpUtils.Log("Updated scripting defines");
             }
 
@@ -2096,6 +2114,8 @@ namespace UdonSharpEditor
                 AssetDatabase.StopAssetEditing();
             }
         }
+
+        public int callbackOrder { get; }
     }
     
     internal class UdonSharpPrefabPostprocessor : AssetPostprocessor

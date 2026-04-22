@@ -1,8 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Net;
+using System.Net.Sockets;
 using UnityEngine;
 using UnityEditor;
 using VRC.Core;
+using VRC.SDKBase;
 using VRC.SDKBase.Editor;
 
 // This file handles the Settings tab of the SDK Panel
@@ -18,6 +20,7 @@ public partial class VRCSdkControlPanel : EditorWindow
     }
     
     Vector2 settingsScroll;
+    bool showLocalIpAddress;
 
     void ShowSettings()
     {
@@ -50,11 +53,20 @@ public partial class VRCSdkControlPanel : EditorWindow
             if (enableLogging != isLoggingEnabled)
             {
                 if (enableLogging)
-                    VRC.Core.Logger.AddDebugLevel(DebugLevel.API);
+                    VRC.Core.Logger.EnableCategory(API.LOG_CATEGORY);
                 else
-                    VRC.Core.Logger.RemoveDebugLevel(DebugLevel.API);
+                    VRC.Core.Logger.DisableCategory(API.LOG_CATEGORY);
 
                 UnityEditor.EditorPrefs.SetBool("apiLoggingEnabled", enableLogging);
+            }
+        }
+
+        // Dry Builds
+        if (APIUser.CurrentUser != null && APIUser.CurrentUser.hasSuperPowers) {
+            var newDryRun = EditorGUILayout.ToggleLeft(new GUIContent("Dry Run Builds", "This will skip actual builds and uploads and instead pass as if they succeeded"), VRC_EditorTools.DryRunState);
+            if (newDryRun != VRC_EditorTools.DryRunState)
+            {
+                VRC_EditorTools.DryRunState = newDryRun;
             }
         }
 
@@ -102,7 +114,16 @@ public partial class VRCSdkControlPanel : EditorWindow
         {
             VRC.Dynamics.VRCConstraintManager.CanExecuteConstraintJobsInEditMode = VRCSettings.VrcConstraintsInEditMode;
         }
-
+        
+        EditorGUILayout.Space();
+        
+        showLocalIpAddress = EditorGUILayout.Foldout(showLocalIpAddress, "Show Local IP Address", true);
+        if (showLocalIpAddress)
+        {
+            string localIpAddress = GetLocalIPAddress();
+            EditorGUILayout.HelpBox(localIpAddress, MessageType.None);
+        }
+        
         EditorGUILayout.EndVertical();
 
         EditorGUILayout.Separator();
@@ -123,11 +144,7 @@ public partial class VRCSdkControlPanel : EditorWindow
                 bool enableLogging = EditorGUILayout.ToggleLeft("All Logging Enabled", isLoggingEnabled);
                 if (enableLogging != isLoggingEnabled)
                 {
-                    if (enableLogging)
-                        VRC.Core.Logger.AddDebugLevel(DebugLevel.All);
-                    else
-                        VRC.Core.Logger.RemoveDebugLevel(DebugLevel.All);
-
+                    VRC.Core.Logger.SetTreatAllCategoriesAsEnabled(enableLogging);
                     UnityEditor.EditorPrefs.SetBool("allLoggingEnabled", enableLogging);
                 }
             }
@@ -182,5 +199,27 @@ public partial class VRCSdkControlPanel : EditorWindow
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.Separator();
+    }
+
+    string GetLocalIPAddress()
+    {
+        // Note that there are usually many IP addresses on any particular machine (multiple ethernet ports, virtual machine IP addresses)
+        // So will give you a whole list of them `Dns.GetHostEntry(Dns.GetHostName());`, but it's hard to say which one you care about.
+        // https://stackoverflow.com/a/27376368
+        // The following gives you exactly the address you care about by instead opening a UDP socket to get the address that would be used
+        // As the post mentions, no real connection is established here.
+        try
+        {
+            using Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0);
+            socket.Connect("8.8.8.8", 65530);
+            IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+            var localIP = endPoint.Address.ToString();
+            return localIP;
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+            return "Unable to get local IP address";
+        }
     }
 }

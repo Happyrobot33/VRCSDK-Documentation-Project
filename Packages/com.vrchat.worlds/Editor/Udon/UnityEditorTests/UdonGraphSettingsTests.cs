@@ -199,7 +199,7 @@ namespace Tests
             EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
             
             // Load test graph programs from scene
-            UdonBehaviour[] udonBehaviours = Object.FindObjectsOfType<UdonBehaviour>();
+            UdonBehaviour[] udonBehaviours = Object.FindObjectsByType<UdonBehaviour>(FindObjectsSortMode.None);
             Assert.AreEqual(2, udonBehaviours.Length);
 
             UdonGraphProgramAsset graphAsset1 = udonBehaviours[0].programSource as UdonGraphProgramAsset;

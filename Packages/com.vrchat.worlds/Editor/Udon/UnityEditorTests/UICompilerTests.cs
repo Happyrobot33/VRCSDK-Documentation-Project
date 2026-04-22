@@ -28,7 +28,7 @@ namespace Tests
                 // Compile assembly from copy of existing asset
                 string path = AssetDatabase.GUIDToAssetPath(guid);
                 var legacyData = GetDataFromAssetAtPath(path);
-                var legacyAssembly = UdonEditorManager.Instance.CompileGraph(legacyData, null, out Dictionary<string, (string uid, string fullName, int index)> _, out Dictionary<string, (object value, Type type)> heapDefaultValues);
+                var legacyAssembly = UdonEditorManager.Instance.CompileGraph(legacyData, null, out Dictionary<string, (string uid, string fullName, int index)> _, out Dictionary<string, (object value, Type type)> heapDefaultValues, out _);
 
                 // Compile assembly from copy of asset loaded into new graph
                 var newAsset = ScriptableObject.CreateInstance<UdonGraphProgramAsset>();
@@ -40,7 +40,7 @@ namespace Tests
                 Assert.AreSame(newAsset, graphSettings.programAsset);
                 var newData = graphSettings.programAsset.graphData;
                 Assert.AreSame(newAsset.graphData, newData);
-                var newAssembly = UdonEditorManager.Instance.CompileGraph(newData, null, out Dictionary<string, (string uid, string fullName, int index)> _, out Dictionary<string, (object value, Type type)> heapDefaultValues1);
+                var newAssembly = UdonEditorManager.Instance.CompileGraph(newData, null, out Dictionary<string, (string uid, string fullName, int index)> _, out Dictionary<string, (object value, Type type)> heapDefaultValues1, out _);
 
                 Assert.AreEqual(newAssembly, legacyAssembly);
                 Settings.CloseGraph(newAsset.name);

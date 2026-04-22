@@ -17,7 +17,7 @@
  </copyright>
 -----------------------------------------------------------------------
 
- #if UNITY_EDITOR
+#if UNITY_EDITOR
 
  namespace VRC.Udon.Serialization.OdinSerializer.Utilities.Editor
  {
@@ -45,11 +45,14 @@
              {
                  var buildGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
 
- #if UNITY_5_6_OR_NEWER
+#if UNITY_2022_3_OR_NEWER
+                 NamedBuildTarget namedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(buildGroup);
+                 var backend = PlayerSettings.GetScriptingBackend(namedBuildTarget);
+#elif UNITY_5_6_OR_NEWER
                  var backend = PlayerSettings.GetScriptingBackend(buildGroup);
- #else
+#else
                  var backend = (ScriptingImplementation)PlayerSettings.GetPropertyInt("ScriptingBackend", buildGroup);
- #endif
+#endif
 
                  if (backend != ScriptingImplementation.Mono2x)
                  {
@@ -123,7 +126,7 @@
          {
              var importer = (PluginImporter)AssetImporter.GetAtPath(assemblyFilePath);
 
- #if UNITY_5_6_OR_NEWER
+#if UNITY_5_6_OR_NEWER
              if (importer.GetCompatibleWithAnyPlatform() != includeInBuild
                  || Platforms.Any(p => importer.GetCompatibleWithPlatform(p) != includeInBuild)
                  || (includeInBuild && importer.GetExcludeEditorFromAnyPlatform() != !includeInEditor || importer.GetCompatibleWithEditor()))
@@ -143,7 +146,7 @@
 
                  importer.SaveAndReimport();
              }
- #else
+#else
              if (importer.GetCompatibleWithAnyPlatform() != includeInBuild
                  || Platforms.Any(p => importer.GetCompatibleWithPlatform(p) != includeInBuild)
                  || importer.GetCompatibleWithEditor() != includeInEditor)
@@ -154,7 +157,7 @@
 
                  importer.SaveAndReimport();
              }
- #endif
+#endif
          }
      }
 
@@ -206,5 +209,5 @@
      }
  }
 
- #endif
- #endif
+#endif
+#endif

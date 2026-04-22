@@ -1,10 +1,13 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using UdonSharp.Compiler.Emit;
 using UdonSharp.Compiler.Symbols;
+using UdonSharp.Compiler.Udon;
 using UdonSharp.Core;
+using UdonSharp.Localization;
 
 namespace UdonSharp.Compiler.Binder
 {
@@ -15,14 +18,14 @@ namespace UdonSharp.Compiler.Binder
         {
         }
 
-        public static BoundAccessExpression BindFieldAccess(SyntaxNode node, FieldSymbol fieldSymbol, BoundExpression sourceExpression)
+        public static BoundAccessExpression BindFieldAccess(AbstractPhaseContext context, SyntaxNode node, FieldSymbol fieldSymbol, BoundExpression sourceExpression)
         {
             if (fieldSymbol.IsConst)
                 return new BoundConstantExpression(fieldSymbol.RoslynSymbol.ConstantValue, fieldSymbol.Type);
             
             if (fieldSymbol is ExternFieldSymbol externField)
             {
-                return new BoundExternFieldAccessExpression(node, externField, sourceExpression);
+                return new BoundExternFieldAccessExpression(node, context, externField, sourceExpression);
             }
 
             if (fieldSymbol is UdonSharpBehaviourFieldSymbol udonSharpBehaviourFieldSymbol)
@@ -38,10 +41,14 @@ namespace UdonSharp.Compiler.Binder
 
             public override TypeSymbol ValueType => Field.Type;
 
-            public BoundExternFieldAccessExpression(SyntaxNode node, ExternFieldSymbol field, BoundExpression sourceExpression) 
+            public BoundExternFieldAccessExpression(SyntaxNode node, AbstractPhaseContext context, ExternFieldSymbol field,
+                BoundExpression sourceExpression) 
                 : base(node, sourceExpression)
             {
-                Field = field;
+                // This is access, so check for get only
+                // Passing originalSymbol.RoslynSymbol to synthesized fields to inherit attributes (static, const, etc.)
+                Field = SetupExternAccessor(node, context, field, sourceExpression, CompilerUdonInterface.FieldAccessorType.Get,
+                    (candidate) => new ExternSynthesizedFieldSymbol(field.RoslynSymbol, context, field.Name, candidate, field.Type));
             }
 
             private Value.CowValue GetInstanceValue(EmitContext context)

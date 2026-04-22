@@ -420,6 +420,31 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI
             typeString = typeString.Replace("VRCSDK3PlatformScreenUpdateData", "ScreenUpdateData");
             typeString = typeString.Replace("TextstringBuilder", "StringBuilder");
             typeString = typeString.Replace("TextRegularExpressionsRegex", "Regex");
+            typeString = typeString.Replace("SourceVRCDroneApi", "Drone");
+            typeString = typeString.Replace("SDK3NetworkStats", "NetworkStats");
+            typeString = typeString.Replace("SDK3UdonNetworkCalling", "NetworkCalling");
+            typeString = typeString.Replace("InterfacesNetworkEventTarget", "NetworkEventTarget");
+
+            typeString = typeString.Replace("VRCSDK3DynamicsPhysBoneComponentsVRCPhysBone", "PhysBone");
+            typeString = typeString.Replace("VRCDynamicsPhysBoneGrabbedInfo", "PhysBoneGrabbedInfo");
+            typeString = typeString.Replace("VRCDynamicsPhysBonePosedInfo", "PhysBonePosedInfo");
+            typeString = typeString.Replace("VRCDynamicsPhysBoneReleasedInfo", "PhysBoneReleasedInfo");
+            typeString = typeString.Replace("VRCDynamicsPhysBoneUnPosedInfo", "PhysBoneUnPosedInfo");
+
+            typeString = typeString.Replace("VRCSDK3DynamicsContactComponentsVRCContactSender", "ContactSender");
+            typeString = typeString.Replace("VRCDynamicsContactSenderProxy", "ContactSenderProxy");
+            typeString = typeString.Replace("VRCSDK3DynamicsContactComponentsVRCContactReceiver", "ContactReceiver");
+            typeString = typeString.Replace("VRCDynamicsContactEnterInfo", "ContactEnterInfo");
+            typeString = typeString.Replace("VRCDynamicsContactExitInfo", "ContactExitInfo");
+
+            typeString = typeString.Replace("VRCSDK3DynamicsConstraintComponentsVRCAimConstraint", "AimConstraint");
+            typeString = typeString.Replace("VRCSDK3DynamicsConstraintComponentsVRCLookAtConstraint", "LookAtConstraint");
+            typeString = typeString.Replace("VRCSDK3DynamicsConstraintComponentsVRCParentConstraint", "ParentConstraint");
+            typeString = typeString.Replace("VRCSDK3DynamicsConstraintComponentsVRCPositionConstraint", "PositionConstraint");
+            typeString = typeString.Replace("VRCSDK3DynamicsConstraintComponentsVRCRotationConstraint", "RotationConstraint");
+            typeString = typeString.Replace("VRCSDK3DynamicsConstraintComponentsVRCScaleConstraint", "ScaleConstraint");
+            typeString = typeString.Replace("VRCDynamicsVRCConstraintSource", "ConstraintSource");
+            typeString = typeString.Replace("VRCDynamicsVRCConstraintSourceKeyableList", "ConstraintSourceKeyableList");
             
             // ReSharper disable once StringLiteralTypo
             if (typeString.Replace("ector", "").Contains("ctor")) //Handle "Vector/vector"
@@ -674,6 +699,10 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI
 
         public static string SanitizeVariableName(this string result)
         {
+            if (string.IsNullOrEmpty(result))
+            {
+                return result;
+            }
             result = result.Replace(" ", "");
             result = result.Replace("[]", "Array");
             if (char.IsNumber(result[0]))

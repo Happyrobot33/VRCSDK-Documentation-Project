@@ -14,7 +14,9 @@ public class FallbackMaterialCache
         }
         else
         {
+#pragma warning disable RS0030 // Banned APIs
             Debug.LogError($"Attempted to add a duplicate fallback material '{fallbackMaterial.name}' for original material '{material.name}'.");
+#pragma warning restore RS0030
         }
     }
 

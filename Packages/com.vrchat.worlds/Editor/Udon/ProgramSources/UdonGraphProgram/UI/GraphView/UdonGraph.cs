@@ -642,7 +642,7 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
         public bool IsDuplicateEventNode(string fullName, string uid = "")
         {
             if (fullName.StartsWith("Event_") &&
-                fullName != "Event_Custom"
+                !fullName.StartsWith("Event_Custom")
             )
             {
                 if (this.Query(fullName).ToList().Count <= 0) return false;
@@ -809,17 +809,23 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
 
                 for (int j = 0; j < newNodeData.nodeUIDs.Length; j++)
                 {
-                    if (uidMap.ContainsKey(nodeData.nodeUIDs[j].Split('|')[0]))
+                    var prevSplit = nodeData.nodeUIDs[j].Split('|');
+                    if (uidMap.ContainsKey(prevSplit[0]))
                     {
-                        newNodeData.nodeUIDs[j] = uidMap[nodeData.nodeUIDs[j].Split('|')[0]];
+                        newNodeData.nodeUIDs[j] = uidMap[prevSplit[0]];
+                        if (prevSplit.Length > 1)
+                            newNodeData.nodeUIDs[j] += $"|{prevSplit[1]}";
                     }
                 }
 
                 for (int j = 0; j < newNodeData.flowUIDs.Length; j++)
                 {
-                    if (uidMap.ContainsKey(nodeData.flowUIDs[j].Split('|')[0]))
+                    var prevSplit = nodeData.flowUIDs[j].Split('|');
+                    if (uidMap.ContainsKey(prevSplit[0]))
                     {
-                        newNodeData.flowUIDs[j] = uidMap[nodeData.flowUIDs[j].Split('|')[0]];
+                        newNodeData.flowUIDs[j] = uidMap[prevSplit[0]];
+                        if (prevSplit.Length > 1)
+                            newNodeData.flowUIDs[j] += $"|{prevSplit[1]}";
                     }
                 }
 
@@ -1096,6 +1102,7 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                     }
                     catch (Exception e)
                     {
+                        Debug.LogException(e);
                         Debug.LogError($"Error Loading Node {nodeData.fullName} : {e.Message}");
                         nodesToDelete.Add(nodeData);
                     }

@@ -118,7 +118,8 @@ namespace VRC.SDK3.ClientSim
                 }
             }
             #if VRC_ENABLE_PLAYER_PERSISTENCE
-            ClientSimMain.GetInstance().GetEventDispatcher().SendEvent(new ClientSimOnPlayerObjectUpdatedEvent{Data = this});
+            if (ClientSimMain.TryGetInstance(out var instance))
+                instance.GetEventDispatcher().SendEvent(new ClientSimOnPlayerObjectUpdatedEvent{Data = this});
             #endif
             return _data;
         }
@@ -181,7 +182,8 @@ namespace VRC.SDK3.ClientSim
             }
             
 #if VRC_ENABLE_PLAYER_PERSISTENCE
-            ClientSimMain.GetInstance().GetEventDispatcher().SendEvent(new ClientSimOnPlayerObjectUpdatedEvent{Data = this});
+            if (ClientSimMain.TryGetInstance(out var instance))
+                instance.GetEventDispatcher().SendEvent(new ClientSimOnPlayerObjectUpdatedEvent{Data = this});
 #endif
         }
         

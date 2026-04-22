@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 
 namespace VRC.SDK3.Editor
 {
@@ -11,6 +13,7 @@ namespace VRC.SDK3.Editor
         public const string WORLD_CAPACITY_KEY = SESSION_STATE_PREFIX + ".World.Capacity";
         public const string WORLD_RECOMMENDED_CAPACITY_KEY = SESSION_STATE_PREFIX + ".World.RecommendedCapacity";
         public const string WORLD_THUMBPATH_KEY = SESSION_STATE_PREFIX + ".World.ThumbPath";
+        public const string WORLD_SELECTED_PLATFORMS_KEY = SESSION_STATE_PREFIX + ".World.Platforms";
 
         public static string WorldName
         {
@@ -46,6 +49,21 @@ namespace VRC.SDK3.Editor
         {
             get => SessionState.GetString(WORLD_THUMBPATH_KEY, "");
             set => SessionState.SetString(WORLD_THUMBPATH_KEY, value);
+        }
+
+        public static List<BuildTarget> WorldPlatforms
+        {
+            get
+            {
+                var loaded = SessionState.GetString(WORLD_SELECTED_PLATFORMS_KEY, string.Empty);
+                if (string.IsNullOrWhiteSpace(loaded)) return new List<BuildTarget>();
+                return loaded.Split('|').Select(s => (BuildTarget) int.Parse(s)).ToList();
+            }
+            set
+            {
+                var serialized = string.Join("|", value.Select(t => ((int) t).ToString()));
+                SessionState.SetString(WORLD_SELECTED_PLATFORMS_KEY, serialized);
+            }
         }
 
         public static void Clear()

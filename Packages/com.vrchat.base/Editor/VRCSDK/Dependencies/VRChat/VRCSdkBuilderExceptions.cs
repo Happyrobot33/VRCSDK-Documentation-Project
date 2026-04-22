@@ -73,4 +73,24 @@ namespace VRC.SDKBase.Editor
         {
         }
     }
+    
+    /// <summary>
+    /// This bundle has already been uploaded
+    /// </summary>
+    public class BundleExistsException : Exception
+    {
+        public BundleExistsException(string message) : base(message)
+        {
+        }
+    }
+
+    /// <summary>
+    /// The user has not confirmed copyright ownership
+    /// </summary>
+    public class CopyrightOwnershipAgreementException : Exception
+    {
+        public CopyrightOwnershipAgreementException(string message) : base(message)
+        {
+        }
+    }
 }

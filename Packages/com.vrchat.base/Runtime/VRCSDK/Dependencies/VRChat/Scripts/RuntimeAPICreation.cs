@@ -49,7 +49,7 @@ namespace VRCSDK2
             if (!Application.isEditor || !Application.isPlaying)
                 return;
 
-            PipelineSaver ps = GameObject.FindObjectOfType<PipelineSaver>();
+            PipelineSaver ps = GameObject.FindFirstObjectByType<PipelineSaver>();
             pipelineManager = ps.gameObject.GetComponent<PipelineManager>();
 
             imageCapture = GetComponent<CameraImageCapture>();
@@ -166,7 +166,7 @@ namespace VRCSDK2
 
         protected void OnSDKPipelineComplete(string contentUrl=null)
         {
-            VRC.Core.Logger.Log("OnSDKPipelineComplete", DebugLevel.All);
+            VRC.Core.Logger.Log("OnSDKPipelineComplete", API.LOG_CATEGORY);
             isUploading = false;
             pipelineManager.completedSDKPipeline = true;
             ClearUploadRetryState();
@@ -179,7 +179,7 @@ namespace VRCSDK2
 
         protected void OnSDKPipelineError(string error, string details)
         {
-            VRC.Core.Logger.Log("OnSDKPipelineError: " + error + " - " + details, DebugLevel.All);
+            VRC.Core.Logger.Log("OnSDKPipelineError: " + error + " - " + details, API.LOG_CATEGORY);
             isUploading = false;
             pipelineManager.completedSDKPipeline = true;
             UnityEditor.EditorApplication.isPaused = false;
@@ -232,7 +232,7 @@ namespace VRCSDK2
         {
             if (string.IsNullOrEmpty(filename))
                 yield break;
-            VRC.Core.Logger.Log("Uploading " + fileType + "(" + filename + ") ...", DebugLevel.All);
+            VRC.Core.Logger.Log("Uploading " + fileType + "(" + filename + ") ...", API.LOG_CATEGORY);
             SetUploadProgress("Uploading " + fileType + "...", "", 0.0f);
 
             string fileId = GetUploadRetryStateValue(filename);
@@ -246,11 +246,11 @@ namespace VRCSDK2
                 delegate (ApiFile apiFile, string message)
                 {
                     newFileUrl = apiFile.GetFileURL();
-                    if (VRC.Core.Logger.DebugLevelIsEnabled(DebugLevel.API))
+                    if (VRC.Core.Logger.CategoryIsEnabled(API.LOG_CATEGORY))
                         VRC.Core.Logger.Log(fileType + " upload succeeded: " + message + " (" + filename +
-                              ") => " + apiFile.ToString(), DebugLevel.API);
+                              ") => " + apiFile.ToString(), API.LOG_CATEGORY);
                     else
-                        VRC.Core.Logger.Log(fileType + " upload succeeded ", DebugLevel.Always);
+                        VRC.Core.Logger.Log(fileType + " upload succeeded ");
                 },
                 delegate (ApiFile apiFile, string error)
                 {

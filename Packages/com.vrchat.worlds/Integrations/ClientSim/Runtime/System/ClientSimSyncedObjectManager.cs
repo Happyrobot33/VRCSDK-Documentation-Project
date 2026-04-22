@@ -60,12 +60,10 @@ namespace VRC.SDK3.ClientSim
 
         public void InitializeObjectSync(VRCObjectSync sync)
         {
-            // Only allow one sync helper per object.
-            if (sync.TryGetComponent(out ClientSimPositionSyncedHelperBase Synchelper))
+            // Only allow one object sync helper per object.
+            if (sync.TryGetComponent(out ClientSimObjectSyncHelper syncHelper))
             {
-                if(Synchelper is ClientSimObjectSyncHelper)
-                    ((ClientSimObjectSyncHelper)Synchelper).Initialize(sync,this);
-                // else other object sync helper types initialize object sync
+                syncHelper.Initialize(sync,this);
             }
             else
             {

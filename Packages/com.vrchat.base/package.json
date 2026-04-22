@@ -1,7 +1,7 @@
 {
   "name": "com.vrchat.base",
   "displayName": "VRChat SDK - Base",
-  "version": "3.7.5",
+  "version": "3.10.3",
   "unity": "2022.3",
   "description": "Base for VRChat SDK",
   "author": {

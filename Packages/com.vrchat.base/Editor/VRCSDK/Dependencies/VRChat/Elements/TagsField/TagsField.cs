@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,32 +10,37 @@ namespace VRC.SDKBase.Editor.Elements
 {
     public class TagsField: VisualElement
     {
-
-        private VisualElement _tagsContainer;
-        private readonly VisualElement _addTagBlock;
-        private readonly TextField _addTagField;
         private Label _tagsLabel;
+        private TagsFieldButton _tagsButton;
+        private Modal _tagsModal;
+        private VisualElement _tagsRow;
+        private Button _addTagButton;
+        private VRCTextField _tagInput;
 
-        private IList<string> _tags;
+        private List<string> _tags;
         public IList<string> tags
         {
             get => _tags;
             set
             {
+                var copied = new List<string>(value);
                 if (TagFilter != null)
                 {
-                    value = TagFilter(value);
+                    copied = TagFilter(copied);
                 }
-                _tags = value;
-                UpdateTags(ref _tagsContainer);
+                _tags = copied;
+                _tagsButton?.SetTagCount(_tags.Count);
+                UpdateTags(ref _tagsRow);
+                _tagsModal?.SetTitle($"Manage Your Tags ({copied.Count})");
             }
         }
 
         public EventHandler<string> OnAddTag;
         public EventHandler<string> OnRemoveTag;
         public Func<bool> CanAddTag;
-        public Func<string, string> FormatTagDisplay;
-        public Func<IList<string>, IList<string>> TagFilter;
+        public Func<string, bool> IsProtectedTag = input => false;
+        public Func<string, string> FormatTagDisplay = input => input; 
+        public Func<List<string>, List<string>> TagFilter;
         public int TagLimit = 5;
 
         public new class UxmlFactory : UxmlFactory<TagsField, UxmlTraits> {}
@@ -69,14 +75,38 @@ namespace VRC.SDKBase.Editor.Elements
             Resources.Load<VisualTreeAsset>("TagsField").CloneTree(this);
             styleSheets.Add(Resources.Load<StyleSheet>("TagsFieldStyles"));
             
-            _tagsContainer = this.Q(null, "tags-row");
-            _addTagBlock = this.Q("add-tag-block");
-            _addTagField = this.Q<TextField>("tag-input");
-            _addTagField.RegisterCallback<KeyDownEvent>(AddTagKeyDown);
             _tagsLabel = this.Q<Label>("tags-label");
-            this.Q<Button>("add-tag-button").clicked += AddTagConfirm;
-            this.Q<Button>("cancel-add-tag-button").clicked += AddTagCancel;
+            _tagsButton = this.Q<TagsFieldButton>();
+            _tagsRow = this.Q("tags-row");
+            _tagsModal = this.Q<Modal>("tags-modal");
+            _tagsButton.clicked += _tagsModal.Open;
+            _tagsModal.styleSheets.Add(Resources.Load<StyleSheet>("TagsFieldStyles"));
+
+            _tagInput = _tagsModal.Q<VRCTextField>("tag-add-field");
+            _tagInput.RegisterCallback<KeyDownEvent>(e =>
+            {
+                if (e.keyCode != KeyCode.Return) return;
+                AddTag();
+            });
+
+            // Comma is a valid input event, so adding a tag and clearing input on KeyDown causes internal errors
+            // so we do it on key up and trim the end
+            _tagInput.RegisterCallback<KeyUpEvent>(e =>
+            {
+                if (e.keyCode != KeyCode.Comma) return;
+                _tagInput.value = _tagInput.value[..^1];
+                AddTag();
+            });
+            _addTagButton = _tagsModal.Q<Button>("tag-add-button");
+            _addTagButton.clicked += AddTag;
+            
             tags = new List<string>();
+            
+            // Anchor the modal to the content-info block
+            RegisterCallback<AttachToPanelEvent>(e =>
+            {
+                _tagsModal.SetAnchor(e.destinationPanel.visualTree.Q("content-info"));
+            });
         }
 
         public TagsField(List<string> tags) : this()
@@ -84,91 +114,58 @@ namespace VRC.SDKBase.Editor.Elements
             this.tags = tags;
         }
 
-        private Button CreateAddTagButton()
+        /// <summary>
+        /// Stops the editing of the tags list, closes the modal and clears the input field
+        /// </summary>
+        [PublicAPI]
+        public void StopEditing()
         {
-            var tagElement = new Button();
-            tagElement.AddToClassList("add-tag-button");
-            tagElement.text = "Add Tag";
-            return tagElement;
+            _tagInput.value = string.Empty;
+            _tagsModal.Close();
         }
-        
-        private VisualElement CreateTag(string tag)
+
+        private void AddTag()
         {
-            var tagElement = new VisualElement();
-            tagElement.AddToClassList("tag");
-            var tagText = tag;
-            if (FormatTagDisplay != null)
-            {
-                tagText = FormatTagDisplay(tagText);
-            }
-            var tagLabel = new Label(tagText);
-            tagLabel.AddToClassList("tag-label");
-            tagElement.Add(tagLabel);
-            var tagRemoveButton = new Button(() => OnRemoveTag?.Invoke(this, tag));
-            tagRemoveButton.AddToClassList("tag-remove-button");
-            tagElement.Add(tagRemoveButton);
-            return tagElement;
-        }
-        
-        private void UpdateTags(ref VisualElement tagContainer)
-        {
-            if (tagContainer == null)
+            if (tags.Count >= TagLimit)
             {
                 return;
             }
-            tagContainer.Clear();
+            
+            if (CanAddTag != null && !CanAddTag())
+            {
+                return;
+            }
+
+            if (_tagInput.IsPlaceholder()) return;
+            
+            if (_tagInput.value.Length == 0) return;
+            
+            OnAddTag?.Invoke(this, _tagInput.text);
+            _tagInput.value = string.Empty;
+        }
+
+        private void UpdateTags(ref VisualElement container)
+        {
+            container.Clear();
             foreach (var tag in tags)
             {
-                tagContainer.Add(CreateTag(tag));
-            }
-
-            if ((!CanAddTag?.Invoke() ?? true) && tags.Count >= TagLimit)
-            {
-                return;
-            }
-            var addButton = CreateAddTagButton();
-            addButton.clicked += AddTagClicked;
-            tagContainer.Add(addButton);
-        }
-        
-        private void AddTagClicked()
-        {
-            if (_addTagBlock == null) return;
-            if (!enabledSelf) return;
-            _addTagBlock.RemoveFromClassList("d-none");
-            _addTagField.Q("unity-text-input").Focus();
-        }
-
-        private void AddTagConfirm()
-        {
-            if (!enabledSelf) return;
-            if (_addTagBlock == null || _addTagField == null) return;
-            if (string.IsNullOrWhiteSpace(_addTagField.value)) return;
-            OnAddTag?.Invoke(this, _addTagField.value);
-            _addTagField.value = "";
-            _addTagBlock.AddToClassList("d-none");
-        }
-        
-        private void AddTagCancel()
-        {
-            if (!enabledSelf) return;
-            if (_addTagBlock == null || _addTagField == null) return;
-            _addTagField.value = "";
-            _addTagBlock.AddToClassList("d-none");
-        }
-
-        private void AddTagKeyDown(KeyDownEvent evt)
-        {
-            if (!enabledSelf) return;
-            if (evt.keyCode == KeyCode.Return)
-            {
-                AddTagConfirm();
-                return;
-            }
-
-            if (evt.keyCode == KeyCode.Escape)
-            {
-                AddTagCancel();
+                var tagElement = new VisualElement();
+                tagElement.AddToClassList("tag");
+                tagElement.AddToClassList("row");
+                tagElement.AddToClassList("mr-2");
+                tagElement.AddToClassList("mb-2");
+                
+                tagElement.Add(new Label(FormatTagDisplay(tag)));
+                if (!IsProtectedTag(tag))
+                {
+                    var removeButton = new Button(() =>
+                    {
+                        OnRemoveTag?.Invoke(this, tag);
+                    });
+                    removeButton.AddToClassList("tag-remove-button");
+                    tagElement.Add(removeButton);
+                }
+                container.Add(tagElement);
             }
         }
     }

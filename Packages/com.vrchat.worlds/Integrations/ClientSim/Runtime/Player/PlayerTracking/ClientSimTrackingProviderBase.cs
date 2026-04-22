@@ -94,7 +94,7 @@ namespace VRC.SDK3.ClientSim
             if (settings.spawnPlayer)
             {
                 // Destroy other audio listeners
-                foreach (var listener in FindObjectsOfType<AudioListener>())
+                foreach (var listener in FindObjectsByType<AudioListener>(FindObjectsSortMode.None))
                 {
                     if (listener.transform == playerAudioListener)
                     {
@@ -105,7 +105,7 @@ namespace VRC.SDK3.ClientSim
                 }
 
                 // Disable all cameras that do not render to a render texture.
-                foreach (var worldCamera in FindObjectsOfType<Camera>())
+                foreach (var worldCamera in FindObjectsByType<Camera>(FindObjectsSortMode.None))
                 {
                     if (worldCamera == playerCamera)
                     {

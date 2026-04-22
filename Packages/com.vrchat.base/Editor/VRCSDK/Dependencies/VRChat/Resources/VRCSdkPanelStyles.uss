@@ -131,7 +131,7 @@
 }
 
 .mr-3 {
-    margin-right: 8px;
+    margin-right: 14px;
 }
 
 .mr-4 {
@@ -307,6 +307,18 @@
     justify-content: space-between;
 }
 
+.justify-content-end {
+    justify-content: flex-end;
+}
+
+.align-self-stretch {
+    align-self: stretch;
+}
+
+.align-self-start {
+    align-self: flex-start;
+}
+
 .w-100 {
     width: 100%;
 }
@@ -321,6 +333,50 @@
 
 .flex-1 {
     flex: 1;
+}
+
+.flex-2 {
+    flex: 2;
+}
+
+.flex-3 {
+    flex: 3;
+}
+
+.flex-4 {
+    flex: 4;
+}
+
+.flex-5 {
+    flex: 5;
+}
+
+.flex-6 {
+    flex: 6;
+}
+
+.flex-7 {
+    flex: 7;
+}
+
+.flex-8 {
+    flex: 8;
+}
+
+.flex-9 {
+    flex: 9;
+}
+
+.flex-10 {
+    flex: 10;
+}
+
+.flex-11 {
+    flex: 11;
+}
+
+.flex-12 {
+    flex: 12;
 }
 
 .visible {
@@ -419,6 +475,14 @@
 
 .text-center {
     -unity-text-align: middle-center;
+}
+
+.text-left {
+    -unity-text-align: middle-left;
+}
+
+.text-right {
+    -unity-text-align: middle-right;
 }
 
 .text-highlight {
@@ -922,6 +986,20 @@
     border-right-color: #DADADA;
 }
 
+VRCTextField > Label {
+    margin-bottom: 4px;
+    -unity-font-style: bold;
+    font-size: 12px;
+}
+
+.light .options-text-color {
+    color: #575757;
+}
+
+.dark .options-text-color {
+    color: #9C9C9C;
+}
+
 .unity-text-field__placeholder > .unity-base-text-field__input {
     color: #969696
 }
@@ -932,6 +1010,14 @@
 .m-unity-field {
     margin-left: 3px;
     margin-right: 3px;
+}
+
+.mr-unity-field {
+    margin-right: 3px;
+}
+
+.ml-unity-field {
+    margin-left: 3px;
 }
 
 .cursor-link {

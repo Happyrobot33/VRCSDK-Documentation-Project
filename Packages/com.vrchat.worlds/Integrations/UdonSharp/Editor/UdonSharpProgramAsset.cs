@@ -19,6 +19,7 @@ using VRC.Udon.Editor.ProgramSources.Attributes;
 using VRC.Udon.ProgramSources;
 using VRC.Udon.Serialization.OdinSerializer;
 using Debug = UnityEngine.Debug;
+using VRC.SDK3.UdonNetworkCalling;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -83,6 +84,8 @@ namespace UdonSharp
                 }
             }
         }
+
+        private NetworkCallingEntrypointMetadata[] networkCallingMetadata;
 
         [NonSerialized, OdinSerialize]
         public Dictionary<string, FieldDefinition> fieldDefinitions;
@@ -547,13 +550,18 @@ namespace UdonSharp
 
         public void ApplyProgram()
         {
-            GetSerializedProgramAssetWithoutRefresh().StoreProgram(program);
+            GetSerializedProgramAssetWithoutRefresh().StoreProgram(program, networkCallingMetadata);
             EditorUtility.SetDirty(this);
         }
 
         public void SetUdonAssembly(string assembly)
         {
             udonAssembly = assembly;
+        }
+
+        public void SetNetworkCallingMetadata(NetworkCallingEntrypointMetadata[] metadata)
+        {
+            networkCallingMetadata = metadata;
         }
         
         public IUdonProgram GetRealProgram()

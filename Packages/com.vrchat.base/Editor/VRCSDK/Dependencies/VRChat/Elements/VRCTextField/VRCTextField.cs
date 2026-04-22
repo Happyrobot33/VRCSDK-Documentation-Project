@@ -11,8 +11,9 @@ namespace VRC.SDKBase.Editor.Elements
 
         public new class UxmlTraits : TextField.UxmlTraits
         {
-            private readonly UxmlStringAttributeDescription _placeholder = new UxmlStringAttributeDescription { name = "placeholder" };
-            private readonly UxmlBoolAttributeDescription _required = new UxmlBoolAttributeDescription { name = "required" };
+            private readonly UxmlStringAttributeDescription _placeholder = new() { name = "placeholder" };
+            private readonly UxmlBoolAttributeDescription _required = new() { name = "required" };
+            private readonly UxmlBoolAttributeDescription _vertical = new() { name="vertical" };
             
             public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
             {
@@ -25,13 +26,23 @@ namespace VRC.SDKBase.Editor.Elements
                 var textField = (VRCTextField) ve;
                 textField._placeholder = _placeholder.GetValueFromBag(bag, cc);
                 textField._required = _required.GetValueFromBag(bag, cc);
+                var vertical = _vertical.GetValueFromBag(bag, cc);
+                if (textField._required)
+                {
+                    textField.label += "*";
+                }
+                if (vertical)
+                {
+                    textField.AddToClassList("col");
+                }
             }
         }
 
         private string _placeholder;
-        private static readonly string PlaceholderClass = TextField.ussClassName + "__placeholder";
+        private static readonly string PlaceholderClass = ussClassName + "__placeholder";
         private bool _required;
         private bool _loading;
+        private bool _vertical;
 
         public bool Loading
         {
@@ -75,6 +86,10 @@ namespace VRC.SDKBase.Editor.Elements
 
         private void ValueChanged(ChangeEvent<string> evt)
         {
+            if (IsPlaceholder() && !string.IsNullOrEmpty(evt.newValue))
+            {
+                RemoveFromClassList(PlaceholderClass);
+            }
             if (!_required) return;
             this.Q<TextInputBase>().EnableInClassList("border-red", string.IsNullOrWhiteSpace(evt.newValue));
         }
@@ -84,21 +99,20 @@ namespace VRC.SDKBase.Editor.Elements
             if (string.IsNullOrWhiteSpace(_placeholder)) return;
             if (!string.IsNullOrEmpty(text)) return;
             SetValueWithoutNotify(_placeholder);
-            AddToClassList(ussClassName + "__placeholder");
+            AddToClassList(PlaceholderClass);
         }
 
         private void FocusIn()
         {
             if (string.IsNullOrWhiteSpace(_placeholder)) return;
-            if (!this.ClassListContains(ussClassName + "__placeholder")) return;
+            if (!this.ClassListContains(PlaceholderClass)) return;
             this.value = string.Empty;
-            this.RemoveFromClassList(ussClassName + "__placeholder");
+            this.RemoveFromClassList(PlaceholderClass);
         }
         
         public bool IsPlaceholder()
         {
-            var placeholderClass = TextField.ussClassName + "__placeholder";
-            return ClassListContains(placeholderClass);
+            return ClassListContains(PlaceholderClass);
         }
     }
 }

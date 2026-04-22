@@ -4,7 +4,6 @@ using UnityEditor;
 using VRC.Core;
 using System.Text.RegularExpressions;
 using UnityEngine.UIElements;
-using VRC.SDKBase;
 using VRC.SDKBase.Editor;
 
 public enum TwoFactorType
@@ -21,8 +20,11 @@ public partial class VRCSdkControlPanel : EditorWindow
     static bool isInitialized = false;
     static string clientInstallPath;
     static bool signingIn = false;
+    static double latestSignInTime = -1.0d;
     static string error = null;
+
     private const string UNITY_UPGRADE_PROMPT_URL = "https://creators.vrchat.com/sdk/upgrade/unity-2022";
+    private const double LogoutCooldownAfterLogin = 0.75d;
 
     public static bool FutureProofPublishEnabled { get { return UnityEditor.EditorPrefs.GetBool("futureProofPublish", DefaultFutureProofPublishEnabled); } }
     //public static bool DefaultFutureProofPublishEnabled { get { return !SDKClientUtilities.IsInternalSDK(); } }
@@ -134,20 +136,19 @@ public partial class VRCSdkControlPanel : EditorWindow
         ClearContent();
     }
 
-    static bool OnAccountGUI()
+    void OnAccountGUI()
     {
         using (new GUILayout.HorizontalScope())
         {
             GUILayout.FlexibleSpace();
-            var newSigningIn = AccountWindowGUI();
+            AccountWindowGUI();
             GUILayout.FlexibleSpace();
-            return newSigningIn;
         }
     }
 
-    static bool AccountWindowGUI()
+    void AccountWindowGUI()
     {
-        using (new EditorGUILayout.VerticalScope(accountWindowStyle, GUILayout.Height(150), GUILayout.Width(340)))
+        using (new EditorGUILayout.VerticalScope(accountWindowStyle, GUILayout.Width(340)))
         {
             EditorGUILayout.LabelField("Account", centeredLabelStyle);
             if (signingIn)
@@ -157,7 +158,7 @@ public partial class VRCSdkControlPanel : EditorWindow
                     EditorGUILayout.LabelField("Signing in as " + username + ".");
                 }
                 OnTwoFactorAuthenticationGUI(twoFactorAuthenticationEntryType);
-                return !signingIn;
+                return;
             }
 
             if (APIUser.IsLoggedIn)
@@ -168,18 +169,28 @@ public partial class VRCSdkControlPanel : EditorWindow
                 }
 
                 OnCreatorStatusGUI();
-                
-                if (GUILayout.Button("Logout"))
-                {
-                    storedUsername = username = null;
-                    storedPassword = password = null;
 
-                    VRC.Tools.ClearCookies();
-                    APIUser.Logout();
-                    ClearContent();
-                    OnPanelLoggedOut?.Invoke(window, EventArgs.Empty);
+                // Add a space, pushing this away from the line that contained "Verify" on the previous page.
+                EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
+
+                // Disable the logout button for a short amount of time after logging in.
+                // This attempts to patch UX difficulties where users try to click "Verify" on the previous screen as
+                // 2FA automatically submits so they end up accidentally clicking Logout instead.
+                bool wasRecentLogin = latestSignInTime >= 0.0d && EditorApplication.timeSinceStartup < latestSignInTime + LogoutCooldownAfterLogin;
+                using (new EditorGUI.DisabledScope(wasRecentLogin))
+                {
+                    if (GUILayout.Button("Logout"))
+                    {
+                        storedUsername = username = null;
+                        storedPassword = password = null;
+
+                        VRC.Tools.ClearCookies();
+                        APIUser.Logout();
+                        ClearContent();
+                        OnPanelLoggedOut?.Invoke(window, EventArgs.Empty);
+                    }
                 }
-                return !signingIn;
+                return;
             }
             
             InitAccount();
@@ -190,10 +201,32 @@ public partial class VRCSdkControlPanel : EditorWindow
             if (serverEnvironment != newEnv)
                 serverEnvironment = newEnv;
 
+            const string controlNameUser = "input_user";
+            const string controlNamePass = "input_pass";
+
+            GUI.SetNextControlName(controlNameUser);
             username = EditorGUILayout.TextField("Username/Email", username);
+            GUI.SetNextControlName(controlNamePass);
             password = EditorGUILayout.PasswordField("Password", password);
 
-            if (GUILayout.Button("Sign In"))
+            bool attemptKeyboardSignIn = false;
+            if (
+                Event.current != null &&
+                Event.current.type == EventType.KeyUp &&
+                (Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter))
+            {
+                switch (GUI.GetNameOfFocusedControl())
+                {
+                    case controlNameUser:
+                        GUI.FocusControl(controlNamePass);
+                        break;
+                    case controlNamePass:
+                        attemptKeyboardSignIn = true;
+                        break;
+                }
+            }
+
+            if (GUILayout.Button("Sign In") || attemptKeyboardSignIn)
             {
                 SignIn(true);
             }
@@ -202,8 +235,6 @@ public partial class VRCSdkControlPanel : EditorWindow
             {
                 Application.OpenURL("https://vrchat.com/register");
             }
-            
-            return !signingIn;
         }
     }
 
@@ -214,6 +245,8 @@ public partial class VRCSdkControlPanel : EditorWindow
         //if (SDKClientUtilities.IsInternalSDK())
         //    EditorGUILayout.LabelField("Developer Status: ", APIUser.CurrentUser.developerType.ToString());
 
+        EditorGUILayout.Space();
+
         EditorGUILayout.BeginHorizontal();
 
         EditorGUILayout.BeginVertical();
@@ -221,7 +254,7 @@ public partial class VRCSdkControlPanel : EditorWindow
         EditorGUILayout.LabelField("Avatar Creator Status: ", APIUser.CurrentUser.canPublishAvatars ? "Allowed to publish avatars" : "Not yet allowed to publish avatars");
         EditorGUILayout.EndVertical();
 
-        if (!APIUser.CurrentUser.canPublishAllContent)
+        if (!APIUser.CurrentUser.canPublishWorldsAndAvatars)
         {
             if (GUILayout.Button("More Info..."))
             {
@@ -561,6 +594,7 @@ public partial class VRCSdkControlPanel : EditorWindow
                 else
                     ApiCredentials.SetHumanName(user.username);
                 signingIn = false;
+                latestSignInTime = EditorApplication.timeSinceStartup;
                 error = null;
                 storedUsername = null;
                 storedPassword = null;
@@ -568,7 +602,7 @@ public partial class VRCSdkControlPanel : EditorWindow
                 
                 OnPanelLoggedIn?.Invoke(window, user);
                 
-                if (!APIUser.CurrentUser.canPublishAllContent)
+                if (!APIUser.CurrentUser.canPublishWorldsAndAvatars)
                 {
                     if (UnityEditor.SessionState.GetString("HasShownContentPublishPermissionsDialogForUser", "") != user.id)
                     {
@@ -608,7 +642,7 @@ public partial class VRCSdkControlPanel : EditorWindow
 
 
     private static object syncObject = new object();
-    private static void SignIn(bool explicitAttempt)
+    private void SignIn(bool explicitAttempt)
     {
         lock (syncObject)
         {
@@ -629,6 +663,9 @@ public partial class VRCSdkControlPanel : EditorWindow
         InitAccount();
 
         AttemptLogin();
+
+        // Show login status immediately without needing an automatic repaint (cursor movement).
+        Repaint();
     }
 
     public static void Logout()

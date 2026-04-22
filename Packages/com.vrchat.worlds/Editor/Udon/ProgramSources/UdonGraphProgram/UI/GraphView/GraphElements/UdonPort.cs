@@ -8,6 +8,7 @@ using UnityEditor;
 using UnityEngine;
 using VRC.Udon.Graph;
 using VRC.Udon.Serialization;
+using VRC.SDK3.Network;
 
 namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
 {
@@ -70,23 +71,28 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
 
             tooltip = UdonGraphExtensions.FriendlyTypeName(portType);
 
+            // apply friendly name for custom event output parameters
+            if (direction == Direction.Output && _udonNodeData.fullName.StartsWithCached("Event_Custom"))
+            {
+                if (portType != null)
+                {
+                    string typeLabel = UdonGraphExtensions.FriendlyTypeName(portType).FriendlyNameify();
+                    SetLabelText($"Param {_nodeValueIndex + 1} ({typeLabel})");
+                }
+            }
+
             if (portType == null || direction == Direction.Output)
             {
                 return;
             }
 
-            if (TryGetValueObject(out object result, portType))
+            if (_udonNodeData.fullName.StartsWithCached("Event_Custom"))
             {
-                var field = UdonFieldFactory.CreateField(
-                    portType,
-                    result,
-                    SetNewValue
-                );
-
-                if (field != null)
-                {
-                    SetupField(field);
-                }
+                HandleFieldForCustomEvent();
+            }
+            else if (TryGetValueObject(out object result, portType))
+            {
+                MakeField(result);
             }
 
             if (_udonNodeData.fullName.StartsWithCached("Const"))
@@ -105,58 +111,115 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             UpdateLabel(connected);
         }
 
-        // Made its own method for now as we have issues auto-converting between string and char in a TextField
-        // TODO: refactor SetupField so we can do just the field.value part separately to combine with this
-        private VisualElement SetupCharField()
+        private VisualElement MakeField(object value)
         {
-            TextField field = new TextField();
-            field.AddToClassList("portField");
-            if (TryGetValueObject(out object result))
+            var field = UdonFieldFactory.CreateField(
+                portType,
+                value,
+                SetNewValue
+            );
+
+            if (field != null)
             {
-                field.value = UdonGraphExtensions.UnescapeLikeALiteral((char) result);
+                SetupField(field);
             }
 
-            field.isDelayed = true;
+            return field;
+        }
 
-            // Special handling for escaping char value
-            field.RegisterValueChangedCallback(
-                e =>
+        private void HandleFieldForCustomEvent()
+        {
+            // custom events get some extra fields
+            if (portName == "EventName")
+            {
+                TryGetValueObject(out object result, portType);
+                var field = MakeField(result);
+                SetupFieldForCustomEventName(field);
+            }
+            else if (portName == "MaxEventsPerSecond")
+            {
+                var hasParameters = _udonNodeData.fullName.StartsWithCached("Event_Custom_"); // note the trailing underscore!
+                if (!TryGetValueObject(out object result, portType) || result is not int storedMax)
                 {
-                    if (e.newValue[0] == '\\' && e.newValue.Length > 1)
-                    {
-                        SetNewValue(UdonGraphExtensions.EscapeLikeALiteral(e.newValue.Substring(0, 2)));
-                    }
-                    else
-                    {
-                        SetNewValue(e.newValue[0]);
-                    }
-                });
-            _inputField = field;
+                    storedMax = hasParameters ? 5 : 0; // allow 0 for non-parameter events to migrate legacy data
+                }
+                if (hasParameters && storedMax == 0)
+                {
+                    storedMax = 5; // default to 5 for parameter events
+                }
 
-            // Add label, shown when input is connected. Not shown by default
-            var friendlyName = UdonGraphExtensions.FriendlyTypeName(typeof(char)).FriendlyNameify();
-            var label = new Label(friendlyName);
-            _inputFieldTypeLabel = label;
+                // write back immediately to ensure default is set
+                SetNewValue(storedMax);
 
-            return _inputField;
+                var field = UdonFieldFactory.CreateField(
+                    typeof(int),
+                    storedMax,
+                    (newValue) =>
+                    {
+                        if (newValue is not int newValueInt)
+                        {
+                            newValueInt = hasParameters ? 5 : 0;
+                        }
+                        if (newValueInt < (hasParameters ? 1 : 0))
+                        {
+                            Debug.LogWarning($"Found invalid MaxEventsPerSecond value of {newValueInt}, applying default.");
+                            newValueInt = hasParameters ? 5 : 0;
+                        }
+                        else if (newValueInt > 100)
+                        {
+                            Debug.LogWarning($"Found large MaxEventsPerSecond value of {newValueInt}, clamping to 100.");
+                            newValueInt = 100;
+                        }
+                        SetNewValue(newValueInt);
+                    }
+                );
+
+                SetupField(field);
+                RemoveConnector();
+            }
+            else if (portName.EndsWith("_type"))
+            {
+                TryGetValueObject(out object result, portType);
+                result ??= typeof(string);
+                var udonType = VRCUdonSyncTypeConverter.TypeToUdonType(result as Type);
+                if (udonType == VRCUdonSyncType.NONE)
+                    udonType = VRCUdonSyncType.UdonString;
+
+                // write back immediately to ensure default is set
+                SetNewValue(VRCUdonSyncTypeConverter.UdonTypeToType(udonType));
+
+                var field = UdonFieldFactory.CreateField(
+                    typeof(VRCUdonSyncType),
+                    udonType,
+                    (newValue) =>
+                    {
+                        // Convert back to type
+                        var udonType = (VRCUdonSyncType)newValue;
+                        if (udonType == VRCUdonSyncType.NONE)
+                        {
+                            Debug.LogWarning($"Event parameter cannot have type None, defaulting to String.");
+                            udonType = VRCUdonSyncType.UdonString;
+                        }
+                        var type = VRCUdonSyncTypeConverter.UdonTypeToType(udonType);
+                        SetNewValue(type);
+
+                        // Disconnect anything from the corresponding output port, since the type changed
+                        var eventNode = (UdonNode)node;
+                        eventNode.DisconnectUdonPort(eventNode.portsOut[_nodeValueIndex - 2]);
+
+                        // Update the port to show the new type
+                        this.Reload();
+                    }
+                );
+
+                SetupField(field);
+                RemoveConnector();
+                SetLabelText($"Param {_nodeValueIndex - 1} Type");
+            }
         }
 
         private void SetupField(VisualElement field)
         {
-            // Custom Event fields need their event names sanitized after input and their connectors removed
-            if (string.Compare(_udonNodeData.fullName, "Event_Custom", StringComparison.Ordinal) == 0)
-            {
-                var tField = (TextField) field;
-                tField.RegisterValueChangedCallback(
-                    (e) =>
-                    {
-                        string newValue = e.newValue.SanitizeVariableName();
-                        tField.value = newValue;
-                        SetNewValue(newValue);
-                    });
-                RemoveConnectorAndLabel();
-            }
-
             // Add label, shown when input is connected. Not shown by default
             var friendlyName = UdonGraphExtensions.FriendlyTypeName(portType).FriendlyNameify();
             var label = new Label(friendlyName);
@@ -165,6 +228,21 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
 
             _inputField = field;
             Add(_inputField);
+        }
+
+        private void SetupFieldForCustomEventName(VisualElement field)
+        {
+            // Custom Event fields need their event names sanitized after input and their connectors removed
+            var tField = (TextField) field;
+            tField.RegisterValueChangedCallback(
+                (e) =>
+                {
+                    string newValue = e.newValue.SanitizeVariableName();
+                    tField.value = newValue;
+                    SetNewValue(newValue);
+                });
+            RemoveConnectorAndLabel();
+            field.AddToClassList("portFieldCustomEvent"); // slightly different spacing
         }
 
         private void RemoveConnectorAndLabel()
@@ -176,6 +254,14 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
         private void RemoveConnector()
         {
             this.Q("connector")?.RemoveFromHierarchy();
+        }
+
+        private void SetLabelText(string text)
+        {
+            if (this.Q(null, "connectorText") is Label label)
+            {
+                label.text = text;
+            }
         }
 
 #pragma warning disable 0649 // variable never assigned

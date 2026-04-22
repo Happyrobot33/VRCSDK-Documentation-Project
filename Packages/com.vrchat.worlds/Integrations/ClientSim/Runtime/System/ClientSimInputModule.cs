@@ -23,7 +23,7 @@ namespace VRC.SDK3.ClientSim
         {
             // Go through and Disable all other event systems in the scene.
             EventSystem thisEventSystem = GetComponent<EventSystem>();
-            EventSystem[] systems = FindObjectsOfType<EventSystem>();
+            EventSystem[] systems = FindObjectsByType<EventSystem>(FindObjectsSortMode.None);
             foreach (EventSystem system in systems)
             {
                 if (system != thisEventSystem)

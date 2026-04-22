@@ -31,7 +31,8 @@ namespace VRC.SDK3.ClientSim
             DestroyEditorOnly(GetSettings());
             
 #if VRC_ENABLE_PLAYER_PERSISTENCE
-            ClientSimMain.GetInstance().EnablePlayerObjects();
+            if (ClientSimMain.TryGetInstance(out var instance))
+                instance.EnablePlayerObjects();
 #endif
         }
 

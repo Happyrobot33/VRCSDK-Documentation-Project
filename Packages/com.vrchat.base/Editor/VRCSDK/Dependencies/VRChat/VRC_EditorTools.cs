@@ -10,7 +10,10 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using UnityEngine.Rendering;
 #if !VRC_CLIENT
+using VRC.Core;
 using VRC.SDKBase.Editor.Api;
+#else
+using ZLinq;
 #endif
 using File = UnityEngine.Windows.File;
 using Object = UnityEngine.Object;
@@ -468,7 +471,16 @@ namespace VRC.SDKBase
 #if !VRC_CLIENT
         internal static string CropImage(string sourcePath, float width, float height, bool centerCrop = true, bool forceLinear = false, bool forceGamma = false)
         {
-            var bytes = File.ReadAllBytes(sourcePath);
+            // read all bytes from the image file without blocking access
+            var nonBlockingFileHandle = System.IO.File.Open(sourcePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            var bytes = new byte[nonBlockingFileHandle.Length];
+            var bytesRead = nonBlockingFileHandle.Read(bytes, 0, (int)nonBlockingFileHandle.Length);
+            if (bytesRead != nonBlockingFileHandle.Length)
+            {
+                Core.Logger.LogError($"Failed to read all bytes from {sourcePath}");
+                return null;
+            }
+            nonBlockingFileHandle.Close();
             var tex = new Texture2D(2, 2)
             {
                 wrapMode = TextureWrapMode.Clamp
@@ -495,6 +507,7 @@ namespace VRC.SDKBase
             cropped.Apply();
             RenderTexture.active = null;
             RenderTexture.ReleaseTemporary(rt);
+            Object.DestroyImmediate(blitMat);
             return SaveTemporaryTexture("cropped", cropped);
         }
 
@@ -549,20 +562,23 @@ namespace VRC.SDKBase
             }
             var camera = customCamera != null ? customCamera : CreateThumbnailCaptureCamera(rt, useFlatColor, clearColor, usePostProcessing);
             camera.Render();
-            var req = AsyncGPUReadback.Request(rt);
-            AsyncGPUReadback.WaitAllRequests();
-            var data = req.GetData<Color32>();
-            var tex = new Texture2D((int) width, (int) height, TextureFormat.RGBA32, 0, true);
-            // convert to proper color-space
-            tex.SetPixels32(
-                data.ToArray().Select(p => new Color32(
-                    (byte) Mathf.Clamp(Mathf.Pow(p.r/255f, 1.0f/2.2f) * 255, 0, 255), 
-                    (byte) Mathf.Clamp(Mathf.Pow(p.g/255f, 1.0f/2.2f) * 255, 0, 255), 
-                    (byte) Mathf.Clamp(Mathf.Pow(p.b/255f, 1.0f/2.2f) * 255, 0, 255), 
-                    p.a
-                )).ToArray()
-            );
-            tex.Apply(false);
+            
+            var blitShader = Resources.Load<Shader>("CropShader");
+            var blitMat = new Material(blitShader);
+            blitMat.SetFloat("_TargetWidth", width);
+            blitMat.SetFloat("_TargetHeight", height);
+            blitMat.SetInt("_CenterCrop", 1);
+            var buffer = RenderTexture.GetTemporary((int)width, (int)height);
+            
+            Graphics.Blit(rt, buffer, blitMat);
+            RenderTexture.active = buffer;
+            var tex = new Texture2D((int)width, (int)height);
+            tex.ReadPixels(new Rect(0, 0, (int)width, (int)height), 0, 0);
+            tex.Apply();
+            RenderTexture.active = null;
+            RenderTexture.ReleaseTemporary(buffer);
+            Object.DestroyImmediate(blitMat);
+            
             var tempPath = SaveTemporaryTexture("captured", tex);
             if (camera != customCamera)
             {
@@ -594,6 +610,11 @@ namespace VRC.SDKBase
             return typeof(VRCSdkControlPanel).GetMethod("SetPanelUploading", BindingFlags.Instance | BindingFlags.NonPublic);
         }
 
+        internal static MethodInfo GetCheckProjectSetupMethod()
+        {
+            return typeof(VRCSdkControlPanel).GetMethod("CheckProjectSetup", BindingFlags.Instance | BindingFlags.NonPublic);
+        }
+
         internal static void ToggleSdkTabsEnabled(VRCSdkControlPanel panel, bool value)
         {
             var tabsProp =
@@ -601,10 +622,118 @@ namespace VRC.SDKBase
             tabsProp?.SetValue(panel, value);
         }
         
+        internal static bool IsBuildTargetSupported(BuildTarget target)
+        {
+            try
+            {
+                var moduleManager = Type.GetType("UnityEditor.Modules.ModuleManager,UnityEditor.dll");
+                var isPlatformSupportLoaded = moduleManager?.GetMethod("IsPlatformSupportLoaded",
+                    BindingFlags.Static | BindingFlags.NonPublic);
+                var getTargetStringFromBuildTarget = moduleManager?.GetMethod("GetTargetStringFromBuildTarget",
+                    BindingFlags.Static | BindingFlags.NonPublic);
+
+                var targetString = (string) getTargetStringFromBuildTarget?.Invoke(null, new object[] {target});
+                if (string.IsNullOrWhiteSpace(targetString))
+                {
+                    throw new Exception("Failed to get string for build target");    
+                }
+
+                return (bool) (isPlatformSupportLoaded?.Invoke(null, new object[] {targetString}) ?? false);
+            }
+            catch (Exception e)
+            {
+                Core.Logger.LogError($"Failed to check build target support for {target}, assume not installed: {e.Message}");
+                return false;
+            }
+        }
+        
+        internal static void OpenProgressWindow()
+        {
+            Progress.ShowDetails();
+        }
+        
         internal static void OpenConsoleWindow()
         {
-            Assembly.GetAssembly(typeof(EditorWindow)).GetType("UnityEditor.ConsoleWindow")
-                .GetMethod("ShowConsoleWindow", BindingFlags.Static | BindingFlags.Public)?.Invoke(null, new object[] { false });
+            EditorApplication.ExecuteMenuItem("Window/General/Console");
+        }
+        
+        internal static List<string> GetBuildTargetOptions()
+        {
+            var options = new List<string>
+            {
+                "Windows",
+                "Android",
+                "iOS"
+            };
+
+            return options;
+        }
+        
+        internal static List<BuildTarget> GetBuildTargetOptionsAsEnum()
+        {
+            var options = new List<BuildTarget>
+            {
+                BuildTarget.StandaloneWindows64,
+                BuildTarget.Android,
+                BuildTarget.iOS
+            };
+
+            return options;
+        }
+
+        internal static string GetCurrentBuildTarget()
+        {
+            return GetTargetName(GetCurrentBuildTargetEnum());
+        }
+
+        internal static BuildTarget GetCurrentBuildTargetEnum()
+        {
+            return EditorUserBuildSettings.activeBuildTarget;
+        }
+
+        internal static string GetTargetName(BuildTarget target)
+        {
+            string currentTarget;
+            switch (target)
+            {
+                case BuildTarget.StandaloneWindows:
+                case BuildTarget.StandaloneWindows64:
+                    currentTarget = "Windows";
+                    break;
+                case BuildTarget.Android:
+                    currentTarget = "Android";
+                    break;
+                case BuildTarget.iOS:
+                    currentTarget = "iOS";
+                    break;
+                default:
+                    currentTarget = "Unsupported Target Platform";
+                    break;
+            }
+
+            return currentTarget;
+        }
+
+        internal static BuildTargetGroup GetBuildTargetGroupForTarget(BuildTarget target)
+        {
+            switch (target)
+            {
+                case BuildTarget.StandaloneWindows:
+                case BuildTarget.StandaloneWindows64:
+                    return BuildTargetGroup.Standalone;
+                case BuildTarget.Android:
+                    return BuildTargetGroup.Android;
+                case BuildTarget.iOS:
+                    return BuildTargetGroup.iOS;
+                default:
+                    return BuildTargetGroup.Unknown;
+            }
+        }
+
+        internal static bool DryRunState
+        {
+            get => SessionState.GetBool("VRC.SDKBase.DryRun", false);
+            set => SessionState.SetBool("VRC.SDKBase.DryRun", value);
         }
 #endif
     }

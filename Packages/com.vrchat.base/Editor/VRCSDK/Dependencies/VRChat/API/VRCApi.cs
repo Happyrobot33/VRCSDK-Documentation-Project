@@ -155,7 +155,8 @@ namespace VRC.SDKBase.Editor.Api {
             int contentLength = 0, 
             int timeout = 30,
             Action<float> onProgress = null,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default,
+            JsonSerializerSettings jsonSettings = null)
         {
             SetApiUrl();
             var uri = await BuildUrl(requestUrl, queryParams);
@@ -165,7 +166,7 @@ namespace VRC.SDKBase.Editor.Api {
                 // If cache has not expired yet - return cached value
                 if (isCached && !forceRefresh)
                 {
-                    Core.Logger.Log($"Got Cached Response for {uri.ToString()}", DebugLevel.API);
+                    Core.Logger.Log($"Got Cached Response for {uri.ToString()}", API.LOG_CATEGORY);
                     return (cachedResponse, null);
                 }
             }
@@ -211,8 +212,8 @@ namespace VRC.SDKBase.Editor.Api {
                     string json;
                     try
                     {
-                        json = JsonConvert.SerializeObject(body, JSON_OPTIONS);
-                        Core.Logger.Log($"Request body - json: {json}", DebugLevel.API);
+                        json = JsonConvert.SerializeObject(body, jsonSettings ?? JSON_OPTIONS);
+                        Core.Logger.Log($"Request body - json: {json}", API.LOG_CATEGORY);
 
                     }
                     catch (Exception ex)
@@ -252,23 +253,23 @@ namespace VRC.SDKBase.Editor.Api {
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    Core.Logger.LogError("Request cancelled", DebugLevel.API);
+                    Core.Logger.LogError("Request cancelled", API.LOG_CATEGORY);
                 }
                 else
                 {
-                    Core.Logger.LogError("Request timeout", DebugLevel.API);
+                    Core.Logger.LogError("Request timeout", API.LOG_CATEGORY);
                 }
 
                 throw;
             }
             catch (Exception e)
             {
-                Core.Logger.LogError("Failed to send request", DebugLevel.API);
-                Core.Logger.LogError(e.Message, DebugLevel.API);
+                Core.Logger.LogError("Failed to send request", API.LOG_CATEGORY);
+                Core.Logger.LogError(e.Message, API.LOG_CATEGORY);
                 throw;
             }
 
-            Core.Logger.Log($"Request finished - result: {result}", DebugLevel.API);
+            Core.Logger.Log($"Request finished - result: {result}", API.LOG_CATEGORY);
 
             if (!result.IsSuccessStatusCode)
             {
@@ -280,6 +281,7 @@ namespace VRC.SDKBase.Editor.Api {
                     }
                     catch (ApiErrorException ex)
                     {
+                        Core.Logger.LogError($"Got API Error: {ex.ErrorMessage}", API.LOG_CATEGORY);
                         // Provide an actionable error message
                         if (ex.StatusCode == HttpStatusCode.Unauthorized)
                         {
@@ -291,7 +293,7 @@ namespace VRC.SDKBase.Editor.Api {
                     {
                         // Fall-through to the generic error exception if encountered non-api exception 
                     }
-                    Core.Logger.LogError($"Error data {await result.Content.ReadAsStringAsync()}", DebugLevel.API);
+                    Core.Logger.LogError($"Error data {await result.Content.ReadAsStringAsync()}", API.LOG_CATEGORY);
                 }
                 throw new RequestFailedException($"Failed to perform a request to VRChat API for {uri} and data {JsonConvert.SerializeObject(body, JSON_OPTIONS)}", result, result.StatusCode);
             }
@@ -318,7 +320,7 @@ namespace VRC.SDKBase.Editor.Api {
             var text = await result.Content.ReadAsStringAsync();
             try
             {
-                Core.Logger.Log($"Request finished - result: {text}", DebugLevel.API);
+                Core.Logger.Log($"Request finished - result: {text}", API.LOG_CATEGORY);
 
                 var parsed = JsonConvert.DeserializeObject<TResponse>(text, JSON_OPTIONS);
                 if (method == HttpMethod.Get)
@@ -335,9 +337,9 @@ namespace VRC.SDKBase.Editor.Api {
         
         [PublicAPI]
         public static async Task<TResponse> MakeRequest<T, TResponse>(string requestUrl, HttpMethod method,
-            Dictionary<string, string> queryParams = null, bool forceRefresh = false, T body = default, string contentType = null, byte[] contentMD5 = null, int contentLength = 0, int timeout = 30, Action<float> onProgress = null, CancellationToken cancellationToken = default)
+            Dictionary<string, string> queryParams = null, bool forceRefresh = false, T body = default, string contentType = null, byte[] contentMD5 = null, int contentLength = 0, int timeout = 30, Action<float> onProgress = null, CancellationToken cancellationToken = default, JsonSerializerSettings jsonSettings = null)
         {
-            var result = await MakeRequestWithResponse<T, TResponse>(requestUrl, method, queryParams, forceRefresh, body, contentType, contentMD5, contentLength, timeout, onProgress, cancellationToken);
+            var result = await MakeRequestWithResponse<T, TResponse>(requestUrl, method, queryParams, forceRefresh, body, contentType, contentMD5, contentLength, timeout, onProgress, cancellationToken, jsonSettings);
             return result.responseData;
         }
 
@@ -364,10 +366,10 @@ namespace VRC.SDKBase.Editor.Api {
                     {
                         throw;
                     }
-                    Core.Logger.LogError(ex.Message, DebugLevel.API);
+                    Core.Logger.LogError(ex.Message, API.LOG_CATEGORY);
                     if (ex.InnerException != null)
                     {
-                        Core.Logger.LogError(ex.InnerException.Message, DebugLevel.API);
+                        Core.Logger.LogError(ex.InnerException.Message, API.LOG_CATEGORY);
                     }
 
                     result = default;
@@ -380,23 +382,23 @@ namespace VRC.SDKBase.Editor.Api {
 
         [PublicAPI]
         public static async Task<TResponse> Post<T, TResponse>(string requestUrl, T body,
-            Dictionary<string, string> queryParams = null, bool forceRefresh = false, CancellationToken cancellationToken = default)
+            Dictionary<string, string> queryParams = null, bool forceRefresh = false, CancellationToken cancellationToken = default, JsonSerializerSettings jsonSettings = null)
         {
-            return await MakeRequest<T, TResponse>(requestUrl, HttpMethod.Post, queryParams, forceRefresh, body, cancellationToken: cancellationToken);
+            return await MakeRequest<T, TResponse>(requestUrl, HttpMethod.Post, queryParams, forceRefresh, body, cancellationToken: cancellationToken, jsonSettings: jsonSettings);
         }
         
         [PublicAPI]
         public static async Task<TResponse> Put<T, TResponse>(string requestUrl, T body,
-            Dictionary<string, string> queryParams = null, bool forceRefresh = false, CancellationToken cancellationToken = default)
+            Dictionary<string, string> queryParams = null, bool forceRefresh = false, CancellationToken cancellationToken = default, JsonSerializerSettings jsonSettings = null)
         {
-            return await MakeRequest<T, TResponse>(requestUrl, HttpMethod.Put, queryParams, forceRefresh, body, cancellationToken: cancellationToken);
+            return await MakeRequest<T, TResponse>(requestUrl, HttpMethod.Put, queryParams, forceRefresh, body, cancellationToken: cancellationToken, jsonSettings: jsonSettings);
         }
         
         [PublicAPI]
         public static async Task<TResponse> Put<TResponse>(string requestUrl,
-            Dictionary<string, string> queryParams = null, bool forceRefresh = false, CancellationToken cancellationToken = default)
+            Dictionary<string, string> queryParams = null, bool forceRefresh = false, CancellationToken cancellationToken = default, JsonSerializerSettings jsonSettings = null)
         {
-            return await MakeRequest<object, TResponse>(requestUrl, HttpMethod.Put, queryParams, forceRefresh, cancellationToken: cancellationToken);
+            return await MakeRequest<object, TResponse>(requestUrl, HttpMethod.Put, queryParams, forceRefresh, cancellationToken: cancellationToken, jsonSettings: jsonSettings);
         }
 
         [PublicAPI]
@@ -441,14 +443,14 @@ namespace VRC.SDKBase.Editor.Api {
                 "canPublish");
         }
         
-        public static async Task<VRCWorld> PublishWorld(string id, CancellationToken cancellationToken = default)
+        public static async Task<JObject> PublishWorld(string id, CancellationToken cancellationToken = default)
         {
-            return await Put<VRCWorld>($"worlds/{id}/publish", cancellationToken: cancellationToken);
+            return await Put<JObject>($"worlds/{id}/publish", cancellationToken: cancellationToken);
         }
         
-        public static async Task<VRCWorld> UnpublishWorld(string id, CancellationToken cancellationToken = default)
+        public static async Task<JObject> UnpublishWorld(string id, CancellationToken cancellationToken = default)
         {
-            return await Delete<VRCWorld>($"worlds/{id}/unpublish", cancellationToken: cancellationToken);
+            return await Delete<JObject>($"worlds/{id}/publish", cancellationToken: cancellationToken);
         }
         
         [PublicAPI]
@@ -476,7 +478,7 @@ namespace VRC.SDKBase.Editor.Api {
         {
             if (string.IsNullOrWhiteSpace(pathToBundle))
             {
-                Core.Logger.LogError("Bundle path cannot be empty", DebugLevel.API);
+                Core.Logger.LogError("Bundle path cannot be empty", API.LOG_CATEGORY);
                 return data;
             }
             var fileName = "World - " + data.Name + " - Asset bundle - " + Application.unityVersion + "_" + ApiWorld.VERSION.ApiVersion +
@@ -497,7 +499,7 @@ namespace VRC.SDKBase.Editor.Api {
             }
             if (string.IsNullOrWhiteSpace(newBundleUrl))
             {
-                Core.Logger.LogError("New bundle url is empty, aborting", DebugLevel.API);
+                Core.Logger.LogError("New bundle url is empty, aborting", API.LOG_CATEGORY);
                 return data;
             }
             var bundleUpdateRequest = new Dictionary<string, object>
@@ -510,9 +512,9 @@ namespace VRC.SDKBase.Editor.Api {
                 {"udonProducts", data.UdonProducts},
                 {"worldSignature", worldSignature},
             };
-            Core.Logger.Log($"Updating with new bundle {newBundleUrl}", DebugLevel.API);
+            Core.Logger.Log($"Updating with new bundle {newBundleUrl}", API.LOG_CATEGORY);
             await VRCApi.Put<object, VRCWorld>($"worlds/{id}", bundleUpdateRequest, cancellationToken: cancellationToken);
-            Core.Logger.Log("Fetching latest", DebugLevel.API);
+            Core.Logger.Log("Fetching latest", API.LOG_CATEGORY);
             return await VRCApi.Get<VRCWorld>($"worlds/{id}", forceRefresh: true, cancellationToken: cancellationToken);
         } 
         
@@ -584,7 +586,11 @@ namespace VRC.SDKBase.Editor.Api {
                 Description = data.Description,
                 Tags = data.Tags,
                 ReleaseStatus = data.ReleaseStatus,
+                // API doesn't allow null values, so we have to map to empty strings
+                PrimaryStyle = data.Styles.Primary ?? string.Empty,
+                SecondaryStyle = data.Styles.Secondary ?? string.Empty,
             };
+            
             return await VRCApi.Put<VRCAvatarChanges, VRCAvatar>($"avatars/{id}", changes, cancellationToken: cancellationToken);
         }
         
@@ -597,7 +603,7 @@ namespace VRC.SDKBase.Editor.Api {
             var newImageUrl = await UploadFile(pathToImage, fileId, fileName, onProgress, cancellationToken);
             if (string.IsNullOrWhiteSpace(newImageUrl))
             {
-                Core.Logger.LogError("New image url is empty, aborting", DebugLevel.API);
+                Core.Logger.LogError("New image url is empty, aborting", API.LOG_CATEGORY);
                 return data;
             }
             var imageUpdateRequest = new Dictionary<string, string>
@@ -613,7 +619,7 @@ namespace VRC.SDKBase.Editor.Api {
         {
             if (string.IsNullOrWhiteSpace(pathToBundle))
             {
-                Core.Logger.LogError("Bundle path cannot be empty", DebugLevel.API);
+                Core.Logger.LogError("Bundle path cannot be empty", API.LOG_CATEGORY);
                 return data;
             }
             var fileName = "Avatar - " + data.Name + " - Asset bundle - " + Application.unityVersion + "_" + ApiAvatar.VERSION.ApiVersion +
@@ -634,7 +640,7 @@ namespace VRC.SDKBase.Editor.Api {
             }
             if (string.IsNullOrWhiteSpace(newBundleUrl))
             {
-                Core.Logger.LogError("new bundle url is empty, aborting", DebugLevel.API);
+                Core.Logger.LogError("new bundle url is empty, aborting", API.LOG_CATEGORY);
                 return data;
             }
             var bundleUpdateRequest = new Dictionary<string, object>
@@ -644,11 +650,37 @@ namespace VRC.SDKBase.Editor.Api {
                 {"unityVersion", Tools.UnityVersion.ToString()},
                 {"assetVersion", 1}
             };
-            Core.Logger.Log($"Updating with new bundle {newBundleUrl}", DebugLevel.API);
+            Core.Logger.Log($"Updating with new bundle {newBundleUrl}", API.LOG_CATEGORY);
             await VRCApi.Put<object, VRCAvatar>($"avatars/{id}", bundleUpdateRequest, cancellationToken: cancellationToken);
-            Core.Logger.Log("Fetching latest", DebugLevel.API);
+            Core.Logger.Log("Fetching latest", API.LOG_CATEGORY);
             return await VRCApi.Get<VRCAvatar>($"avatars/{id}", forceRefresh: true, cancellationToken: cancellationToken);
-        } 
+        }
+
+        /// <summary>
+        /// Creates an avatar entry in the database.
+        /// Use this method to get a new ID to assign to the avatar blueprint before building and uploading it.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="onProgress"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [PublicAPI]
+        public static async Task<VRCAvatar> CreateAvatarRecord(VRCAvatar data, Action<string, float> onProgress = null,
+            CancellationToken cancellationToken = default)
+        {
+            var newAvatarData = new Dictionary<string, object>
+            {
+                {"name", data.Name},
+                {"description", data.Description},
+                {"tags", data.Tags},
+                {"releaseStatus", data.ReleaseStatus},
+                {"platform", Tools.Platform},
+                {"unityVersion", Tools.UnityVersion.ToString()},
+                {"assetVersion", 1}
+            };
+            var createdAvatar = await Post<Dictionary<string, object>, VRCAvatar>($"avatars", newAvatarData, cancellationToken: cancellationToken);
+            return createdAvatar;
+        }
         
         [PublicAPI]
         public static async Task<VRCAvatar> CreateNewAvatar(string id, VRCAvatar data, string pathToBundle, string pathToImage,
@@ -659,6 +691,13 @@ namespace VRC.SDKBase.Editor.Api {
                 Core.Logger.LogError("Both bundle and image paths must be provided");
                 return data;
             }
+            
+            var remoteData = await VRCApi.GetAvatar(id, forceRefresh: true, cancellationToken);
+            if (!remoteData.PendingUpload)
+            {
+                throw new UploadException("Avatar creation is only allowed for a reserved avatar ID pending first upload");
+            }
+            
             var fileName = "Avatar - " + data.Name + " - Asset bundle - " + Application.unityVersion + "_" + ApiAvatar.VERSION.ApiVersion +
                            "_" + VRC.Tools.Platform + "_" + API.GetServerEnvironmentForApiUrl();
             var newBundleUrl = await UploadFile(pathToBundle, "", fileName, onProgress: (status, percentage) =>
@@ -684,7 +723,6 @@ namespace VRC.SDKBase.Editor.Api {
             }
             var newAvatarData = new Dictionary<string, object>
             {
-                {"id", id},
                 {"name", data.Name},
                 {"description", data.Description},
                 {"assetUrl", newBundleUrl},
@@ -695,18 +733,23 @@ namespace VRC.SDKBase.Editor.Api {
                 {"unityVersion", Tools.UnityVersion.ToString()},
                 {"assetVersion", 1}
             };
-            var createdAvatar = await Post<Dictionary<string, object>, VRCAvatar>($"avatars", newAvatarData, cancellationToken: cancellationToken);
-            var bundleUpdateRequest = new Dictionary<string, object>
+            // The expects either a style ID or no style keys
+            if (data.Styles.Primary != null)
             {
-                {"assetUrl", newBundleUrl},
-                {"platform", Tools.Platform.ToString()},
-                {"unityVersion", Tools.UnityVersion.ToString()},
-                {"assetVersion", 1}
-            };
-            // enforce "standard" bundle
-            createdAvatar = await Put<Dictionary<string, object>, VRCAvatar>($"avatars/{createdAvatar.ID}", bundleUpdateRequest, cancellationToken: cancellationToken);
-            Core.Logger.Log("Created a new Avatar");
+                newAvatarData["primaryStyle"] = data.Styles.Primary;
+            }
+            if (data.Styles.Secondary != null)
+            {
+                newAvatarData["secondaryStyle"] = data.Styles.Secondary;
+            }
+            var createdAvatar = await Put<Dictionary<string, object>, VRCAvatar>($"avatars/{remoteData.ID}", newAvatarData, cancellationToken: cancellationToken);
             return createdAvatar;
+        }
+
+        [PublicAPI]
+        public static async Task<VRCAvatar> DeleteAvatar(string id)
+        {
+            return await VRCApi.Delete<VRCAvatar>($"avatars/{id}", cancellationToken: CancellationToken.None);
         }
 
         [PublicAPI]
@@ -720,11 +763,51 @@ namespace VRC.SDKBase.Editor.Api {
             await Put<EmptyResponse>($"avatars/{id}/selectFallback");
             return await Get<VRCAvatar>($"avatars/{id}", forceRefresh: true);
         }
+
+        [PublicAPI]
+        public static async Task<List<VRCAvatarStyle>> GetAvatarStyles()
+        {
+            return await VRCApi.Get<List<VRCAvatarStyle>>("avatarStyles");
+        }
+
+        public static async Task<VRCAgreement> ContentUploadConsent(VRCAgreement data)
+        {
+            return await Post<VRCAgreement, VRCAgreement>("agreement", data);
+        }
+
+        public static async Task<VRCAgreementCheckResponse> CheckContentUploadConsent(VRCAgreementCheckRequest data)
+        {
+            return await Get<VRCAgreementCheckResponse>("agreement", new Dictionary<string, string>
+            {
+                {"agreementCode", data.AgreementCode},
+                {"contentId", data.ContentId},
+                {"version", data.Version.ToString()}
+            }, forceRefresh: true);
+        }
+
+        internal static async Task SubmitAssetReviewNotes(string id, string notes)
+        {
+            var avatarData = await GetAvatar(id, forceRefresh: true);
+            if (string.IsNullOrWhiteSpace(avatarData.ActiveAssetReviewId))
+            {
+                Core.Logger.LogError("Avatar review doesn't exist, cannot submit notes");
+                return;
+            }
+            
+            var request = new VRCAssetReviewNotesRequest
+            {
+                ReviewNotes = notes
+            };
+            await Put<VRCAssetReviewNotesRequest, EmptyResponse>($"assetReview/{avatarData.ActiveAssetReviewId}/notes", request);
+        }
         
+        
+        
+
         #endregion
 
         #region Public Utilities
-        
+
         [PublicAPI]
         public static async Task<Texture2D> GetImage(string url, bool forceRefresh = false, CancellationToken cancellationToken = default)
         {
@@ -746,7 +829,7 @@ namespace VRC.SDKBase.Editor.Api {
             // This setting often gets cleared on assembly reload, so we re-enable it here
             if (UnityEditor.EditorPrefs.GetBool("apiLoggingEnabled"))
             {
-                Core.Logger.AddDebugLevel(DebugLevel.API);
+                Core.Logger.EnableCategory(API.LOG_CATEGORY);
             }
             
             var extension = Path.GetExtension(filename);
@@ -756,7 +839,7 @@ namespace VRC.SDKBase.Editor.Api {
             if (!creatingNewFile)
             {
                 currentFile = await Get<VRCFile>("file/" + fileId, forceRefresh: true, cancellationToken: cancellationToken);
-                Core.Logger.Log($"Updating existing file {fileId}", DebugLevel.API);
+                Core.Logger.Log($"Updating existing file {fileId}", API.LOG_CATEGORY);
             }
             else
             {
@@ -767,22 +850,22 @@ namespace VRC.SDKBase.Editor.Api {
                     {"extension", extension}
                 };
                 currentFile = await Post<Dictionary<string, string>, VRCFile>("file", requestData, cancellationToken: cancellationToken);
-                Core.Logger.Log($"Created a new file {currentFile.ID}", DebugLevel.API);
+                Core.Logger.Log($"Created a new file {currentFile.ID}", API.LOG_CATEGORY);
             }
             
             onProgress?.Invoke("Preparing for file upload...", 0.0f);
 
             if (string.IsNullOrWhiteSpace(currentFile.ID))
             {
-                Core.Logger.LogError("Failed to load file info, aborting", DebugLevel.API);
+                Core.Logger.LogError("Failed to load file info, aborting", API.LOG_CATEGORY);
                 return null;
             }
 
             if (currentFile.HasQueuedOperation())
             {
-                Core.Logger.Log("Existing file is not fully uploaded, cleaning up", DebugLevel.API);
+                Core.Logger.Log("Existing file is not fully uploaded, cleaning up", API.LOG_CATEGORY);
                 await Delete($"file/{currentFile.ID}/{currentFile.GetLatestVersion()}", cancellationToken: cancellationToken);
-                Core.Logger.Log("Cleaned up leftover queued uploads", DebugLevel.API);
+                Core.Logger.Log("Cleaned up leftover queued uploads", API.LOG_CATEGORY);
                 await Task.Delay(1000, cancellationToken);
                 // reload the file without a queued version
                 currentFile = await Get<VRCFile>("file/" + fileId, forceRefresh: true, cancellationToken: cancellationToken);
@@ -790,9 +873,9 @@ namespace VRC.SDKBase.Editor.Api {
 
             if (currentFile.IsLatestVersionErrored())
             {
-                Core.Logger.Log("Existing file failed to upload, cleaning up", DebugLevel.API);
+                Core.Logger.Log("Existing file failed to upload, cleaning up", API.LOG_CATEGORY);
                 await Delete($"file/{currentFile.ID}/{currentFile.GetLatestVersion()}", cancellationToken: cancellationToken);
-                Core.Logger.Log("Cleaned up leftover errored uploads", DebugLevel.API);
+                Core.Logger.Log("Cleaned up leftover errored uploads", API.LOG_CATEGORY);
                 await Task.Delay(1000, cancellationToken);
                 // reload the file without a broken version
                 currentFile = await Get<VRCFile>("file/" + fileId, forceRefresh: true, cancellationToken: cancellationToken);
@@ -809,16 +892,16 @@ namespace VRC.SDKBase.Editor.Api {
             }
             catch (Exception e)
             {
-                Core.Logger.LogError("Failed to get file MD5, exiting upload", DebugLevel.API);
-                Core.Logger.LogError(e.Message, DebugLevel.API);
+                Core.Logger.LogError("Failed to get file MD5, exiting upload", API.LOG_CATEGORY);
+                Core.Logger.LogError(e.Message, API.LOG_CATEGORY);
                 return null;
             }
 
             var signatureFilePath = VRC.Tools.GetTempFileName(".sig", out var tempFileError, new GUID().ToString());
             if (!string.IsNullOrWhiteSpace(tempFileError))
             {
-                Core.Logger.LogError("Failed to create temp file for signature, exiting upload", DebugLevel.API);
-                Core.Logger.LogError(tempFileError, DebugLevel.API);
+                Core.Logger.LogError("Failed to create temp file for signature, exiting upload", API.LOG_CATEGORY);
+                Core.Logger.LogError(tempFileError, API.LOG_CATEGORY);
                 return null;
             }
 
@@ -827,7 +910,7 @@ namespace VRC.SDKBase.Editor.Api {
             
             if (!string.IsNullOrWhiteSpace(sigFileSizeErrorStr))
             {
-                Core.Logger.LogError("failed to get signature file size, exiting upload", DebugLevel.API);
+                Core.Logger.LogError("failed to get signature file size, exiting upload", API.LOG_CATEGORY);
                 return null;
             }
 
@@ -841,7 +924,7 @@ namespace VRC.SDKBase.Editor.Api {
             }
             catch (Exception e)
             {
-                Core.Logger.LogError("Failed to get signature MD5, exiting upload", DebugLevel.API);
+                Core.Logger.LogError("Failed to get signature MD5, exiting upload", API.LOG_CATEGORY);
                 Core.Logger.LogError(e.Message);
                 return null;
             }
@@ -850,7 +933,7 @@ namespace VRC.SDKBase.Editor.Api {
 
             if (!string.IsNullOrWhiteSpace(fileSizeErrorStr))
             {
-                Core.Logger.LogError("failed to get file size, exiting upload", DebugLevel.API);
+                Core.Logger.LogError("failed to get file size, exiting upload", API.LOG_CATEGORY);
                 return null;
             }
             
@@ -865,16 +948,16 @@ namespace VRC.SDKBase.Editor.Api {
                 {
                     if (!currentFile.IsLatestVersionWaiting())
                     {
-                        Core.Logger.LogError("file with the same hash is already uploaded", DebugLevel.API);
-                        throw new UploadException("This file was already uploaded, you should make a new build");
+                        Core.Logger.LogError("file with the same hash is already uploaded", API.LOG_CATEGORY);
+                        throw new UploadException("This file was already uploaded");
                     }
 
                     // file already exists and is in waiting state - we should try to upload
                     isRetrying = true;
-                    Core.Logger.Log("File MD5 match, going to retry the file upload", DebugLevel.API);
+                    Core.Logger.Log("File MD5 match, going to retry the file upload", API.LOG_CATEGORY);
                 } else if (currentFile.IsLatestVersionWaiting())
                 {
-                    Core.Logger.Log("Latest file upload failed and we have a new file, we're going to clean up", DebugLevel.API);
+                    Core.Logger.Log("Latest file upload failed and we have a new file, we're going to clean up", API.LOG_CATEGORY);
                     await Delete($"file/{currentFile.ID}/{currentFile.GetLatestVersion()}", cancellationToken: cancellationToken);
                     await Task.Delay(1000, cancellationToken);
                     // reload the file without a broken version
@@ -894,11 +977,11 @@ namespace VRC.SDKBase.Editor.Api {
                 if (isMatch)
                 {
                     versionAlreadyExists = true;
-                    Core.Logger.Log("Files match, will attempt to re-upload", DebugLevel.API);
+                    Core.Logger.Log("Files match, will attempt to re-upload", API.LOG_CATEGORY);
                 }
                 else
                 {
-                    Core.Logger.Log("Files do not fully match, removing latest version", DebugLevel.API);
+                    Core.Logger.Log("Files do not fully match, removing latest version", API.LOG_CATEGORY);
                     await Delete($"file/{currentFile.ID}/{currentFile.GetLatestVersion()}", cancellationToken: cancellationToken);
                     await Task.Delay(1000, cancellationToken);
                     // reload the file without a broken version
@@ -919,30 +1002,30 @@ namespace VRC.SDKBase.Editor.Api {
                 var updatedFile = await Post<Dictionary<string, object>, VRCFile>($"file/{currentFile.ID}", requestData, cancellationToken: cancellationToken);
                 if (string.IsNullOrWhiteSpace(updatedFile.ID))
                 {
-                    Core.Logger.LogError("Failed to create new file version, exiting upload", DebugLevel.API);
+                    Core.Logger.LogError("Failed to create new file version, exiting upload", API.LOG_CATEGORY);
                     return null;
                 }
-                Core.Logger.Log($"Created new record. {currentFile.GetLatestVersion()} -> {updatedFile.GetLatestVersion()}", DebugLevel.API);
+                Core.Logger.Log($"Created new record. {currentFile.GetLatestVersion()} -> {updatedFile.GetLatestVersion()}", API.LOG_CATEGORY);
                 currentFile = updatedFile;
                 await Task.Delay(1000, cancellationToken);
             }
             else
             {
-                Core.Logger.Log("File already exists, skipping record creation", DebugLevel.API);
+                Core.Logger.Log("File already exists, skipping record creation", API.LOG_CATEGORY);
             }
 
-            Core.Logger.Log($"Is target version waiting? {currentFile.Versions[currentFile.GetLatestVersion()].File.Status == "waiting"}", DebugLevel.API);
+            Core.Logger.Log($"Is target version waiting? {currentFile.Versions[currentFile.GetLatestVersion()].File.Status == "waiting"}", API.LOG_CATEGORY);
 
             var fileDescriptor = currentFile.Versions[currentFile.GetLatestVersion()].File;
             var fileCategory = fileDescriptor.Category;
             
-            Core.Logger.Log("File upload type: " + fileCategory, DebugLevel.API);
+            Core.Logger.Log("File upload type: " + fileCategory, API.LOG_CATEGORY);
             
             onProgress?.Invoke("Starting file upload...", 0.15f);
 
             if (currentFile.Versions[currentFile.GetLatestVersion()].File.Status == "waiting")
             {
-                Core.Logger.Log("Starting file upload", DebugLevel.API);
+                Core.Logger.Log("Starting file upload", API.LOG_CATEGORY);
                 if (fileCategory != "simple")
                 {
                     if (await UploadMultipart(filename, FileUploadType.File, currentFile, mimeType, fileMD5bytes,
@@ -951,7 +1034,7 @@ namespace VRC.SDKBase.Editor.Api {
                         // cleanup the file if we created it
                         if (creatingNewFile)
                         {
-                            Core.Logger.Log("Cleanup, deleting created file", DebugLevel.API);
+                            Core.Logger.Log("Cleanup, deleting created file", API.LOG_CATEGORY);
                             await Delete($"file/{currentFile.ID}", cancellationToken: cancellationToken);
                         }
 
@@ -966,7 +1049,7 @@ namespace VRC.SDKBase.Editor.Api {
                         // cleanup the file if we created it
                         if (creatingNewFile)
                         {
-                            Core.Logger.Log("Cleanup, deleting created file", DebugLevel.API);
+                            Core.Logger.Log("Cleanup, deleting created file", API.LOG_CATEGORY);
                             await Delete($"file/{currentFile.ID}", cancellationToken: cancellationToken);
                         }
 
@@ -978,7 +1061,7 @@ namespace VRC.SDKBase.Editor.Api {
             }
             else
             {
-                Core.Logger.Log("File upload not waiting, thus isn't needed", DebugLevel.API);
+                Core.Logger.Log("File upload not waiting, thus isn't needed", API.LOG_CATEGORY);
                 throw new UploadException("This file was already uploaded, you should make a new build");
             }
 
@@ -989,7 +1072,7 @@ namespace VRC.SDKBase.Editor.Api {
             
             if (currentFile.Versions[currentFile.GetLatestVersion()].Signature.Status == "waiting")
             {
-                Core.Logger.Log("Starting signature upload", DebugLevel.API);
+                Core.Logger.Log("Starting signature upload", API.LOG_CATEGORY);
                 if (fileCategory != "simple")
                 {
                     if (await UploadMultipart(signatureFilePath, FileUploadType.Signature, currentFile,
@@ -999,7 +1082,7 @@ namespace VRC.SDKBase.Editor.Api {
                         // cleanup the file if we created it
                         if (creatingNewFile)
                         {
-                            Core.Logger.Log("Cleanup, deleting created file", DebugLevel.API);
+                            Core.Logger.Log("Cleanup, deleting created file", API.LOG_CATEGORY);
                             await Delete($"file/{currentFile.ID}", cancellationToken: cancellationToken);
                         }
 
@@ -1015,7 +1098,7 @@ namespace VRC.SDKBase.Editor.Api {
                         // cleanup the file if we created it
                         if (creatingNewFile)
                         {
-                            Core.Logger.Log("Cleanup, deleting created file", DebugLevel.API);
+                            Core.Logger.Log("Cleanup, deleting created file", API.LOG_CATEGORY);
                             await Delete($"file/{currentFile.ID}", cancellationToken: cancellationToken);
                         }
 
@@ -1027,23 +1110,23 @@ namespace VRC.SDKBase.Editor.Api {
             }
             else
             {
-                Core.Logger.Log("Signature upload not waiting, thus isn't needed", DebugLevel.API);
+                Core.Logger.Log("Signature upload not waiting, thus isn't needed", API.LOG_CATEGORY);
                 return null;
             }
             
-            Core.Logger.Log("Everything should be now uploaded", DebugLevel.API);
+            Core.Logger.Log("Everything should be now uploaded", API.LOG_CATEGORY);
             currentFile = await Get<VRCFile>($"file/{currentFile.ID}", forceRefresh: true, cancellationToken: cancellationToken);
             var latestVersion = currentFile.Versions[currentFile.GetLatestVersion()];
             
-            Core.Logger.Log($"File upload complete? {latestVersion.File.Status == "complete"}", DebugLevel.API);
-            Core.Logger.Log($"Signature upload complete? {latestVersion.Signature.Status == "complete"}", DebugLevel.API);
+            Core.Logger.Log($"File upload complete? {latestVersion.File.Status == "complete"}", API.LOG_CATEGORY);
+            Core.Logger.Log($"Signature upload complete? {latestVersion.Signature.Status == "complete"}", API.LOG_CATEGORY);
             
-            Core.Logger.Log("waiting for file to finish processing", DebugLevel.API);
+            Core.Logger.Log("waiting for file to finish processing", API.LOG_CATEGORY);
             onProgress?.Invoke("Refreshing data...", 0.99f);
-            Core.Logger.Log("waiting for 5s", DebugLevel.API);
+            Core.Logger.Log("waiting for 5s", API.LOG_CATEGORY);
             await Task.Delay(5000, cancellationToken);
             
-            Core.Logger.Log("Everything should be good now", DebugLevel.API);
+            Core.Logger.Log("Everything should be good now", API.LOG_CATEGORY);
 
             onProgress?.Invoke($"Cleaning up Temp Files...", 0.99f);
             await VRCTools.CleanupTempFiles(currentFile.ID);
@@ -1066,14 +1149,14 @@ namespace VRC.SDKBase.Editor.Api {
             var startUploadResp = await Put<JObject>($"file/{currentFile.ID}/{currentFile.GetLatestVersion()}/{fileUploadType.ToString().ToLowerInvariant()}/start", cancellationToken: cancellationToken);
             var uploadUrl = startUploadResp.Value<string>("url");
 
-            Core.Logger.Log($"got upload url {uploadUrl}", DebugLevel.API);
+            Core.Logger.Log($"got upload url {uploadUrl}", API.LOG_CATEGORY);
             if (string.IsNullOrWhiteSpace(uploadUrl))
             {
-                Core.Logger.LogError("Got invalid upload url, exiting upload", DebugLevel.API);
+                Core.Logger.LogError("Got invalid upload url, exiting upload", API.LOG_CATEGORY);
                 return true;
             }
             
-            var fileData = File.ReadAllBytes(filename);
+            var fileData = await File.ReadAllBytesAsync(filename, cancellationToken);
 
             onProgress?.Invoke($"Uploading {fileUploadType.ToString().ToLowerInvariant()}...", 0f);
             try
@@ -1085,13 +1168,13 @@ namespace VRC.SDKBase.Editor.Api {
             }
             catch (Exception e)
             {
-                Core.Logger.LogError($"failed to upload {fileUploadType.ToString()} to {uploadUrl}, exiting upload", DebugLevel.API);
-                Core.Logger.LogError(e.Message, DebugLevel.API);
+                Core.Logger.LogError($"failed to upload {fileUploadType.ToString()} to {uploadUrl}, exiting upload", API.LOG_CATEGORY);
+                Core.Logger.LogError(e.Message, API.LOG_CATEGORY);
                 return true;
             }
 
             await Put<EmptyResponse>($"file/{currentFile.ID}/{currentFile.GetLatestVersion()}/{fileUploadType.ToString().ToLowerInvariant()}/finish", cancellationToken: cancellationToken);
-            Core.Logger.Log($"{fileUploadType.ToString()} upload complete", DebugLevel.API);
+            Core.Logger.Log($"{fileUploadType.ToString()} upload complete", API.LOG_CATEGORY);
             
             return false;
         }
@@ -1109,8 +1192,8 @@ namespace VRC.SDKBase.Editor.Api {
             }
             catch (Exception e)
             {
-                Core.Logger.LogError("Failed to get current file status, aborting upload", DebugLevel.API);
-                Core.Logger.LogError(e.Message, DebugLevel.API);
+                Core.Logger.LogError("Failed to get current file status, aborting upload", API.LOG_CATEGORY);
+                Core.Logger.LogError(e.Message, API.LOG_CATEGORY);
                 return true;
             }
             var nextPartNumber = 1;
@@ -1119,125 +1202,123 @@ namespace VRC.SDKBase.Editor.Api {
 
             var statusEtags = uploadStatus.Value<JArray>("etags").ToObject<List<string>>();
             etags.AddRange(statusEtags);
-            Core.Logger.Log($"Loaded up existing etags: {string.Join(", ", statusEtags)}", DebugLevel.API);
+            Core.Logger.Log($"Loaded up existing etags: {string.Join(", ", statusEtags)}", API.LOG_CATEGORY);
 
-            using (var fileStream = File.OpenRead(filename))
-            {
-                var parts = Mathf.Max(1, Mathf.FloorToInt((float)fileStream.Length / (float)MULTIPART_PART_SIZE));
+            await using var fileStream = File.OpenRead(filename);
+            var parts = Mathf.Max(1, Mathf.FloorToInt((float)fileStream.Length / (float)MULTIPART_PART_SIZE));
                 
-                if (nextPartNumber > 1)
+            if (nextPartNumber > 1)
+            {
+                onProgress?.Invoke("Resuming upload...", (float) nextPartNumber / parts);
+            }
+
+            var perPartProgress = 1f / parts;
+
+            // intermediary buffer
+            var buffer = new byte[MULTIPART_PART_SIZE * 2];
+            for (var partNumber = nextPartNumber; partNumber <= parts; partNumber++)
+            {
+                var partProgressStart = (float) (partNumber - 1) / parts;
+                if (cancellationToken.IsCancellationRequested)
                 {
-                    onProgress?.Invoke("Resuming upload...", (float) nextPartNumber / parts);
+                    Core.Logger.Log("Upload cancelled", API.LOG_CATEGORY);
+                    return true;
                 }
 
-                var perPartProgress = 1f / parts;
-
-                // intermediary buffer
-                var buffer = new byte[MULTIPART_PART_SIZE * 2];
-                for (var partNumber = nextPartNumber; partNumber <= parts; partNumber++)
-                {
-                    var partProgressStart = (float) (partNumber - 1) / parts;
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        Core.Logger.Log("Upload cancelled", DebugLevel.API);
-                        return true;
-                    }
-
-                    JObject startUploadResp;
-                    try
-                    {
-                        startUploadResp = await Put<JObject>(
-                            $"file/{currentFile.ID}/{currentFile.GetLatestVersion()}/{fileUploadType.ToString().ToLowerInvariant()}/start",
-                            queryParams: new Dictionary<string, string> { { "partNumber", partNumber.ToString() }},
-                            cancellationToken: cancellationToken);
-                    }
-                    catch (Exception e)
-                    {
-                        Core.Logger.LogError($"Failed to start upload for part {partNumber}", DebugLevel.API);
-                        Core.Logger.LogError(e.Message, DebugLevel.API);
-                        return true;
-                    }
-
-                    var uploadUrl = startUploadResp.Value<string>("url");
-                    
-                    Core.Logger.Log($"got upload url {uploadUrl}", DebugLevel.API);
-                    if (string.IsNullOrWhiteSpace(uploadUrl))
-                    {
-                        Core.Logger.LogError("Got invalid upload url, exiting upload", DebugLevel.API);
-                        return true;
-                    }
-
-                    onProgress?.Invoke($"Uploading {fileUploadType.ToString()}...", partProgressStart);
-                    
-                    var bytesToRead = partNumber < parts ? MULTIPART_PART_SIZE : (int)(fileStream.Length - fileStream.Position);
-                    var bytesRead = 0;
-                    try
-                    {
-                        bytesRead = await fileStream.ReadAsync(buffer, 0, bytesToRead, cancellationToken);
-                    }
-                    catch (Exception e)
-                    {
-                        Core.Logger.LogError("Could not read file, aborting", DebugLevel.API);
-                        Core.Logger.LogError(e.Message, DebugLevel.API);
-                        return true;
-                    }
-                    
-                    Core.Logger.Log($"Loaded {bytesRead} from file", DebugLevel.API);
-
-                    var sizedArray = new byte[bytesRead];
-                    Array.Copy(buffer, sizedArray, bytesRead);
-                    
-                    try
-                    {
-                        var result = await MakeRequestWithResponse<byte[], EmptyResponse>(
-                            uploadUrl, 
-                            HttpMethod.Put, 
-                            body: sizedArray,
-                            timeout: 60 * 60,
-                            onProgress: (percentage) =>
-                            {
-                                onProgress?.Invoke($"Uploading {fileUploadType.ToString()} ({(percentage * 100):F0}%)...", partProgressStart + percentage * perPartProgress);
-                            }, 
-                            cancellationToken: cancellationToken
-                        );
-                        if (result.responseMessage.Headers.ETag != null)
-                        {
-                            Core.Logger.Log($"Got an etag {result.responseMessage.Headers.ETag.Tag.Trim('"', '\'')} from S3", DebugLevel.API);
-                            etags.Add(result.responseMessage.Headers.ETag.Tag.Trim('"', '\''));
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Core.Logger.LogError($"failed to upload {fileUploadType.ToString()} to {uploadUrl}, exiting upload", DebugLevel.API);
-                        Core.Logger.LogError(e.Message, DebugLevel.API);
-                        return true;
-                    }
-
-                    await Task.Delay(1000, cancellationToken);
-                    Core.Logger.Log($"Uploaded part {partNumber} out of {parts}", DebugLevel.API);
-                }
-
+                JObject startUploadResp;
                 try
                 {
-                    var requestData = new Dictionary<string, List<string>>
-                    {
-                        {"etags", etags}
-                    };
-                    await Put<Dictionary<string, List<string>>, EmptyResponse>(
-                        $"file/{currentFile.ID}/{currentFile.GetLatestVersion()}/{fileUploadType.ToString().ToLowerInvariant()}/finish",
-                        cancellationToken: cancellationToken, body: requestData);
+                    startUploadResp = await Put<JObject>(
+                        $"file/{currentFile.ID}/{currentFile.GetLatestVersion()}/{fileUploadType.ToString().ToLowerInvariant()}/start",
+                        queryParams: new Dictionary<string, string> { { "partNumber", partNumber.ToString() }},
+                        cancellationToken: cancellationToken);
                 }
                 catch (Exception e)
                 {
-                    Core.Logger.LogError("Failed to finish upload", DebugLevel.API);
-                    Core.Logger.LogError(e.Message, DebugLevel.API);
+                    Core.Logger.LogError($"Failed to start upload for part {partNumber}", API.LOG_CATEGORY);
+                    Core.Logger.LogError(e.Message, API.LOG_CATEGORY);
                     return true;
                 }
-                
-                Core.Logger.Log($"{fileUploadType.ToString()} upload complete", DebugLevel.API);
 
-                return false;
+                var uploadUrl = startUploadResp.Value<string>("url");
+                    
+                Core.Logger.Log($"got upload url {uploadUrl}", API.LOG_CATEGORY);
+                if (string.IsNullOrWhiteSpace(uploadUrl))
+                {
+                    Core.Logger.LogError("Got invalid upload url, exiting upload", API.LOG_CATEGORY);
+                    return true;
+                }
+
+                onProgress?.Invoke($"Uploading {fileUploadType.ToString()}...", partProgressStart);
+                    
+                var bytesToRead = partNumber < parts ? MULTIPART_PART_SIZE : (int)(fileStream.Length - fileStream.Position);
+                var bytesRead = 0;
+                try
+                {
+                    bytesRead = await fileStream.ReadAsync(buffer, 0, bytesToRead, cancellationToken);
+                }
+                catch (Exception e)
+                {
+                    Core.Logger.LogError("Could not read file, aborting", API.LOG_CATEGORY);
+                    Core.Logger.LogError(e.Message, API.LOG_CATEGORY);
+                    return true;
+                }
+                    
+                Core.Logger.Log($"Loaded {bytesRead} from file", API.LOG_CATEGORY);
+
+                var sizedArray = new byte[bytesRead];
+                Array.Copy(buffer, sizedArray, bytesRead);
+                    
+                try
+                {
+                    var result = await MakeRequestWithResponse<byte[], EmptyResponse>(
+                        uploadUrl, 
+                        HttpMethod.Put, 
+                        body: sizedArray,
+                        timeout: 60 * 60,
+                        onProgress: (percentage) =>
+                        {
+                            onProgress?.Invoke($"Uploading {fileUploadType.ToString()} ({(percentage * 100):F0}%)...", partProgressStart + percentage * perPartProgress);
+                        }, 
+                        cancellationToken: cancellationToken
+                    );
+                    if (result.responseMessage.Headers.ETag != null)
+                    {
+                        Core.Logger.Log($"Got an etag {result.responseMessage.Headers.ETag.Tag.Trim('"', '\'')} from S3", API.LOG_CATEGORY);
+                        etags.Add(result.responseMessage.Headers.ETag.Tag.Trim('"', '\''));
+                    }
+                }
+                catch (Exception e)
+                {
+                    Core.Logger.LogError($"failed to upload {fileUploadType.ToString()} to {uploadUrl}, exiting upload", API.LOG_CATEGORY);
+                    Core.Logger.LogError(e.Message, API.LOG_CATEGORY);
+                    return true;
+                }
+
+                await Task.Delay(1000, cancellationToken);
+                Core.Logger.Log($"Uploaded part {partNumber} out of {parts}", API.LOG_CATEGORY);
             }
+
+            try
+            {
+                var requestData = new Dictionary<string, List<string>>
+                {
+                    {"etags", etags}
+                };
+                await Put<Dictionary<string, List<string>>, EmptyResponse>(
+                    $"file/{currentFile.ID}/{currentFile.GetLatestVersion()}/{fileUploadType.ToString().ToLowerInvariant()}/finish",
+                    cancellationToken: cancellationToken, body: requestData);
+            }
+            catch (Exception e)
+            {
+                Core.Logger.LogError("Failed to finish upload", API.LOG_CATEGORY);
+                Core.Logger.LogError(e.Message, API.LOG_CATEGORY);
+                return true;
+            }
+                
+            Core.Logger.Log($"{fileUploadType.ToString()} upload complete", API.LOG_CATEGORY);
+
+            return false;
         }
 
         #endregion

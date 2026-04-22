@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -15,11 +16,19 @@ namespace VRC.SDK3.ClientSim
         private bool _isReady;
         private List<Camera> _cameras;
         private ClientSimMenu _clientSimMenu;
+        private IClientSimEventDispatcher _eventDispatcher;
 
-        public void Initialize(Camera playerCamera, ClientSimMenu menu)
+        public IReadOnlyList<Camera> Cameras => _cameras;
+
+        // all layers handled by this system - note that this does not change whether the system is active or not,
+        // meaning it is valid to call this at any time, which `OnCameraSettingsChanged` may need to do
+        public LayerMask RequestedStackLayers => cameraStack.Aggregate(0, (mask, cam) => mask | cam.RenderLayer);
+
+        public void Initialize(Camera playerCamera, ClientSimMenu menu, IClientSimEventDispatcher eventDispatcher)
         {
             _mainSceneCamera = playerCamera;
             _clientSimMenu = menu;
+            _eventDispatcher = eventDispatcher;
         }
 
         public void Ready()
@@ -49,6 +58,7 @@ namespace VRC.SDK3.ClientSim
             {
                 CreateCameraStack();
                 _isInitialized = true;
+                _eventDispatcher.SendEvent(new ClientSimStackedCameraReadyEvent());
             }
         }
 

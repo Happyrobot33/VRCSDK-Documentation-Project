@@ -1,8 +1,13 @@
 ﻿
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using UdonSharp.Compiler.Emit;
 using UdonSharp.Compiler.Symbols;
+using UdonSharp.Compiler.Udon;
+using UdonSharp.Core;
+using UdonSharp.Localization;
 
 namespace UdonSharp.Compiler.Binder
 {
@@ -44,6 +49,105 @@ namespace UdonSharp.Compiler.Binder
             ReleaseCowValuesImpl(context);
             context.ReleaseCowValues(this);
             SourceExpression?.ReleaseCowReferences(context);
+        }
+
+        protected ExternFieldSymbol SetupExternAccessor(SyntaxNode node, AbstractPhaseContext context, ExternFieldSymbol externFieldAccessor,
+            BoundExpression sourceExpression, CompilerUdonInterface.FieldAccessorType accessorType,
+            Func<TypeSymbol, ExternFieldSymbol> synthesizedFieldSymbolFactory)
+        {
+            string sig = accessorType == CompilerUdonInterface.FieldAccessorType.Get ? externFieldAccessor.ExternGetSignature : externFieldAccessor.ExternSetSignature;
+
+            if (!CompilerUdonInterface.IsExposedToUdon(sig))
+            {
+                ExternFieldSymbol externAlternateAccessor = FindAlternateAccessor(context, externFieldAccessor, sourceExpression, accessorType, synthesizedFieldSymbolFactory);
+                if (externAlternateAccessor == null)
+                {
+                    throw new NotExposedException(LocStr.CE_UdonFieldNotExposed, node, $"{externFieldAccessor.RoslynSymbol?.ToDisplayString() ?? externFieldAccessor.ToString()}, sig: {sig}");
+                }
+                else
+                {
+                    return externAlternateAccessor;
+                }
+            }
+
+            return externFieldAccessor;
+        }
+
+        protected ExternMethodSymbol SetupExternMethodSymbol(SyntaxNode node, AbstractPhaseContext context, ExternMethodSymbol methodSymbol,
+            BoundExpression instanceExpression, BoundExpression[] parameterExpressions)
+        {
+            if (!CompilerUdonInterface.IsExposedToUdon(methodSymbol.ExternSignature))
+            {
+                ExternMethodSymbol externAlternateMethodSymbol = FindAlternateInvocation(context, methodSymbol, instanceExpression, parameterExpressions);
+                if (externAlternateMethodSymbol == null)
+                {
+                    throw new NotExposedException(LocStr.CE_UdonMethodNotExposed, node, $"{methodSymbol.RoslynSymbol?.ToDisplayString() ?? methodSymbol.ToString()}, sig: {methodSymbol.ExternSignature}");
+                }
+                else
+                {
+                    return externAlternateMethodSymbol;
+                }
+            }
+
+            return methodSymbol;
+        }
+
+        private static ExternFieldSymbol FindAlternateAccessor(AbstractPhaseContext context, ExternFieldSymbol originalFieldSymbol,
+            BoundExpression sourceExpression, CompilerUdonInterface.FieldAccessorType accessorType,
+            Func<TypeSymbol, ExternFieldSymbol> synthesizedFieldSymbolFactory)
+        {
+            if (originalFieldSymbol.IsStatic) return null;
+
+            List<TypeSymbol> candidates = new List<TypeSymbol>();
+            FindCandidateAlternateTypes(context, candidates, sourceExpression?.ValueType ?? originalFieldSymbol.ContainingType);
+
+            foreach (TypeSymbol candidate in candidates)
+            {
+                ExternFieldSymbol externFieldSymbol = synthesizedFieldSymbolFactory(candidate);
+                string sig = accessorType == CompilerUdonInterface.FieldAccessorType.Get ? externFieldSymbol.ExternGetSignature : externFieldSymbol.ExternSetSignature;
+                if (CompilerUdonInterface.IsExposedToUdon(sig))
+                {
+                    return externFieldSymbol;
+                }
+            }
+
+            return null;
+        }
+
+        private static ExternMethodSymbol FindAlternateInvocation(AbstractPhaseContext context,
+            MethodSymbol originalSymbol, BoundExpression instanceExpression, BoundExpression[] parameterExpressions)
+        {
+            if (originalSymbol.IsStatic || originalSymbol.IsConstructor) return null;
+
+            List<TypeSymbol> candidates = new List<TypeSymbol>();
+            FindCandidateAlternateTypes(context, candidates, instanceExpression.ValueType);
+
+            TypeSymbol[] paramTypes = parameterExpressions.Select(ex => ex.ValueType).ToArray();
+
+            foreach (TypeSymbol candidate in candidates)
+            {
+                ExternMethodSymbol externMethodSymbol = new ExternSynthesizedMethodSymbol(context, originalSymbol.Name, candidate, paramTypes, originalSymbol.ReturnType, false, false);
+                if (CompilerUdonInterface.IsExposedToUdon(externMethodSymbol.ExternSignature))
+                {
+                    return externMethodSymbol;
+                }
+            }
+
+            return null;
+        }
+
+        private static void FindCandidateAlternateTypes(AbstractPhaseContext context, List<TypeSymbol> candidates, TypeSymbol ty)
+        {
+            foreach (var intf in ty.RoslynSymbol.AllInterfaces)
+            {
+                candidates.Add(context.GetTypeSymbol(intf));
+            }
+
+            while (ty != null)
+            {
+                candidates.Add(ty);
+                ty = ty.BaseType;
+            }
         }
     }
 

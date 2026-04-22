@@ -8,6 +8,7 @@ using VRC.SDKBase;
 
 #if VRC_ENABLE_PLAYER_PERSISTENCE
 using UnityEngine.SceneManagement;
+using VRC.SDK3.Data;
 using VRC.SDK3.Persistence;
 using VRC.Udon;
 #endif
@@ -42,6 +43,12 @@ namespace VRC.SDK3.ClientSim.Persistence
         private bool isDoneDecoding;
         private bool hasPostedPlayerDataDecoded;
         private bool hasPostedPlayerRestored;
+
+        public int Size
+            => System.Text.Encoding.UTF8.GetByteCount(JsonConvert.SerializeObject(leData, Formatting.Indented, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            }));
 
         public IEnumerable<string> GetKeys()
         {
@@ -836,6 +843,7 @@ namespace VRC.SDK3.ClientSim.Persistence
             });
         }
 
+        private float lastCheckTime = 0;
         private void LateUpdate()
         {
             if (queuedPlayerDataUpdates.Count > 0)
@@ -854,6 +862,18 @@ namespace VRC.SDK3.ClientSim.Persistence
             {
                 hasPostedPlayerDataDecoded = true;
                 _eventDispatcher.SendEvent(new ClientSimOnPlayerDataDecodedEvent { player = _player });
+            }
+
+            if (Time.realtimeSinceStartup - lastCheckTime > 30f)
+            {
+                lastCheckTime = Time.realtimeSinceStartup;
+                float dataLimit = ClientSimMain.TryGetInstance(out var instance) ? instance.GetPlayerDataUsageLimit() : 0;
+                float sz = Size;
+                
+                if (sz >= dataLimit)
+                    UdonManager.Instance.RunEvent(UdonManager.UDON_EVENT_ONPLAYERDATASTORAGEEXCEEDED, ("player", _player));
+                else if (sz >= dataLimit * 0.7f)
+                    UdonManager.Instance.RunEvent(UdonManager.UDON_EVENT_ONPLAYERDATASTORAGEWARNING, ("player", _player));
             }
         }
         

@@ -244,35 +244,54 @@ namespace UdonSharp.Editors
 
             TypeItemMetadata itemMetadata = new TypeItemMetadata();
             itemMetadata.member = memberInfo;
-            
-            switch (memberInfo.MemberType)
+
+            bool isExposed = false;
+            Type baseDeclaringType = memberInfo.DeclaringType;
+            Type currentNavigatedType = memberInfo.ReflectedType ?? baseDeclaringType;
+            while (currentNavigatedType != null && (currentNavigatedType.IsSubclassOf(baseDeclaringType) || currentNavigatedType == baseDeclaringType))
             {
-                case MemberTypes.Constructor:
-                case MemberTypes.Method:
-                    itemMetadata.exposed = CompilerUdonInterface.IsExposedToUdon(CompilerUdonInterface.GetUdonMethodName((MethodBase)memberInfo));
-                    break;
-                case MemberTypes.Field:
-                    string getAccessor = CompilerUdonInterface.GetUdonAccessorName((FieldInfo)memberInfo, CompilerUdonInterface.FieldAccessorType.Get);
-                    // string setAccessor = resolver.GetUdonFieldAccessorName((FieldInfo)memberInfo, CompilerUdonInterface.FieldAccessorType.Set, false);
-
-                    itemMetadata.exposed = CompilerUdonInterface.IsExposedToUdon(getAccessor);
-                    break;
-                case MemberTypes.Property:
-                    MethodInfo getMethod = ((PropertyInfo) memberInfo).GetGetMethod();
-
-                    if (getMethod == null)
-                        return;
+                switch (memberInfo.MemberType)
+                {
+                    case MemberTypes.Constructor:
+                    case MemberTypes.Method:
+                        string method = CompilerUdonInterface.GetUdonMethodName((MethodBase)memberInfo, declaringTypeOverride: currentNavigatedType);
                     
-                    string getProperty = CompilerUdonInterface.GetUdonMethodName(getMethod);
+                        isExposed = CompilerUdonInterface.IsExposedToUdon(method);
+                        break;
+                    case MemberTypes.Field:
+                        string getAccessor = CompilerUdonInterface.GetUdonAccessorName((FieldInfo)memberInfo, CompilerUdonInterface.FieldAccessorType.Get, declaringTypeOverride: currentNavigatedType);
+                        // string setAccessor = resolver.GetUdonFieldAccessorName((FieldInfo)memberInfo, CompilerUdonInterface.FieldAccessorType.Set, false);
 
-                    // if (((PropertyInfo)memberInfo).GetSetMethod() != null)
-                    // {
-                    //     string setProperty = resolver.GetUdonMethodName(((PropertyInfo)memberInfo).GetSetMethod(), false);
-                    // }
+                        isExposed = CompilerUdonInterface.IsExposedToUdon(getAccessor);
+                        break;
+                    case MemberTypes.Property:
+                        MethodInfo getMethod = ((PropertyInfo) memberInfo).GetGetMethod();
 
-                    itemMetadata.exposed = CompilerUdonInterface.IsExposedToUdon(getProperty);
+                        if (getMethod != null)
+                        {
+                            string getProperty = CompilerUdonInterface.GetUdonMethodName(getMethod, declaringTypeOverride: currentNavigatedType);
+
+                            // if (((PropertyInfo)memberInfo).GetSetMethod() != null)
+                            // {
+                            //     string setProperty = resolver.GetUdonMethodName(((PropertyInfo)memberInfo).GetSetMethod(), false);
+                            // }
+
+                            isExposed = CompilerUdonInterface.IsExposedToUdon(getProperty);
+                        }
+
+                        break;
+                }
+
+                if (isExposed)
+                {
+                    // Found exposure, stop searching up
                     break;
+                }
+
+                // Move up the tree.
+                currentNavigatedType = currentNavigatedType.BaseType;
             }
+            itemMetadata.exposed = isExposed;
             
             parentItem.AddChild(memberItem);
 

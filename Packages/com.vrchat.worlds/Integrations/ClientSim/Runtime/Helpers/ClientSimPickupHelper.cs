@@ -141,7 +141,7 @@ namespace VRC.SDK3.ClientSim
 
         public VRCPlayerApi GetHoldingPlayer() => IsHeld() ? _heldPlayer : null;
 
-        public bool AutoHold() => _pickup.AutoHold == VRC_Pickup.AutoHoldMode.Yes;
+        public bool AutoHold() => _pickup.AutoHold is VRC_Pickup.AutoHoldMode.Yes or VRC_Pickup.AutoHoldMode.Sometimes;
 
         public GameObject GetGameObject() => gameObject;
 

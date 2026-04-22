@@ -25,8 +25,6 @@ namespace VRC.Udon.Wrapper.Modules
     {
         public string Name => "UnityEngineInput";
         
-        
-        
         public HashSet<Func<bool>> FreezeInputFuncs = new HashSet<Func<bool>>();
         private enum FreezeInputState
         {
@@ -71,16 +69,16 @@ namespace VRC.Udon.Wrapper.Modules
             return shouldFreeze;
         }
         
-        private readonly Dictionary<string, int> _parameterCounts;
-        private readonly Dictionary<string, UdonExternDelegate> _functionDelegates;
+        private readonly Lazy<Dictionary<string, int>> _parameterCounts;
+        private readonly Lazy<Dictionary<string, UdonExternDelegate>> _functionDelegates;
         private readonly IUdonComponentGetter _componentGetter;
-        private readonly IUdonSecurityBlacklist<UnityEngine.Object> _blacklist;
+        private readonly IUdonSecurityFilter<UnityEngine.Object> _filter;
         
-        public ExternUnityEngineInput(IUdonComponentGetter componentGetter, IUdonSecurityBlacklist<UnityEngine.Object> blacklist)
+        public ExternUnityEngineInput(IUdonComponentGetter componentGetter, IUdonSecurityFilter<UnityEngine.Object> filter)
         {
             _componentGetter = componentGetter;
-            _blacklist = blacklist;
-            _parameterCounts = new Dictionary<string, int>
+            _filter = filter;
+            _parameterCounts = new Lazy<Dictionary<string, int>>(() => new Dictionary<string, int>
             {
                 {"__Equals__SystemObject__SystemBoolean", 3},
                 {"__GetAxisRaw__SystemString__SystemSingle", 2},
@@ -106,9 +104,9 @@ namespace VRC.Udon.Wrapper.Modules
                 {"__get_anyKey__SystemBoolean", 1},
                 {"__get_imeIsSelected__SystemBoolean", 1},
                 {"__get_inputString__SystemString", 1},
-            };
+            });
             
-            _functionDelegates = new Dictionary<string, UdonExternDelegate>
+            _functionDelegates = new Lazy<Dictionary<string, UdonExternDelegate>>(() => new Dictionary<string, UdonExternDelegate>()
             {
                 {"__Equals__SystemObject__SystemBoolean", __Equals__SystemObject__SystemBoolean},
                 {"__GetAxisRaw__SystemString__SystemSingle", __GetAxisRaw__SystemString__SystemSingle},
@@ -134,12 +132,12 @@ namespace VRC.Udon.Wrapper.Modules
                 {"__get_anyKey__SystemBoolean", __get_anyKey__SystemBoolean},
                 {"__get_imeIsSelected__SystemBoolean", __get_imeIsSelected__SystemBoolean},
                 {"__get_inputString__SystemString", __get_inputString__SystemString},
-            };
+            });
         }
         
         public int GetExternFunctionParameterCount(string externFunctionSignature)
         {
-           if(_parameterCounts.TryGetValue(externFunctionSignature, out int numParameters))
+           if(_parameterCounts.Value.TryGetValue(externFunctionSignature, out int numParameters))
            {
                return numParameters;
            }
@@ -149,7 +147,7 @@ namespace VRC.Udon.Wrapper.Modules
         
         public UdonExternDelegate GetExternFunctionDelegate(string externFunctionSignature)
         {
-            if(_functionDelegates.TryGetValue(externFunctionSignature, out UdonExternDelegate externDelegate))
+            if(_functionDelegates.Value.TryGetValue(externFunctionSignature, out UdonExternDelegate externDelegate))
             {
                 return externDelegate;
             }
@@ -162,12 +160,12 @@ namespace VRC.Udon.Wrapper.Modules
         {
             System.Object var_0 = heap.GetHeapVariable<System.Object>(parameterAddresses[0]);
             #if !UDON_DISABLE_SECURITY
-            _blacklist.FilterBlacklisted(ref var_0);
+            _filter.ApplyFilter(ref var_0);
             #endif
             
             System.Object var_1 = heap.GetHeapVariable<System.Object>(parameterAddresses[1]);
             #if !UDON_DISABLE_SECURITY
-            _blacklist.FilterBlacklisted(ref var_1);
+            _filter.ApplyFilter(ref var_1);
             #endif
             
             System.Boolean var_2 = var_0.Equals(var_1);
@@ -219,7 +217,7 @@ namespace VRC.Udon.Wrapper.Modules
         {
             System.Object var_0 = heap.GetHeapVariable<System.Object>(parameterAddresses[0]);
             #if !UDON_DISABLE_SECURITY
-            _blacklist.FilterBlacklisted(ref var_0);
+            _filter.ApplyFilter(ref var_0);
             #endif
             
             System.Int32 var_1 = var_0.GetHashCode();
@@ -310,7 +308,7 @@ namespace VRC.Udon.Wrapper.Modules
         {
             System.Object var_0 = heap.GetHeapVariable<System.Object>(parameterAddresses[0]);
             #if !UDON_DISABLE_SECURITY
-            _blacklist.FilterBlacklisted(ref var_0);
+            _filter.ApplyFilter(ref var_0);
             #endif
             
             System.Type var_1 = var_0.GetType();
@@ -322,7 +320,7 @@ namespace VRC.Udon.Wrapper.Modules
         {
             System.Object var_0 = heap.GetHeapVariable<System.Object>(parameterAddresses[0]);
             #if !UDON_DISABLE_SECURITY
-            _blacklist.FilterBlacklisted(ref var_0);
+            _filter.ApplyFilter(ref var_0);
             #endif
             
             System.String var_1 = var_0.ToString();

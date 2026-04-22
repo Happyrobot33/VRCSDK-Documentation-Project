@@ -30,7 +30,7 @@ namespace VRC.SDKBase.Validation.Performance
                         case PerformanceRating.Good:
                         {
                             displayLevel = PerformanceInfoDisplayLevel.Info;
-                            statText = string.Format("Overall Performance: {0}", AvatarPerformanceStats.GetPerformanceRatingDisplayName(rating));
+                            statText = string.Format("Overall Performance Estimate: {0}", AvatarPerformanceStats.GetPerformanceRatingDisplayName(rating));
                             break;
                         }
                         case PerformanceRating.Medium:
@@ -38,7 +38,7 @@ namespace VRC.SDKBase.Validation.Performance
                         {
                             displayLevel = PerformanceInfoDisplayLevel.Warning;
                             statText = string.Format(
-                                "Overall Performance: {0} - This avatar may not perform well on many systems." +
+                                "Overall Performance Estimate: {0} - This avatar may not perform well on many systems." +
                                 " See additional warnings for suggestions on how to improve performance. Click 'Avatar Optimization Tips' below for more information.",
                                 AvatarPerformanceStats.GetPerformanceRatingDisplayName(rating)
                             );
@@ -51,7 +51,7 @@ namespace VRC.SDKBase.Validation.Performance
                             if(ValidationEditorHelpers.IsMobilePlatform())
                             {
                                 statText = string.Format(
-                                    "Overall Performance: {0} - This avatar does not meet minimum performance requirements for VRChat. " +
+                                    "Overall Performance Estimate: {0} - This avatar does not meet minimum performance requirements for VRChat. " +
                                     "It will be blocked by default on VRChat for Quest, and will not show unless a user chooses to show your avatar." +
                                     " See additional warnings for suggestions on how to improve performance. Click 'Avatar Optimization Tips' below for more information.",
                                     AvatarPerformanceStats.GetPerformanceRatingDisplayName(rating));
@@ -59,7 +59,7 @@ namespace VRC.SDKBase.Validation.Performance
                             else
                             {
                                 statText = string.Format(
-                                    "Overall Performance: {0} - This avatar does not meet minimum performance requirements for VRChat. " +
+                                    "Overall Performance Estimate: {0} - This avatar does not meet minimum performance requirements for VRChat. " +
                                     "It may be blocked by users depending on their Performance settings." +
                                     " See additional warnings for suggestions on how to improve performance. Click 'Avatar Optimization Tips' below for more information.",
                                     AvatarPerformanceStats.GetPerformanceRatingDisplayName(rating));
@@ -907,6 +907,49 @@ namespace VRC.SDKBase.Validation.Performance
                                 AvatarPerformanceStats.GetStatLevelForRating(PerformanceRating.Poor, isMobilePlatform).constraintDepth,
                                 AvatarPerformanceStats.GetStatLevelForRating(PerformanceRating.Excellent, isMobilePlatform).constraintDepth,
                                 (isMobilePlatform) ? "All VRCConstraint components will be removed at runtime." : "Reorganize your constraints to reduce dependencies for optimal performance.");
+
+                            break;
+                        }
+                    }
+
+                    break;
+                }
+                case AvatarPerformanceCategory.RaycastCount:
+                {
+                    //Max limits
+                    if (perfStats.raycastCount > AvatarValidation.MAX_RAYCAST_COMPONENTS_PER_AVATAR)
+                    {
+                        errorText = $"VRCRaycast Components: {perfStats.raycastCount} - Avatar exceeds the maximum limit ({AvatarValidation.MAX_RAYCAST_COMPONENTS_PER_AVATAR}) of this component type.  Reduce the number of VRCRaycast components on this avatar.";
+                    }
+
+                    switch(rating)
+                    {
+                        case PerformanceRating.Excellent:
+                        case PerformanceRating.Good:
+                        {
+                            displayLevel = PerformanceInfoDisplayLevel.Verbose;
+                            statText = string.Format("Raycasts: {0}", perfStats.raycastCount);
+                            break;
+                        }
+                        case PerformanceRating.Medium:
+                        case PerformanceRating.Poor:
+                        {
+                            displayLevel = PerformanceInfoDisplayLevel.Warning;
+                            statText = string.Format(
+                                "Raycasts: {0} (Recommended: {1}) - Reduce the number of VRCRaycast components for optimal performance.",
+                                perfStats.raycastCount,
+                                AvatarPerformanceStats.GetStatLevelForRating(PerformanceRating.Excellent, isMobilePlatform).raycastCount);
+
+                            break;
+                        }
+                        case PerformanceRating.VeryPoor:
+                        {
+                            displayLevel = isMobilePlatform ? PerformanceInfoDisplayLevel.Error : PerformanceInfoDisplayLevel.Warning;
+                            statText = string.Format(
+                                "Raycasts: {0} (Maximum: {1}, Recommended: {2}) - This avatar has too many raycast components. Reduce number of VRCRaycast components for better performance.",
+                                perfStats.raycastCount,
+                                AvatarPerformanceStats.GetStatLevelForRating(PerformanceRating.Poor, isMobilePlatform).raycastCount,
+                                AvatarPerformanceStats.GetStatLevelForRating(PerformanceRating.Excellent, isMobilePlatform).raycastCount);
 
                             break;
                         }

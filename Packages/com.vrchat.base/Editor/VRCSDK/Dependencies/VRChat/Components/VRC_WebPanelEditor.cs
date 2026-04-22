@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEditor.Build;
 using System;
-using System.Linq;
+using ZLinq;
 using VRC.SDKBase.Editor;
 
 namespace VRCSDK2

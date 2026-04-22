@@ -193,6 +193,82 @@ namespace Tests.DataContainers
             Assert.Throws<InvalidOperationException>(() => _ = stringtoken.Bitcast(TokenType.Float));
         }
 
+        [Test]
+        public void TestEquality()
+        {
+            void TestEqualityOfDifferentTokensWithSameValue<T>(T _a, T _b)
+            {
+                DataToken a = new DataToken(_a);
+                DataToken b = new DataToken(_b);
+                if (_a == null && _b == null)
+                {
+                    // DataTokens both referring to null are expected to be equal
+                    Assert.IsTrue(a == b);
+                }
+                else if (typeof(T) == typeof(string))
+                {
+                    // Strings are special and their == operator does NOT check if the references are exactly the same, rather it checks the characters
+                    Assert.IsTrue(a == b);
+                }
+                else
+                {
+                    Assert.IsFalse(a == b);
+                }
+                Assert.IsTrue(a.Equals(b));
+            }
+
+            TestEqualityOfDifferentTokensWithSameValue(true, true);
+            TestEqualityOfDifferentTokensWithSameValue((sbyte)5, (sbyte)5);
+            TestEqualityOfDifferentTokensWithSameValue((byte)5, (byte)5);
+            TestEqualityOfDifferentTokensWithSameValue((short)5, (short)5);
+            TestEqualityOfDifferentTokensWithSameValue((ushort)5, (ushort)5);
+            TestEqualityOfDifferentTokensWithSameValue((int)5, (int)5);
+            TestEqualityOfDifferentTokensWithSameValue((uint)5, (uint)5);
+            TestEqualityOfDifferentTokensWithSameValue((long)5, (long)5);
+            TestEqualityOfDifferentTokensWithSameValue((ulong)5, (ulong)5);
+            TestEqualityOfDifferentTokensWithSameValue((float)5, (float)5);
+            TestEqualityOfDifferentTokensWithSameValue((double)5, (double)5);
+            TestEqualityOfDifferentTokensWithSameValue("abc", "abc");
+            TestEqualityOfDifferentTokensWithSameValue<object>(null, null);
+            TestEqualityOfDifferentTokensWithSameValue(new Vector3Int(1, 2, 3), new Vector3Int(1, 2, 3));
+            
+            void TestEqualityOfDifferentTokensWithDifferentValues<T>(T _a, T _b)
+            {
+                DataToken a = new DataToken(_a);
+                DataToken b = new DataToken(_b);
+                Assert.IsFalse(a == b);
+                Assert.IsFalse(a.Equals(b));
+            }
+            
+            TestEqualityOfDifferentTokensWithDifferentValues(true, false);
+            TestEqualityOfDifferentTokensWithDifferentValues((sbyte)5, (sbyte)6);
+            TestEqualityOfDifferentTokensWithDifferentValues((byte)5, (byte)6);
+            TestEqualityOfDifferentTokensWithDifferentValues((short)5, (short)6);
+            TestEqualityOfDifferentTokensWithDifferentValues((ushort)5, (ushort)6);
+            TestEqualityOfDifferentTokensWithDifferentValues((int)5, (int)6);
+            TestEqualityOfDifferentTokensWithDifferentValues((uint)5, (uint)6);
+            TestEqualityOfDifferentTokensWithDifferentValues((long)5, (long)6);
+            TestEqualityOfDifferentTokensWithDifferentValues((ulong)5, (ulong)6);
+            TestEqualityOfDifferentTokensWithDifferentValues((float)5, (float)6);
+            TestEqualityOfDifferentTokensWithDifferentValues((double)5, (double)6);
+            TestEqualityOfDifferentTokensWithDifferentValues("abc", "def");
+            TestEqualityOfDifferentTokensWithDifferentValues("abc", null);
+            TestEqualityOfDifferentTokensWithDifferentValues(new Vector3Int(1, 2, 3), new Vector3Int(4, 5, 6));
+            
+            // Make sure types do not implicitly cast
+            Assert.IsFalse(new DataToken((sbyte)5).Equals(new DataToken((byte)5)));
+            Assert.IsFalse(new DataToken((short)5).Equals(new DataToken((ushort)5)));
+            Assert.IsFalse(new DataToken((int)5).Equals(new DataToken((uint)5)));
+            Assert.IsFalse(new DataToken((long)5).Equals(new DataToken((ulong)5)));
+            Assert.IsFalse(new DataToken((float)5).Equals(new DataToken((double)5)));
+
+            Assert.IsFalse(new DataToken((sbyte)5) == new DataToken((byte)5));
+            Assert.IsFalse(new DataToken((short)5) == new DataToken((ushort)5));
+            Assert.IsFalse(new DataToken((int)5) == new DataToken((uint)5));
+            Assert.IsFalse(new DataToken((long)5) == new DataToken((ulong)5));
+            Assert.IsFalse(new DataToken((float)5) == new DataToken((double)5));
+        }
+
         private void SetAndGet(string title, DataToken inToken)
         {
             SetAndGetDictionary(title, inToken);

@@ -294,7 +294,7 @@ namespace VRC.SDK3.Components.Editor
         
         private static void CreateEventSystem(bool select, GameObject parent)
         {
-            var esys = Object.FindObjectOfType<EventSystem>();
+            var esys = Object.FindFirstObjectByType<EventSystem>();
             if (esys == null)
             {
                 var eventSystem = new GameObject("EventSystem");

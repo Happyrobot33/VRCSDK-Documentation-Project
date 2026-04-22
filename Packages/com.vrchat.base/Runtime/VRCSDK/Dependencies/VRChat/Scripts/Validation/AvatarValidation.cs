@@ -93,6 +93,7 @@ namespace VRC.SDKBase.Validation
             "VRC.SDK3.Avatars.Components.VRCImpostorSettings",
             "VRC.SDK3.Avatars.Components.VRCImpostorEnvironment",
             "VRC.SDK3.Avatars.Components.VRCHeadChop",
+            "VRC.SDK3.Avatars.Components.VRCRaycast",
             "VRC.SDK3.Dynamics.PhysBone.Components.VRCPhysBone",
             "VRC.SDK3.Dynamics.PhysBone.Components.VRCPhysBoneCollider",
             "VRC.SDK3.Dynamics.Constraint.Components.VRCAimConstraint",
@@ -116,7 +117,12 @@ namespace VRC.SDKBase.Validation
 
             "VRChat/Mobile/Particles/Additive",
             "VRChat/Mobile/Particles/Multiply",
+
+            "VRChat/Mobile/Toon Standard",
+            "VRChat/Mobile/Toon Standard (Outline)", // not in client whitelist, will fall back to non-outline variant on mobile
         };
+
+        public const int MAX_RAYCAST_COMPONENTS_PER_AVATAR = 80; // VRCRaycast + FinalIK
 
         public const int MAX_AVD_PHYSBONES_PER_AVATAR = 256;
         public const int MAX_AVD_COLLIDERS_PER_AVATAR = 256;

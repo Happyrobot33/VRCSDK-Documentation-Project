@@ -146,5 +146,49 @@ namespace Tests.DataContainers
 
             return true;
         }
+        
+        [Test]
+        public void TestDictionaryEquality()
+        {
+            // Make sure DataDicts act the same way as a C# dictionary in terms of equality
+            void TestDictEqualityToCSharpDict<T>(T _a, T _b)
+            {
+                // Test same keys same values
+                DataDictionary aDataDictionary = new DataDictionary();
+                aDataDictionary[new DataToken(_a)] = "blah";
+                DataDictionary bDataDictionary = new DataDictionary();
+                bDataDictionary[new DataToken(_b)] = "blah";
+                
+                Dictionary<T, string> aCSharpDict = new Dictionary<T, string>();
+                aCSharpDict[_a] = "blah";
+                Dictionary<T, string> bCSharpDict = new Dictionary<T, string>();
+                bCSharpDict[_b] = "blah";
+                
+                Assert.AreEqual(aDataDictionary == bDataDictionary, aCSharpDict == bCSharpDict);
+                Assert.AreEqual(aDataDictionary.Equals(bDataDictionary), aCSharpDict.Equals(bCSharpDict));
+                
+                // Test same keys different values
+                aDataDictionary[new DataToken(_a)] = "not blah";
+                bDataDictionary[new DataToken(_b)] = "blah";
+                aCSharpDict[_a] = "not blah";
+                bCSharpDict[_b] = "blah";
+                
+                Assert.AreEqual(aDataDictionary == bDataDictionary, aCSharpDict == bCSharpDict);
+                Assert.AreEqual(aDataDictionary.Equals(bDataDictionary), aCSharpDict.Equals(bCSharpDict));
+            }
+            
+            TestDictEqualityToCSharpDict(true, true);
+            TestDictEqualityToCSharpDict((sbyte)5, (sbyte)5);
+            TestDictEqualityToCSharpDict((byte)5, (byte)5);
+            TestDictEqualityToCSharpDict((short)5, (short)5);
+            TestDictEqualityToCSharpDict((ushort)5, (ushort)5);
+            TestDictEqualityToCSharpDict((int)5, (int)5);
+            TestDictEqualityToCSharpDict((uint)5, (uint)5);
+            TestDictEqualityToCSharpDict((long)5, (long)5);
+            TestDictEqualityToCSharpDict((ulong)5, (ulong)5);
+            TestDictEqualityToCSharpDict((float)5, (float)5);
+            TestDictEqualityToCSharpDict((double)5, (double)5);
+            TestDictEqualityToCSharpDict("abc", "abc");
+        }
     }
 }

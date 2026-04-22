@@ -28,6 +28,7 @@ using UdonSharp.Lib.Internal;
 using UdonSharp.Serialization;
 using UdonSharpEditor;
 using UnityEditor;
+using VRC.SDK3.UdonNetworkCalling;
 using VRC.Udon;
 using VRC.Udon.Common.Interfaces;
 using Debug = UnityEngine.Debug;
@@ -149,7 +150,7 @@ namespace UdonSharp.Compiler
             
             if (CurrentJob.Task.IsFaulted)
             {
-                UdonSharpUtils.LogError("internal compiler error, dumping exceptions. Please report to Merlin");
+                UdonSharpUtils.LogError("internal compiler error, dumping exceptions.");
 
                 if (CurrentJob.Task.Exception != null)
                 {
@@ -813,7 +814,7 @@ namespace UdonSharp.Compiler
 
                 try
                 {
-                    AssembleProgram(binding, assembly);
+                    AssembleProgram(compilationContext, binding, assembly, moduleEmitContext);
                 }
                 catch (Exception e)
                 {
@@ -901,8 +902,8 @@ namespace UdonSharp.Compiler
 
         private static readonly object _assembleLock = new object();
 
-        private static void AssembleProgram((INamedTypeSymbol, ModuleBinding) binding,
-            System.Reflection.Assembly assembly)
+        private static void AssembleProgram(CompilationContext compilationContext, (INamedTypeSymbol, ModuleBinding) binding,
+            System.Reflection.Assembly assembly, EmitContext moduleEmitContext)
         {
             INamedTypeSymbol rootTypeSymbol = binding.Item1;
             ModuleBinding rootBinding = binding.Item2;
@@ -911,6 +912,7 @@ namespace UdonSharp.Compiler
 
             rootBinding.programAsset.AssembleCsProgram(generatedUasm, rootBinding.assemblyModule.GetHeapSize());
             rootBinding.programAsset.SetUdonAssembly("");
+            rootBinding.programAsset.SetNetworkCallingMetadata(CollectNetworkMetadataFromAttributes(compilationContext, moduleEmitContext));
 
             IUdonProgram program = rootBinding.programAsset.GetRealProgram();
 
@@ -986,6 +988,31 @@ namespace UdonSharp.Compiler
 
                 rootBinding.assembly = generatedUasm;
             }
+        }
+
+        private static NetworkCallingEntrypointMetadata[] CollectNetworkMetadataFromAttributes(CompilationContext context, EmitContext moduleEmitContext)
+        {
+            var metadataList = new List<NetworkCallingEntrypointMetadata>();
+            foreach (var method in moduleEmitContext.DeclaredRootMethods)
+            {
+                var networkCallableAttribute = method.GetAttribute<NetworkCallableAttribute>();
+                if (networkCallableAttribute != null)
+                {
+                    var usbLayout = context.GetUsbMethodLayout(method, moduleEmitContext);
+                    if (usbLayout == null)
+                    {
+                        context.AddDiagnostic(DiagnosticSeverity.Error, method.RoslynSymbol.Locations.FirstOrDefault(), $"Could not find method layout for network callable method '{method.Name}'");
+                        continue;
+                    }
+                    var methodParameters = new List<NetworkCallingParameterMetadata>();
+                    foreach (var (exportParam, sourceParam) in usbLayout.ParameterExportNames.Zip(method.Parameters, static (a, b) => (a, b)))
+                    {
+                        methodParameters.Add(new NetworkCallingParameterMetadata(exportParam, sourceParam.Type.UdonType.SystemType));
+                    }
+                    metadataList.Add(new NetworkCallingEntrypointMetadata(usbLayout.ExportMethodName, networkCallableAttribute, methodParameters.ToArray()));
+                }
+            }
+            return metadataList.ToArray();
         }
     }
 }

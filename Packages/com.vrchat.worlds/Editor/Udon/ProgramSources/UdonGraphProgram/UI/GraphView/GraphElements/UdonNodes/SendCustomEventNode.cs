@@ -16,7 +16,7 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView.UdonNodes
         protected override void Initialize()
         {
             base.Initialize();
-            _eventNamePopup = this.GetProgramPopup(UdonNodeExtensions.ProgramPopupType.Events, _eventNamePopup);
+            _eventNamePopup = this.GetProgramPopup(UdonNodeExtensions.ProgramPopupType.Events, _eventNamePopup, allowEventsWithParameters: definition.fullName.Contains("__SendCustomNetworkEvent__"));
         }
     }
 }

@@ -6,9 +6,11 @@ using System.Threading;
 using Unity.Profiling;
 using UnityEngine;
 using VRC.Compression;
-using VRC.SDK3.Components;
+using VRC.SDK3.UdonNetworkCalling;
+using VRC.SDKBase;
 using VRC.Udon.Common;
 using VRC.Udon.Common.Interfaces;
+using VRC.Udon.Security;
 using VRC.Udon.Serialization.OdinSerializer;
 using VRC.Udon.Serialization.OdinSerializer.Utilities;
 
@@ -18,8 +20,8 @@ namespace VRC.Udon.ProgramSources
 {
     public sealed class SerializedUdonProgramAsset : AbstractSerializedUdonProgramAsset, IUdonSignatureHolder
     {
-        private static readonly Lazy<int> _debugLevel = new Lazy<int>(InitializeLogging);
-        private static int DebugLevel => _debugLevel.Value;
+        private static readonly Lazy<string> _debugCategory = new Lazy<string>(InitializeLogging);
+        private static string DebugCategoryName => _debugCategory.Value;
 
         private const DataFormat DEFAULT_SERIALIZATION_DATA_FORMAT = DataFormat.Binary;
         private const int MAXIMUM_CACHED_PROGRAM_SIZE = 1024 * 1024 * 2; // 2 MB
@@ -36,6 +38,28 @@ namespace VRC.Udon.ProgramSources
         [SerializeField, HideInInspector]
         private List<UnityEngine.Object> programUnityEngineObjects;
 
+        [SerializeField, HideInInspector]
+        private NetworkCallingEntrypointMetadata[] networkCallingEntrypointMetadata;
+
+        public override NetworkCallingEntrypointMetadata[] GetNetworkCallingMetadata() => networkCallingEntrypointMetadata;
+
+        [NonSerialized] private Dictionary<string, NetworkCallingEntrypointMetadata> _networkCallingEntrypointMetadataMap;
+        public override NetworkCallingEntrypointMetadata GetNetworkCallingMetadata(string entrypoint)
+        {
+            if (networkCallingEntrypointMetadata == null)
+                return null;
+            if (_networkCallingEntrypointMetadataMap == null)
+            {
+                _networkCallingEntrypointMetadataMap = new();
+                foreach (var metadata in networkCallingEntrypointMetadata)
+                {
+                    if (metadata != null)
+                        _networkCallingEntrypointMetadataMap[metadata.Name] = metadata;
+                }
+            }
+            return _networkCallingEntrypointMetadataMap.TryGetValue(entrypoint, out var result) ? result : null;
+        }
+
         // Store the serialization DataFormat that was actually used to serialize the program.
         // This allows us to change the DataFormat later (ex. switch to binary) without causing already serialized programs to use the wrong DataFormat.
         // Programs will be deserialized using the previous format and will switch to the new format if StoreProgram is called again later.
@@ -43,9 +67,9 @@ namespace VRC.Udon.ProgramSources
         private DataFormat serializationDataFormat = DEFAULT_SERIALIZATION_DATA_FORMAT;
 
         // Cache the deserialized program and a serialized copy of its IUdonHeap to more efficiently create clones of the IUdonProgram.
-        private (IUdonProgram program, byte[] serializedHeap, List<UnityEngine.Object> serializedHeapUnityEngineObjects)? _serializationCache = null;
+        [NonSerialized] private (IUdonProgram program, byte[] serializedHeap, List<UnityEngine.Object> serializedHeapUnityEngineObjects)? _serializationCache = null;
 
-        private int _mainThreadId;
+        [NonSerialized] private int _mainThreadId;
 
         private void OnEnable()
         {
@@ -58,7 +82,7 @@ namespace VRC.Udon.ProgramSources
                 {
                     Core.Logger.LogWarning(
                         $"Skipping caching of UdonProgram '{name}' as the total program size ({totalProgramSize}) is higher than '{MAXIMUM_CACHED_PROGRAM_SIZE}'",
-                        DebugLevel);
+                        DebugCategoryName);
 
                     _serializationCache = null;
                     return;
@@ -82,7 +106,7 @@ namespace VRC.Udon.ProgramSources
             }
             catch(Exception e)
             {
-                Core.Logger.LogWarning($"Failed to deserialize Udon Program due to :\n{e}.", DebugLevel);
+                Core.Logger.LogWarning($"Failed to deserialize Udon Program due to :\n{e}.", DebugCategoryName);
             }
 #endif
         }
@@ -101,10 +125,17 @@ namespace VRC.Udon.ProgramSources
             serializedProgramCompressedBytes = GZip.Compress(serializedProgramBytes);
             serializedProgramBytesString = string.Empty;
             serializationDataFormat = DEFAULT_SERIALIZATION_DATA_FORMAT;
+            networkCallingEntrypointMetadata = null;
 
             #if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);
             #endif
+        }
+
+        public override void StoreProgram(IUdonProgram udonProgram, NetworkCallingEntrypointMetadata[] networkCallingMetadata)
+        {
+            StoreProgram(udonProgram);
+            networkCallingEntrypointMetadata = networkCallingMetadata;
         }
 
         private ProfilerMarker _retrieveProgramProfilerMarker = new ProfilerMarker("SerializedUdonProgram.RetrieveProgram");
@@ -124,7 +155,9 @@ namespace VRC.Udon.ProgramSources
 
                     if(_serializationCache == null)
                     {
-                        return ReadSerializedProgram();
+                        var deserializedProgram = ReadSerializedProgram();
+                        PopulateEntrypointHashes(deserializedProgram);
+                        return deserializedProgram;
                     }
 
                     (IUdonProgram program, byte[] serializedHeap, List<UnityEngine.Object> serializedHeapUnityEngineObjects) = _serializationCache.Value;
@@ -163,7 +196,7 @@ namespace VRC.Udon.ProgramSources
                     }
 
                     // Everything except the byte code array and IUdonHeap are immutable so they don't need to be cloned.
-                    return new UdonProgram(
+                    var clonedProgram = new UdonProgram(
                         program.InstructionSetIdentifier,
                         program.InstructionSetVersion,
                         byteCodeCopy,
@@ -173,20 +206,22 @@ namespace VRC.Udon.ProgramSources
                         program.SyncMetadataTable,
                         program.UpdateOrder
                     );
+                    PopulateEntrypointHashes(clonedProgram);
+                    return clonedProgram;
                 }
                 catch(SerializationAbortException e)
                 {
                     // Odin can't deserialize Unity Gradients properly off the main-thread 
                     if(!e.Message.StartsWith("Failed to read Gradient.mode, due to Unity's API"))
                     {
-                        Core.Logger.LogWarning($"Failed to deserialize Udon Program due to an exception:\n{e}.", DebugLevel);
+                        Core.Logger.LogWarning($"Failed to deserialize Udon Program due to an exception:\n{e}.", DebugCategoryName);
                     }
 
                     return null;
                 }
                 catch(Exception e)
                 {
-                    Core.Logger.LogWarning($"Failed to deserialize Udon Program due to an exception:\n{e}.", DebugLevel);
+                    Core.Logger.LogWarning($"Failed to deserialize Udon Program due to an exception:\n{e}.", DebugCategoryName);
                     return null;
                 }
             }
@@ -250,17 +285,17 @@ namespace VRC.Udon.ProgramSources
             return 0L;
         }
 
-        private static int InitializeLogging()
+        private static string InitializeLogging()
         {
-            int hashCode = typeof(SerializedUdonProgramAsset).GetHashCode();
-            if(Core.Logger.DebugLevelIsDescribed(hashCode))
+            const string categoryName = "SerializedUdonProgramAsset";
+            if(Core.Logger.CategoryIsDescribed(categoryName))
             {
-                return hashCode;
+                return categoryName;
             }
 
-            Core.Logger.DescribeDebugLevel(hashCode, "SerializedUdonProgramAsset", Core.Logger.Color.blue);
-            Core.Logger.AddDebugLevel(hashCode);
-            return hashCode;
+            Core.Logger.DescribeCategory(categoryName, Core.Logger.Color.blue);
+            Core.Logger.EnableCategory(categoryName);
+            return categoryName;
         }
 
         private void OnDisable()
@@ -293,10 +328,40 @@ namespace VRC.Udon.ProgramSources
         byte[] IUdonSignatureHolder.SignedData => serializedProgramCompressedBytes;
 
         // in client only, allow skipping signature validation for internal behaviours (like stations)
-        public bool IsInternallyValidated { get; private set; } = false;
+        [field: NonSerialized] public bool IsInternallyValidated { get; private set; } = false;
     #if VRC_CLIENT
         public void SetInternallyValidated() => IsInternallyValidated = true;
     #endif
 #endregion
+
+#region Entrypoint Hashing
+
+        [NonSerialized] private int _entrypointHashesLoaded = 0;
+        private readonly Dictionary<uint, string> _entrypointHashToName = new Dictionary<uint, string>();
+        private readonly Dictionary<string, uint> _entrypointNameToHash = new Dictionary<string, uint>();
+
+        private void PopulateEntrypointHashes(IUdonProgram program)
+        {
+            if (program == null || program.EntryPoints == null)
+                return;
+
+            if (Interlocked.CompareExchange(ref _entrypointHashesLoaded, 1, 0) == 1)
+                return;
+
+            foreach (string entrypoint in program.EntryPoints.GetExportedSymbols())
+            {
+                // hash with basic collision avoidance, this is why you must use TryGetEntrypointHashFromName instead of Fletcher32Fast directly
+                uint hash = Utilities.Fletcher32Fast(entrypoint);
+                while (_entrypointHashToName.ContainsKey(hash))
+                    unchecked { hash++; }
+                _entrypointHashToName[hash] = entrypoint;
+                _entrypointNameToHash[entrypoint] = hash;
+            }
+        }
+
+        public override bool TryGetEntrypointNameFromHash(uint hash, out string entrypoint) => _entrypointHashToName.TryGetValue(hash, out entrypoint);
+        public override bool TryGetEntrypointHashFromName(string entrypoint, out uint hash) => _entrypointNameToHash.TryGetValue(entrypoint, out hash);
+
+        #endregion
     }
 }

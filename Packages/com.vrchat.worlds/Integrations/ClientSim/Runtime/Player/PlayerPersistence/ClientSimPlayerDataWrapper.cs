@@ -199,6 +199,9 @@ namespace VRC.SDK3.ClientSim.Persistence
             getColor32Info?.SetValue(null, _getColor32);
         }
 
+        public static int GetUsage(VRCPlayerApi player)
+            => FindStorage(player, out ClientSimPlayerDataStorage storage) ? storage.Size : 0;
+
         private static bool FindStorage(VRCPlayerApi playerApi, out ClientSimPlayerDataStorage storage)
         {
             ClientSimPlayer player = playerApi.GetClientSimPlayer();

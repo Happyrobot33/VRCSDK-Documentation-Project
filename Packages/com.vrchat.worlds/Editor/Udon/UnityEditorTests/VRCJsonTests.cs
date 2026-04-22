@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Text;
 using NUnit.Framework;
 using UnityEngine;
 using VRC.SDK3.Data;
@@ -131,15 +132,18 @@ namespace Tests.DataContainers
         [Test]
         public void TestString()
         {
+            SetAndGetJson("space", new DataToken(" "));
             SetAndGetJson("backspace", new DataToken("\b"));
             SetAndGetJson("form feed", new DataToken("\f"));
             SetAndGetJson("newline", new DataToken("\n"));
             SetAndGetJson("carriage return", new DataToken("\r"));
             SetAndGetJson("tab", new DataToken("\t"));
             SetAndGetJson("quotes", new DataToken("\""));
+            SetAndGetJson("non breaking space", new DataToken("\u00A0"));
             SetAndGetJson("victory hand", new DataToken("✌"));
             SetAndGetJson("mandarin", new DataToken("䉟"));
             SetAndGetJson("greater than", new DataToken(">"));
+            SetAndGetJson("emoji", new DataToken("🎶"));
         }
         [Test]
         public void RecursiveSerialization()
@@ -321,68 +325,66 @@ namespace Tests.DataContainers
             Assert.IsTrue(list.DataList.TryGetValue(0, out DataToken value));
             CompareTokens($"comparing token {token} against json {input}",value, token);
         }
-        
-        [Test]
-        public void TestBadJsonObjects()
-        {
-            ShouldFailToDeserialize(null);
-            ShouldFailToDeserialize("a");
-            ShouldFailToDeserialize("\"");
-            ShouldFailToDeserialize("{");
-            ShouldFailToDeserialize("{\"key\"}");
-            ShouldFailToDeserialize("{key: 1}");
-            ShouldFailToDeserialize("{\"key\":}");
-            ShouldFailToDeserialize("{\"key\":\"unfinished string}");
-            ShouldFailToDeserialize("{\"key\":\"unfinished object\"");
-            ShouldFailToDeserialize("{\"key\":\"bad brackets\"{");
-            ShouldFailToDeserialize("{\"key\": +1121}");
-        }
 
-        [Test]
-        public void TestBadJsonArrays()
-        {
-            ShouldFailToDeserialize(null);
-            ShouldFailToDeserialize("a");
-            ShouldFailToDeserialize("\"");
-            ShouldFailToDeserialize("[\"");
-            ShouldFailToDeserialize("[\"unfinished string]");
-            ShouldFailToDeserialize("[\"unfinished array\"");
-            ShouldFailToDeserialize("[\"bad brackets\"[");
-        }
-
-        [Test]
-        public void TestBadJsonTokens()
-        {
-            ShouldFailToParse("{\"key\": \"\\u00zz\"}");
-            ShouldFailToParse("{\"key\": \"\\uD800\"}");
-            ShouldFailToParse("{\"key\": 1.0e+}");
-            ShouldFailToParse("{\"key\": 1.0e}");
-            ShouldFailToParse("{\"key\": 110+21}");
-            ShouldFailToParse("{\"key\": 11-21}");
-            ShouldFailToParse("{\"key\": 1121e}");
-            ShouldFailToParse("{\"key\": --1121}");
-            ShouldFailToParse("{\"key\": tru}");
-            ShouldFailToParse("{\"key\": fa}");
-        }
-
+        [Repeat(32)]
         [Test]
         public void GenerateGarbage()
         {
-            string generated = string.Empty;
+            StringBuilder sb = new StringBuilder();
             for (int j = 0; j < 100; j++)
             {
-                generated = generated.Insert(Random.Range(0, generated.Length), ((char)j).ToString());
-                ShouldFailToDeserialize(generated);
+                sb.Insert(Random.Range(0, sb.Length), (char)j);
+                ShouldFailToDeserialize(sb.ToString());
             }
         }
 
-        private void ShouldFailToDeserialize(string input)
+        // bad JSON objects:
+        [TestCase(null, DataError.UnableToParse)]
+        [TestCase("a", DataError.TypeUnsupported)]
+        [TestCase("\"", DataError.TypeUnsupported)]
+        [TestCase("{", DataError.UnableToParse)]
+        [TestCase("}", DataError.TypeUnsupported)]
+        [TestCase("{\"key\"}", DataError.UnableToParse)]
+        [TestCase("{key: 1}", DataError.UnableToParse)]
+        [TestCase("{\"key\":}", DataError.UnableToParse)]
+        [TestCase("{\"unfinished", DataError.UnableToParse)]
+        [TestCase("{\"unfinished\":", DataError.UnableToParse)]
+        [TestCase("{\"unfinished\":\"", DataError.UnableToParse)]
+        [TestCase("{\"key\":\"unfinished string}", DataError.UnableToParse)]
+        [TestCase("{\"key\":\"unfinished object\"", DataError.UnableToParse)]
+        [TestCase("{\"key\":\"bad brackets\"{", DataError.UnableToParse)]
+        [TestCase("{\"key\": +1121}", DataError.UnableToParse)]
+        [TestCase("{\"key\":\"copy\",\"key\":\"duplicate\"}", DataError.UnableToParse)]
+        // bad JSON arrays:
+        [TestCase("[\"", DataError.UnableToParse)]
+        [TestCase("\"]", DataError.TypeUnsupported)]
+        [TestCase("[\"a", DataError.UnableToParse)]
+        [TestCase("a\"]", DataError.TypeUnsupported)]
+        [TestCase("[\"unfinished string]", DataError.UnableToParse)]
+        [TestCase("[\"unfinished array\"", DataError.UnableToParse)]
+        [TestCase("[\"bad brackets\"[", DataError.UnableToParse)]
+        public void ShouldFailToDeserialize(string input, DataError? expectedDataError = null)
         {
             Assert.IsFalse(VRCJson.TryDeserializeFromJson(input, out DataToken result), $"Should fail to deserialize {input}");
-            Assert.IsTrue(result == DataError.TypeUnsupported || result == DataError.ValueUnsupported || result == DataError.UnableToParse, $"Resulting error should be either Type or Value unsupported, was {result} instead");
+            if (expectedDataError.HasValue)
+            {
+                Assert.IsTrue(result == expectedDataError.Value, $"Expected data error was {expectedDataError.Value}, result was actually \"{result}\"");
+            }
         }
-        private void ShouldFailToParse(string input)
+
+        [TestCase("\"\\u00zz\"")]
+        [TestCase("\"\\uD800\"")]
+        [TestCase("1.0e+")]
+        [TestCase("1.0e")]
+        [TestCase("110+21")]
+        [TestCase("11-21")]
+        [TestCase("1121e")]
+        [TestCase("--1121")]
+        [TestCase("tru")]
+        [TestCase("fa")]
+        public void ShouldFailToParseDictionaryValue(string valueString)
         {
+            string input = $"{{\"key\": {valueString}}}";
             Assert.IsTrue(VRCJson.TryDeserializeFromJson(input, out DataToken result), $"Should deserialize {input}");
             Assert.IsFalse(result.DataDictionary.TryGetValue("key", out DataToken value), $"should fail to parse {input}, instead resulted in {value}");
             Assert.AreEqual(DataError.UnableToParse, value, $"Resulting error should be {DataError.UnableToParse}");
@@ -393,61 +395,61 @@ namespace Tests.DataContainers
         {
             //MINIFY
             //lists
-            ShouldSerialize(JsonExportType.Minify,new DataList() {true, false, true},  "[true, false, true]");
-            ShouldSerialize(JsonExportType.Minify,new DataList() {"a", "b", "c"},  "[\"a\", \"b\", \"c\"]");
-            ShouldSerialize(JsonExportType.Minify,new DataList() {new DataToken(), new DataToken(), new DataToken()},  "[null, null, null]");
-            ShouldSerialize(JsonExportType.Minify,new DataList() {(byte)1, (byte)2, (byte)3},  "[1, 2, 3]");
-            ShouldSerialize(JsonExportType.Minify,new DataList() {(sbyte)1, (sbyte)2, (sbyte)3},  "[1, 2, 3]");
-            ShouldSerialize(JsonExportType.Minify,new DataList() {(short)1, (short)2, (short)3},  "[1, 2, 3]");
-            ShouldSerialize(JsonExportType.Minify,new DataList() {(ushort)1, (ushort)2, (ushort)3},  "[1, 2, 3]");
-            ShouldSerialize(JsonExportType.Minify,new DataList() {(int)1, (int)2, (int)3},  "[1, 2, 3]");
-            ShouldSerialize(JsonExportType.Minify,new DataList() {(uint)1, (uint)2, (uint)3},  "[1, 2, 3]");
-            ShouldSerialize(JsonExportType.Minify,new DataList() {(long)1, (long)2, (long)3},  "[1, 2, 3]");
-            ShouldSerialize(JsonExportType.Minify,new DataList() {(ulong)1, (ulong)2, (ulong)3},  "[1, 2, 3]");
-            ShouldSerialize(JsonExportType.Minify,new DataList() {(float)1, (float)2, (float)3},  "[1, 2, 3]");
-            ShouldSerialize(JsonExportType.Minify,new DataList() {(double)1, (double)2, (double)3},  "[1, 2, 3]");
+            ShouldSerialize(JsonExportType.Minify,new DataList() {true, false, true},  "[true,false,true]");
+            ShouldSerialize(JsonExportType.Minify,new DataList() {"a", "b", "c"},  "[\"a\",\"b\",\"c\"]");
+            ShouldSerialize(JsonExportType.Minify,new DataList() {new DataToken(), new DataToken(), new DataToken()},  "[null,null,null]");
+            ShouldSerialize(JsonExportType.Minify,new DataList() {(byte)1, (byte)2, (byte)3},  "[1,2,3]");
+            ShouldSerialize(JsonExportType.Minify,new DataList() {(sbyte)1, (sbyte)2, (sbyte)3},  "[1,2,3]");
+            ShouldSerialize(JsonExportType.Minify,new DataList() {(short)1, (short)2, (short)3},  "[1,2,3]");
+            ShouldSerialize(JsonExportType.Minify,new DataList() {(ushort)1, (ushort)2, (ushort)3},  "[1,2,3]");
+            ShouldSerialize(JsonExportType.Minify,new DataList() {(int)1, (int)2, (int)3},  "[1,2,3]");
+            ShouldSerialize(JsonExportType.Minify,new DataList() {(uint)1, (uint)2, (uint)3},  "[1,2,3]");
+            ShouldSerialize(JsonExportType.Minify,new DataList() {(long)1, (long)2, (long)3},  "[1,2,3]");
+            ShouldSerialize(JsonExportType.Minify,new DataList() {(ulong)1, (ulong)2, (ulong)3},  "[1,2,3]");
+            ShouldSerialize(JsonExportType.Minify,new DataList() {(float)1, (float)2, (float)3},  "[1,2,3]");
+            ShouldSerialize(JsonExportType.Minify,new DataList() {(double)1, (double)2, (double)3},  "[1,2,3]");
             //Lists inside list
             ShouldSerialize(JsonExportType.Minify,new DataList()
             {
                 new DataList(){1, 2, 3}, 
                 new DataList() {4, 5, 6}, 
                 new DataList() {7, 8, 9}
-            },  "[[1, 2, 3], [4, 5, 6], [7, 8, 9]]");
+            },  "[[1,2,3],[4,5,6],[7,8,9]]");
             //Dictionaries inside list
             ShouldSerialize(JsonExportType.Minify,new DataList()
             {
                 new DataDictionary() {["a"]=1, ["b"]=2, ["c"]=3}, 
                 new DataDictionary() {["d"]=4, ["e"]=5, ["f"]=6}, 
                 new DataDictionary() {["g"]=7, ["h"]=8, ["i"]=9}
-            },  "[{\"a\": 1, \"b\": 2, \"c\": 3}, {\"d\": 4, \"e\": 5, \"f\": 6}, {\"g\": 7, \"h\": 8, \"i\": 9}]");
+            },  "[{\"a\":1,\"b\":2,\"c\":3},{\"d\":4,\"e\":5,\"f\":6},{\"g\":7,\"h\":8,\"i\":9}]");
             
             //dictionaries
-            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=true, ["b"]=false, ["c"]=true},  "{\"a\": true, \"b\": false, \"c\": true}");
-            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]="a", ["b"]="b", ["c"]="c"},  "{\"a\": \"a\", \"b\": \"b\", \"c\": \"c\"}");
-            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=new DataToken(), ["b"]=new DataToken(), ["c"]=new DataToken()},  "{\"a\": null, \"b\": null, \"c\": null}");
-            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(byte)1, ["b"]=(byte)2, ["c"]=(byte)3},  "{\"a\": 1, \"b\": 2, \"c\": 3}");
-            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(sbyte)1, ["b"]=(sbyte)2, ["c"]=(sbyte)3},  "{\"a\": 1, \"b\": 2, \"c\": 3}");
-            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(short)1, ["b"]=(short)2, ["c"]=(short)3},  "{\"a\": 1, \"b\": 2, \"c\": 3}");
-            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(ushort)1, ["b"]=(ushort)2, ["c"]=(ushort)3},  "{\"a\": 1, \"b\": 2, \"c\": 3}");
-            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(int)1, ["b"]=(int)2, ["c"]=(int)3},  "{\"a\": 1, \"b\": 2, \"c\": 3}");
-            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(uint)1, ["b"]=(uint)2, ["c"]=(uint)3},  "{\"a\": 1, \"b\": 2, \"c\": 3}");
-            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(long)1, ["b"]=(long)2, ["c"]=(long)3},  "{\"a\": 1, \"b\": 2, \"c\": 3}");
-            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(ulong)1, ["b"]=(ulong)2, ["c"]=(ulong)3},  "{\"a\": 1, \"b\": 2, \"c\": 3}");
-            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(float)1, ["b"]=(float)2, ["c"]=(float)3},  "{\"a\": 1, \"b\": 2, \"c\": 3}");
-            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(double)1, ["b"]=(double)2, ["c"]=(double)3},  "{\"a\": 1, \"b\": 2, \"c\": 3}");
+            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=true, ["b"]=false, ["c"]=true},  "{\"a\":true,\"b\":false,\"c\":true}");
+            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]="a", ["b"]="b", ["c"]="c"},  "{\"a\":\"a\",\"b\":\"b\",\"c\":\"c\"}");
+            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=new DataToken(), ["b"]=new DataToken(), ["c"]=new DataToken()},  "{\"a\":null,\"b\":null,\"c\":null}");
+            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(byte)1, ["b"]=(byte)2, ["c"]=(byte)3},  "{\"a\":1,\"b\":2,\"c\":3}");
+            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(sbyte)1, ["b"]=(sbyte)2, ["c"]=(sbyte)3},  "{\"a\":1,\"b\":2,\"c\":3}");
+            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(short)1, ["b"]=(short)2, ["c"]=(short)3},  "{\"a\":1,\"b\":2,\"c\":3}");
+            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(ushort)1, ["b"]=(ushort)2, ["c"]=(ushort)3},  "{\"a\":1,\"b\":2,\"c\":3}");
+            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(int)1, ["b"]=(int)2, ["c"]=(int)3},  "{\"a\":1,\"b\":2,\"c\":3}");
+            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(uint)1, ["b"]=(uint)2, ["c"]=(uint)3},  "{\"a\":1,\"b\":2,\"c\":3}");
+            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(long)1, ["b"]=(long)2, ["c"]=(long)3},  "{\"a\":1,\"b\":2,\"c\":3}");
+            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(ulong)1, ["b"]=(ulong)2, ["c"]=(ulong)3},  "{\"a\":1,\"b\":2,\"c\":3}");
+            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(float)1, ["b"]=(float)2, ["c"]=(float)3},  "{\"a\":1,\"b\":2,\"c\":3}");
+            ShouldSerialize(JsonExportType.Minify,new DataDictionary() {["a"]=(double)1, ["b"]=(double)2, ["c"]=(double)3},  "{\"a\":1,\"b\":2,\"c\":3}");
             //Lists inside dictionary
             ShouldSerialize(JsonExportType.Minify,new DataDictionary()
             {
                 ["a"]=new DataList() {1, 2, 3}, 
                 ["b"]=new DataList() {4, 5, 6}, 
                 ["c"]=new DataList() {7, 8, 9}
-            },  "{\"a\": [1, 2, 3], \"b\": [4, 5, 6], \"c\": [7, 8, 9]}");
+            },  "{\"a\":[1,2,3],\"b\":[4,5,6],\"c\":[7,8,9]}");
             //Dictionaries inside dictionary
             ShouldSerialize(JsonExportType.Minify,new DataDictionary() {
                 ["a"]=new DataDictionary() { ["a"]=1, ["b"]=2, ["c"]=3 }, 
                 ["b"]=new DataDictionary() {["d"]=4, ["e"]=5, ["f"]=6}, 
                 ["c"]=new DataDictionary() {["g"]=7, ["h"]=8, ["i"]=9}},
-                "{\"a\": {\"a\": 1, \"b\": 2, \"c\": 3}, \"b\": {\"d\": 4, \"e\": 5, \"f\": 6}, \"c\": {\"g\": 7, \"h\": 8, \"i\": 9}}");
+                "{\"a\":{\"a\":1,\"b\":2,\"c\":3},\"b\":{\"d\":4,\"e\":5,\"f\":6},\"c\":{\"g\":7,\"h\":8,\"i\":9}}");
             
             //BEAUTIFY
             //lists

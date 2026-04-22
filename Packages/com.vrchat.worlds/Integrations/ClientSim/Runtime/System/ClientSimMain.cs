@@ -1,28 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using Cysharp.Threading.Tasks;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using VRC.Core;
 using VRC.Economy;
+using VRC.SDK3.Components;
 using VRC.SDK3.Network;
 using VRC.SDK3.Platform;
+using VRC.SDK3.Rendering;
 using VRC.SDK3.Video.Components.AVPro;
 using VRC.SDKBase;
+using VRC.SDKBase.Network;
 using VRC.SDKBase.Platform;
 using VRC.Udon;
-using VRC.Economy;
-using VRC.SDKBase.Network;
-using VRC.Economy;
+using VRC.Udon.Security;
 using VRCNetworkBehaviour = VRC.SDK3.Network.VRCNetworkBehaviour;
-using System;
-using VRC.SDK3.Components;
 using VRCStation = VRC.SDKBase.VRCStation;
+using VRC.SDK3.UdonNetworkCalling;
+using VRC.Utility;
+
 #if VRC_ENABLE_PLAYER_PERSISTENCE
 using VRC.SDK3.ClientSim.Persistence;
-using System.Linq;
 #endif
 
 namespace VRC.SDK3.ClientSim
@@ -143,9 +144,16 @@ namespace VRC.SDK3.ClientSim
             return _instance;
         }
 
-        internal static ClientSimMain GetInstance()
+        internal static bool TryGetInstance(out ClientSimMain instance)
         {
-            return _instance;
+            if (_instance != null)
+            {
+                instance = _instance;
+                return true;
+            }
+
+            instance = null;
+            return false;
         }
         
         public static void SpawnRemotePlayer(string name = null)
@@ -172,7 +180,7 @@ namespace VRC.SDK3.ClientSim
                 DestroyImmediate(_instance.gameObject);
             }
         }
-
+        
         protected override void Awake()
         {
             base.Awake();
@@ -232,6 +240,10 @@ namespace VRC.SDK3.ClientSim
             _blacklistManager = new ClientSimBlacklistManager();
             _blacklistManager.AddObjectAndChildrenToBlackList(gameObject);
 
+            UdonManager.Instance.LightReservedLayerMask = LayerHelper.Mask_ReservedRenderLayers.value;
+
+            Texture2DDefaultTextureHolder.BlacklistDefaultTextures(UdonManager.Instance);
+
             _interactiveLayerProvider = new ClientSimInteractiveLayerProvider(_eventDispatcher);
             _sessionState = new ClientSimSessionState();
             
@@ -284,7 +296,7 @@ namespace VRC.SDK3.ClientSim
             Camera playerCamera = _player.GetCameraProvider().GetCamera();
             tooltipManager.Initialize(_settings, _player.GetTrackingProvider());
             highlightManager.Initialize(playerCamera);
-            stackedCameraSystem.Initialize(playerCamera, menu);
+            stackedCameraSystem.Initialize(playerCamera, menu, _eventDispatcher);
             
             storeManager = new ClientSimStoreManager(_eventDispatcher, new ClientSimUdonManagerEventSender(UdonManager.Instance), _playerManager);
 
@@ -305,6 +317,7 @@ namespace VRC.SDK3.ClientSim
                 if ((int)CurrentResolution.x != UnityEngine.Device.Screen.width || (int)CurrentResolution.y != UnityEngine.Device.Screen.height)
                 {
                     CurrentResolution = new Vector2(UnityEngine.Device.Screen.width, UnityEngine.Device.Screen.height);
+                    _udonEventSender.RunEvent("_onVRCCameraSettingsChanged", ("camera", VRCCameraSettings.ScreenCamera));
                 }
                 
                 var currentOrientation = DetermineOrientation();
@@ -370,8 +383,9 @@ namespace VRC.SDK3.ClientSim
                 if (_player)
                 {
                     _player.isInstanceOwner = _settings.isInstanceOwner;
+                    _player.isVRCPlus = _settings.isVRCPlus;
                     _sceneManager.ResetSpawnOrder(); // Avoids any spawn offsets from pre-initialization of players
-                    _player.EnablePlayer(_sceneManager.GetSpawnPoint(false));
+                    _player.EnablePlayer(_sceneManager.GetSpawnPoint(false), _sceneManager.GetSpawnRadius());
                 }
             }
 
@@ -508,12 +522,51 @@ namespace VRC.SDK3.ClientSim
         {
             _player.EnablePlayerObjects();
         }
+
+        public int GetPlayerDataUsageLimit() => 1024 * 100;
+        
+        public int GetPlayerObjectsUsageLimit() => 1024 * 100;
+        
+        public int GetPlayerDataUsage(VRCPlayerApi player)
+        {
+            Debug.LogWarning("Player Data usage is not accurate in ClientSim.");
+            return ClientSimPlayerDataWrapper.GetUsage(player);
+        }
+
+        public int GetPlayerObjectsUsage(VRCPlayerApi player)
+        {
+            Debug.LogWarning("Player Object usage is not accurate in ClientSim.");
+            ClientSimPlayer simPlayer = player.GetClientSimPlayer();
+            return simPlayer.PlayerObjectData == null ? 0 : simPlayer.PlayerObjectData.Size;
+        }
+
+        public void RequestStorageUsageUpdate()
+        {
+            UdonManager.Instance.RunEvent(UdonManager.UDON_EVENT_ONPERSISTENCEUSAGEUPDATED);
+        }
 #endif
+        
 
         private static void CallNetworkConfigure(VRCNetworkBehaviour behaviour)
         {
             behaviour.NetworkConfigure();
         }
+
+        private static bool IsSuffering() => false; // we did it chat, no more suffering
+
+        private static void SetShadowDistance(float low, float medium, float high, float mobile) => QualitySettings.shadowDistance = high;
+        private static void SetShadowDistanceAll(float distance) => QualitySettings.shadowDistance = distance;
+        private static void ResetShadowDistance() => QualitySettings.shadowDistance = 150; // TODO: base on project quality settings?
+        private void OnCameraSettingsChanged(Camera camera)
+        {
+            camera.farClipPlane = Mathf.Max(camera.farClipPlane, camera.nearClipPlane + 0.1f);
+
+            // don't allow turning off MirrorReflection or stacked layers (InternalUI)
+            camera.cullingMask &= ~(1 << LayerMask.NameToLayer("MirrorReflection"));
+            camera.cullingMask &= ~stackedCameraSystem.RequestedStackLayers;
+        }
+        
+        private static void OpenAvatarListing(string id) => Debug.Log($"opening avatar listing for {id}");
 
         #region VRChat SDK Links
 
@@ -533,13 +586,25 @@ namespace VRC.SDK3.ClientSim
             Networking._IsInstanceOwner += _playerManager.IsInstanceOwner;
             Networking._IsObjectReady += IsObjectReady;
             Networking._IsNetworkSettled += IsNetworkReady;
+            Networking._IsSuffering += IsSuffering;
             
             Networking._GetUniqueName += GetUniqueStringForObject;
-            
+
 #if VRC_ENABLE_PLAYER_PERSISTENCE
             ClientSimPlayerDataWrapper.ConfigureSDK();
             Networking._GetPlayerPersistence += GetPlayerPersistence;
-            Networking._FindComponentInPlayerObjects += FindComponentInPlayerObjects;
+            
+            Networking._GetPlayerDataStorageUsage += GetPlayerDataUsage;
+            Networking._GetPlayerObjectStorageUsage += GetPlayerObjectsUsage;
+            Networking._GetPlayerDataStorageLimit += GetPlayerDataUsageLimit;
+            Networking._GetPlayerObjectStorageLimit += GetPlayerObjectsUsageLimit;
+
+	        Networking._FindComponentInPlayerObjects += FindComponentInPlayerObjects;
+#endif
+            
+            
+#if VRC_ENABLE_PLAYER_PERSISTENCE || VRC_ENABLE_INSTANCE_PERSISTENCE
+            Networking._RequestStorageUsageUpdate += RequestStorageUsageUpdate;
 #endif
             
             VRCNetworkBehaviour.OnNetworkBehaviourAwake += CallNetworkConfigure;
@@ -552,6 +617,8 @@ namespace VRC.SDK3.ClientSim
             if (_player != null)
             {
                 VRC_UiShape.GetEventCamera += _player.GetCameraProvider().GetCameraForObject;
+                VRCCameraSettings.ScreenCameraRef = _player.GetCameraProvider().GetCamera();
+                VRCCameraSettings.ScreenCamera.GetCameraMode = () => VRCCameraMode.Screen;
             }
 
             VRC_Pickup.OnAwake += ClientSimPickupHelper.InitializePickup;
@@ -576,6 +643,7 @@ namespace VRC.SDK3.ClientSim
             VRCPlayerApi._GetPlayerById += _playerManager.GetPlayerByID;
             VRCPlayerApi._isMasterDelegate += _playerManager.IsMaster;
             VRCPlayerApi._isSuspendedDelegate += _playerManager.IsSuspended;
+            VRCPlayerApi._isVRCPlusDelegate += _playerManager.IsVRCPlus;
             VRCPlayerApi._TakeOwnership += ClientSimPlayerManager.SetOwner;
             VRCPlayerApi._IsOwner += _playerManager.IsOwner;
             VRCPlayerApi._isInstanceOwnerDelegate += _playerManager.IsInstanceOwner;
@@ -660,6 +728,7 @@ namespace VRC.SDK3.ClientSim
             VRCPlayerApi._GetCurrentLanguage += ClientSimPlayerManager.GetCurrentLanguage;
             VRCPlayerApi._GetAvailableLanguages += ClientSimPlayerManager.GetAvailableLanguages;
             
+            
             VRC_SpatialAudioSource.Initialize += ClientSimSpatialAudioHelper.InitializeAudio;
 
             VRCAVProVideoPlayer.Initialize += ClientSimAVProVideoStub.InitializePlayer;
@@ -674,7 +743,17 @@ namespace VRC.SDK3.ClientSim
             Store._doesAnyPlayerOwnProduct += ClientSimStoreManager.DoesAnyPlayerOwnProduct;
             Store._getPlayersWhoOwnProduct += ClientSimStoreManager.GetPlayersWhoOwnProduct;
             Store._listProductOwners += ClientSimStoreManager.ListProductOwners;
+
+            VRCQualitySettings.SetShadowDistanceInternal += SetShadowDistance;
+            VRCQualitySettings.SetShadowDistanceInternalAll += SetShadowDistanceAll;
+            VRCQualitySettings.ResetShadowDistanceInternal += ResetShadowDistance;
+            VRCCameraSettings.OnCameraSettingsChanged += OnCameraSettingsChanged;
+
+            NetworkCalling.GetAllQueuedEventsProxy += ClientSimNetworkCalling.GetAllQueuedEventsProxy;
+            NetworkCalling.GetQueuedEventsProxy += ClientSimNetworkCalling.GetQueuedEventsProxy;
+            NetworkCalling.SendCustomNetworkEventProxy += ClientSimNetworkCalling.SendCustomNetworkEventProxy;
             
+            VRC.SDK3.Components.VRCOpenMenu._OpenAvatarListingDelegate = OpenAvatarListing;
         }
 
         private void RemoveSDKLinks()
@@ -690,12 +769,24 @@ namespace VRC.SDK3.ClientSim
             Networking._IsInstanceOwner -= _playerManager.IsInstanceOwner;
             Networking._IsObjectReady -= IsObjectReady;
             Networking._IsNetworkSettled -= IsNetworkReady;
+            Networking._IsSuffering -= IsSuffering;
 
             Networking._GetUniqueName -= GetUniqueStringForObject;
 
 #if VRC_ENABLE_PLAYER_PERSISTENCE
             Networking._GetPlayerPersistence -= GetPlayerPersistence;
-            Networking._FindComponentInPlayerObjects -= FindComponentInPlayerObjects;
+            
+            Networking._GetPlayerDataStorageUsage -= GetPlayerDataUsage;
+            Networking._GetPlayerObjectStorageUsage -= GetPlayerObjectsUsage;
+            Networking._GetPlayerDataStorageLimit -= GetPlayerDataUsageLimit;
+            Networking._GetPlayerObjectStorageLimit -= GetPlayerObjectsUsageLimit;
+
+	        Networking._FindComponentInPlayerObjects -= FindComponentInPlayerObjects;
+#endif
+            
+            
+#if VRC_ENABLE_PLAYER_PERSISTENCE || VRC_ENABLE_INSTANCE_PERSISTENCE
+            Networking._RequestStorageUsageUpdate -= RequestStorageUsageUpdate;
 #endif
             
             VRCNetworkBehaviour.OnNetworkBehaviourAwake -= CallNetworkConfigure;
@@ -732,6 +823,8 @@ namespace VRC.SDK3.ClientSim
             VRCPlayerApi._GetPlayerId -= _playerManager.GetPlayerID;
             VRCPlayerApi._GetPlayerById -= _playerManager.GetPlayerByID;
             VRCPlayerApi._isMasterDelegate -= _playerManager.IsMaster;
+            VRCPlayerApi._isSuspendedDelegate -= _playerManager.IsSuspended;
+            VRCPlayerApi._isVRCPlusDelegate -= _playerManager.IsVRCPlus;
             VRCPlayerApi._TakeOwnership -= ClientSimPlayerManager.SetOwner;
             VRCPlayerApi._IsOwner -= _playerManager.IsOwner;
             VRCPlayerApi._isInstanceOwnerDelegate -= _playerManager.IsInstanceOwner;
@@ -807,6 +900,7 @@ namespace VRC.SDK3.ClientSim
             VRCPlayerApi._SetVoiceDistanceNear -= ClientSimPlayerManager.SetVoiceDistanceNear;
             VRCPlayerApi._SetVoiceGain -= ClientSimPlayerManager.SetVoiceGain;
             
+            
             VRC_SpatialAudioSource.Initialize -= ClientSimSpatialAudioHelper.InitializeAudio;
 
             VRCAVProVideoPlayer.Initialize -= ClientSimAVProVideoStub.InitializePlayer;
@@ -819,6 +913,17 @@ namespace VRC.SDK3.ClientSim
             Store._doesPlayerOwnProduct -= ClientSimStoreManager.DoesPlayerOwnProduct;
             Store._doesAnyPlayerOwnProduct -= ClientSimStoreManager.DoesAnyPlayerOwnProduct;
             Store._getPlayersWhoOwnProduct -= ClientSimStoreManager.GetPlayersWhoOwnProduct;
+
+            VRCQualitySettings.SetShadowDistanceInternal -= SetShadowDistance;
+            VRCQualitySettings.SetShadowDistanceInternalAll -= SetShadowDistanceAll;
+            VRCQualitySettings.ResetShadowDistanceInternal -= ResetShadowDistance;
+            VRCCameraSettings.OnCameraSettingsChanged -= OnCameraSettingsChanged;
+
+            NetworkCalling.GetAllQueuedEventsProxy -= ClientSimNetworkCalling.GetAllQueuedEventsProxy;
+            NetworkCalling.GetQueuedEventsProxy -= ClientSimNetworkCalling.GetQueuedEventsProxy;
+            NetworkCalling.SendCustomNetworkEventProxy -= ClientSimNetworkCalling.SendCustomNetworkEventProxy;
+            
+            VRC.SDK3.Components.VRCOpenMenu._OpenAvatarListingDelegate -= OpenAvatarListing;
         }
 
         #endregion

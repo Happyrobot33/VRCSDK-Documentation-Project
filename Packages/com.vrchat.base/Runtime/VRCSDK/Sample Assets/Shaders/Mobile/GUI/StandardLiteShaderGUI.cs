@@ -23,6 +23,7 @@ namespace UnityEditor
             public static GUIContent uvSetLabel = EditorGUIUtility.TrTextContent("UV Set");
 
             public static GUIContent albedoText = EditorGUIUtility.TrTextContent("Albedo", "Albedo (RGB) and Transparency (A)");
+            public static GUIContent alphaCutoffText = EditorGUIUtility.TrTextContent("Alpha Cutoff", "Threshold for alpha cutoff");
             public static GUIContent metallicMapText = EditorGUIUtility.TrTextContent("Metallic", "Metallic (R) and Smoothness (A)");
             public static GUIContent smoothnessText = EditorGUIUtility.TrTextContent("Smoothness", "Smoothness value");
             public static GUIContent highlightsText = EditorGUIUtility.TrTextContent("Specular Lightprobe Hack", "Use Lightprobes as lights for specularity");
@@ -47,6 +48,7 @@ namespace UnityEditor
 
         MaterialProperty albedoMap = null;
         MaterialProperty albedoColor = null;
+        MaterialProperty cutoff = null;
         MaterialProperty metallicMap = null;
         MaterialProperty metallic = null;
         MaterialProperty smoothness = null;
@@ -76,6 +78,16 @@ namespace UnityEditor
         {
             albedoMap = FindProperty("_MainTex", props);
             albedoColor = FindProperty("_Color", props);
+
+            try
+            {
+                cutoff = FindProperty("_Cutoff", props);
+            }
+            catch(Exception)
+            {
+                cutoff = null;
+            }
+
             metallicMap = FindProperty("_MetallicGlossMap", props, false);
             metallic = FindProperty("_Metallic", props, false);
             smoothness = FindProperty("_Glossiness", props);
@@ -267,6 +279,12 @@ namespace UnityEditor
         void DoAlbedoArea(Material material)
         {
             m_MaterialEditor.TexturePropertySingleLine(Styles.albedoText, albedoMap, albedoColor);
+
+            int indentation = 2;
+            if(cutoff != null)
+            {
+                m_MaterialEditor.ShaderProperty(cutoff, Styles.alphaCutoffText.text, indentation);
+            }
         }
 
         void DoEmissionArea(Material material)

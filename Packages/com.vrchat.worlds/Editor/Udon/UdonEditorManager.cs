@@ -14,6 +14,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VRC.Udon.Common.Interfaces;
+using VRC.Udon.Compiler.Compilers;
 using VRC.Udon.EditorBindings;
 using VRC.Udon.EditorBindings.Interfaces;
 using VRC.Udon.Graph;
@@ -378,10 +379,10 @@ namespace VRC.Udon.Editor
         public string CompileGraph(
             IUdonCompilableGraph graph, INodeRegistry nodeRegistry,
             out Dictionary<string, (string uid, string fullName, int index)> linkedSymbols,
-            out Dictionary<string, (object value, Type type)> heapDefaultValues
-        )
+            out Dictionary<string, (object value, Type type)> heapDefaultValues,
+            out IReadOnlyList<UdonGraphCompiler.NetworkEventMetadataContainer> networkEventMetadata)
         {
-            return UdonEditorInterface.CompileGraph(graph, nodeRegistry, out linkedSymbols, out heapDefaultValues);
+            return UdonEditorInterface.CompileGraph(graph, nodeRegistry, out linkedSymbols, out heapDefaultValues, out networkEventMetadata);
         }
 
         public Type GetTypeFromTypeString(string typeString)

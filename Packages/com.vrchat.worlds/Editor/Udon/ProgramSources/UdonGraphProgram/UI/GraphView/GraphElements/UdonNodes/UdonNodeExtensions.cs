@@ -25,7 +25,13 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView.UdonNodes
             "_onPlayerParticleCollision", "_onParticleCollision", "_onParticleTrigger", "_onPostRender", "_onPreCull", "_onPreRender", "_onRenderImage", "_onRenderObject", "_onTransformChildrenChanged", "_onTransformParentChanged", "_onValidate", "_onWillRenderObject",
             "_interact", "_onDrop", "_onPickup", "_onPickupUseDown", "_onPickupUseUp", "_onPreSerialization", "_onPostSerialization", "_onDeserialization", "_onVideoEnd", "_onVideoPause", "_onVideoPlay", "_onVideoStart", "_midiNoteOn", "_midiNoteOff", "_midiControlChange",
             "_onOwnershipRequest", "_onNetworkReady", "_onOwnershipTransferred", "_onPlayerJoined", "_onPlayerLeft", "_onSpawn", "_onStationEntered", "_onStationExited", "_onPlayerRespawn", "_onPlayerDataUpdated", "_onPlayerRestored", "_onInstanceRestored",
-            "_onMasterTransferred",
+            "_onMasterTransferred", "_onDroneTriggerEnter", "_onDroneTriggerStay", "_onDroneTriggerExit", "_onVRCCameraSettingsChanged", "_onVRCQualitySettingsChanged",
+#if VRC_ENABLE_PLAYER_PERSISTENCE || VRC_ENABLE_INSTANCE_PERSISTENCE
+            "_onPersistenceUsageUpdated",
+#endif
+#if VRC_ENABLE_PLAYER_PERSISTENCE
+            "_onPlayerDataStorageExceeded", "_onPlayerDataStorageWarning", "_onPlayerObjectStorageExceeded", "_onPlayerObjectStorageWarning",
+#endif
         };
         
         public enum ProgramPopupType
@@ -33,14 +39,30 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView.UdonNodes
             Variables, Events
         }
         
-        private static List<string> GetCustomEventsFromAsset(AbstractSerializedUdonProgramAsset asset)
+        private static List<string> GetCustomEventsFromAsset(AbstractSerializedUdonProgramAsset asset, bool allowEventsWithParameters)
         {
             // don't return internal event names or VariableChange events
-            return asset.RetrieveProgram().EntryPoints.GetExportedSymbols().Where(e =>
+            var events = asset.RetrieveProgram().EntryPoints.GetExportedSymbols().Where(e =>
                 !InternalEventNames.Contains(e) && !e.StartsWithCached(VariableChangedEvent.EVENT_PREFIX)).ToList();
+
+            if (!allowEventsWithParameters)
+            {
+                for (int i = events.Count - 1; i >= 0 ; i--)
+                {
+                    var eventName = events[i];
+                    var metadata = asset.GetNetworkCallingMetadata(eventName);
+                    if (metadata != null && metadata.Parameters.Length > 0)
+                    {
+                        // event has parameters, remove
+                        events.RemoveAt(i);
+                    }
+                }
+            }
+
+            return events;
         }
 
-        public static EditorUI.PopupField<string> GetProgramPopup(this UdonNode node, ProgramPopupType popupType, EditorUI.PopupField<string> eventNamePopup)
+        public static EditorUI.PopupField<string> GetProgramPopup(this UdonNode node, ProgramPopupType popupType, EditorUI.PopupField<string> eventNamePopup, bool allowEventsWithParameters)
         {
             const string placeholder = "----";
             const string missing = "MISSING! Was";
@@ -54,7 +76,7 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView.UdonNodes
                 switch (popupType)
                 {
                     case ProgramPopupType.Events:
-                        options =  GetCustomEventsFromAsset(node.Graph.graphProgramAsset.SerializedProgramAsset);
+                        options = GetCustomEventsFromAsset(node.Graph.graphProgramAsset.SerializedProgramAsset, allowEventsWithParameters);
                         break;
                     case ProgramPopupType.Variables:
                         node.Graph.RefreshVariables(false);
@@ -90,7 +112,7 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView.UdonNodes
                         switch (popupType)
                         {
                             case ProgramPopupType.Events:
-                                options = GetCustomEventsFromAsset(ub.programSource.SerializedProgramAsset);
+                                options = GetCustomEventsFromAsset(ub.programSource.SerializedProgramAsset, allowEventsWithParameters);
                                 break;
                             case ProgramPopupType.Variables:
                             {

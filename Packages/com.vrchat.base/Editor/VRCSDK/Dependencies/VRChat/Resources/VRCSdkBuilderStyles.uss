@@ -5,7 +5,7 @@
 }
 
 #content-info-block {
-    flex-shrink: 0;
+    flex-shrink: 1;
     flex-grow: 1;
 }
 
@@ -26,49 +26,26 @@
     height: 0;
     overflow: hidden;
     align-items: stretch;
+    background-color: var(--unity-colors-default-background);
+    padding: 5px 12px;
+}
+
+#save-changes-block > Button {
+    border-radius: 7px;
+    padding: 16px;
+    font-size: 14px;
+    color: white;
+    -unity-font-style: bold;
+    flex: 1;
 }
 
 #save-changes-button {
-    color: white;
-    -unity-font-style: bold;
-    margin: 0;
+    background-color: #006FF8;
+    margin-right: 4px;
 }
 
 #discard-changes-button {
-    color: white;
-    -unity-font-style: bold;
-    margin: 0;
-}
-
-.progress-container {
-    background-color: rgba(255,255,255,0.1);
-    border-radius: 3px;
-    margin: 4px 0;
-    height: 28px;
-    width: 100%;
-    position: relative;
-    overflow:hidden;
-    justify-content: center;
-    align-items: center;
-}
-
-.progress-bar {
-    position: absolute;
-    left: 0;
-    top:0;
-    height: 100%;
-    width: 0;
-}
-
-.progress-text {
-    position: absolute;
-    left: 0;
-    top:0;
-    height: 100%;
-    width: 100%;
-    -unity-text-align: middle-center;
-    /*-unity-font-style: bold;*/
-    font-size: 12px;
+    background-color: #9E3227;
 }
 
 #content-info TextField {
@@ -123,10 +100,10 @@
     -unity-font-style: bold-and-italic;
 }
 
-#local-test-disabled-block, #build-and-upload-disabled-block {
+#local-test-disabled-block, #build-and-upload-disabled-block, #main-action-disabled-block {
     width: 100%;
     height: 100%;
-    background-color: rgba(50,50,50,0.75);
+    background-color: rgba(20,20,20,1);
     align-items: center;
     justify-content: center;
     padding: 4px;
@@ -137,19 +114,18 @@
 .section-header {
     width: 100%;
     border-bottom-width: 1px;
-    padding-bottom: 3px;
-    padding-top: 3px;
+    padding-bottom: 10px;
+    padding-top: 10px;
     padding-left: 2px;
-    margin-top: 1px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .dark .section-header  {
-    border-bottom-color: rgb(26, 26, 26);
     background-color: rgb(60, 60, 60);
 }
 
 .light .section-header  {
-    border-bottom-color: rgb(127, 127, 127);
     background-color: rgb(203, 203, 203);
 }
 
@@ -182,73 +158,37 @@
     background-image: resource("console.infoicon");
 }
 
-#avatar-selector {
-    width: 100%;
-    border-bottom-width: 1px;
-    padding-bottom: 2px;
-    padding-top: 2px;
-}
-
-.dark #avatar-selector  {
-    border-bottom-color: rgb(26, 26, 26);
-    background-color: rgb(60, 60, 60);
-}
-
-.light #avatar-selector  {
-    border-bottom-color: rgb(127, 127, 127);
-    background-color: rgb(203, 203, 203);
-}
-
-#avatar-selector-popup #icon {
-    width: 12px;
-    height: 12px;
-    top: 3px;
-    -unity-background-scale-mode: scale-to-fit;
-    margin-right: 2px;
-}
-
 #avatar-selector-popup > Label {
     -unity-font-style: bold;
 }
 
-.dark #avatar-selector-popup #icon {
-    background-image: resource("d_Avatar Icon");
-}
-
-.light #avatar-selector-popup #icon {
-    background-image: resource("Avatar Icon");
-}
-
-.section-foldout Toggle {
+.section-foldout > Toggle {
     margin: 0;
-    padding: 2px;
+    padding: 10px;
+    flex-shrink: 0;
+    min-height: 24px;
 }
 
-.section-foldout Toggle:checked {
-    border-bottom-width: 1px;
+.section-foldout > Toggle > VisualElement {
+    min-height: 24px;
+}
+
+.section-foldout > Toggle:checked {
+    border-bottom-width: 0;
 }
 
 .section-foldout {
-    margin-top:1px;
-    border-bottom-width: 1px;
-}
-
-.dark .section-foldout  {
-    border-bottom-color: rgb(26, 26, 26);
-}
-
-.light .section-foldout  {
-    border-bottom-color: rgb(127, 127, 127);
+    margin-top: 3px;
+    margin-bottom: 3px;
+    border-bottom-width: 0;
 }
 
 .dark .section-foldout > Toggle {
     background-color: rgb(60, 60, 60);
-    border-bottom-color: rgb(48, 48, 48);
 }
 
 .light .section-foldout > Toggle {
     background-color: rgb(203, 203, 203);
-    border-bottom-color: rgb(186, 186, 186);
 }
 
 .dark .section-foldout > Toggle:hover {
@@ -257,8 +197,23 @@
 
 .section-foldout > Toggle Label {
     -unity-font-style: bold;
+    font-size: 18px;
+    -unity-text-align: middle-center;
+    flex-grow: 1;
 }
 
+.section-foldout .unity-foldout__content {
+    flex-grow: 1;
+    margin-left: 0;
+}
+
+.section-foldout .unity-scroll-view {
+    flex-grow: 1;
+}
+
+.section-foldout .unity-scroll-view .unity-scroll-view__content-container {
+    flex-grow: 1;
+}
 
 #info-foldout #info-icon {
     width: 14px;
@@ -266,6 +221,28 @@
     top: 1px;
     -unity-background-scale-mode: scale-to-fit;
     margin-right: 4px;
+}
+
+#info-foldout {
+    flex-basis: auto;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+#info-foldout:checked {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+#validations-foldout {
+    flex-basis: auto;
+    flex-grow: 0;
+    flex-shrink: 0;
+    max-height: 50%;
+}
+
+#validations-foldout:checked {
+    flex-shrink: 1;
 }
 
 .dark #info-foldout #info-icon {
@@ -381,32 +358,51 @@
 #builder-notification {
     position: absolute;
     left: 0;
+    top: 0;
+    bottom: 0;
+    right:0;
     width: 100%;
-    bottom: -500px;
+    height: 100%;
 }
 
 .dark #builder-notification {
-    background-color: rgb(42, 42, 42)
+    background-color: rgba(0,0,0,0.9);
 }
 
 .light #builder-notification {
-    background-color: rgb(240, 240, 240)
+    background-color: rgba(255,255,255,0.9);
+}
+
+#builder-notification-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+#builder-notification-title {
+    font-size: 16px;
 }
 
 #builder-notification-dismiss {
     position: absolute;
     right: 8px;
     top: 8px;
+    border-width: 0;
+    background-color: transparent;
+    width: 16px;
+    height: 16px;
 }
 
-.light #builder-notification-header {
-    background-color: rgb(211, 211, 211);
+#builder-notification-dismiss:hover {
+    opacity: 0.5;
 }
 
-.dark #builder-notification-header {
-    background-color: rgb(75, 75, 75);
+
+.dark #builder-notification-dismiss {
+    background-image: resource("d_winbtn_win_close");
 }
 
-#content-info-scrollview {
-    min-height: 430px;
+.light #builder-notification-dismiss {
+    background-image: resource("winbtn_win_close");
 }

@@ -18,16 +18,16 @@ namespace VRC.SDKBase.Editor.Api
         internal static byte[] GetFileMD5(string filePath)
         {
             var hash = MD5.Create();
-            return hash.ComputeHash(File.OpenRead(filePath));
+            using var fileStream = File.OpenRead(filePath);
+            return hash.ComputeHash(fileStream);
         }
 
         internal static async Task<string> GenerateFileSignature(string sourceFilePath, string targetFilePath)
         {
-            var inStream = librsync.net.Librsync.ComputeSignature(File.OpenRead(sourceFilePath));
-            var outStream = File.Open(targetFilePath, FileMode.Create, FileAccess.Write);
-            await inStream.CopyToAsync(outStream);
-            inStream.Close();
-            outStream.Close();
+            await using var fileStream = File.OpenRead(sourceFilePath);
+            await using var inStream = librsync.net.Librsync.ComputeSignature(fileStream);
+            await using var signatureStream = File.Open(targetFilePath, FileMode.Create, FileAccess.Write);
+            await inStream.CopyToAsync(signatureStream);
             return targetFilePath;
         }
         
@@ -57,6 +57,8 @@ namespace VRC.SDKBase.Editor.Api
                 return "application/x-world";
             if (extension == ".vrca")
                 return "application/x-avatar";
+            if (extension == ".vrcp")
+                return "application/x-prop";
             if (extension == ".dll")
                 return "application/x-msdownload";
             if (extension == ".unitypackage")
@@ -153,7 +155,7 @@ namespace VRC.SDKBase.Editor.Api
                 }
                 catch (Exception e)
                 {
-                    Core.Logger.LogWarning($"Failed to increase send buffer {e.Message}", Core.DebugLevel.API);
+                    Core.Logger.LogWarning($"Failed to increase send buffer {e.Message}", Core.API.LOG_CATEGORY);
                 }
             }
         }

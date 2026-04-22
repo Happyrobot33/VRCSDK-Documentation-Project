@@ -3,7 +3,9 @@
     "rootNamespace": "",
     "references": [
         "VRC.Udon.Serialization.OdinSerializer",
-        "VRC.Core.Networking.Tools"
+        "VRC.Core.Networking.Tools",
+        "VRC.Core.Networking",
+        "VRC.Dynamics"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

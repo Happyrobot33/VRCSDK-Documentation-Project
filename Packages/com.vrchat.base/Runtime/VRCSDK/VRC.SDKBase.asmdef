@@ -3,6 +3,7 @@
     "rootNamespace": "",
     "references": [
         "Unity.Timeline",
+        "Unity.Mathematics",
         "VRC.Enums.Validation.Performance"
     ],
     "includePlatforms": [],

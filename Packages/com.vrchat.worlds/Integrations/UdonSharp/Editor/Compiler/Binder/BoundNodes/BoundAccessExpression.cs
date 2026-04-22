@@ -37,7 +37,7 @@ namespace UdonSharp.Compiler.Binder
                 case ParameterSymbol parameterSymbol:
                     return new BoundParameterAccessExpression(node, parameterSymbol);
                 case FieldSymbol fieldSymbol:
-                    return BoundFieldAccessExpression.BindFieldAccess(node, fieldSymbol, symbolExpressionSource);
+                    return BoundFieldAccessExpression.BindFieldAccess(context, node, fieldSymbol, symbolExpressionSource);
                 case PropertySymbol propertySymbol:
                     return BoundPropertyAccessExpression.BindPropertyAccess(context, node, propertySymbol, symbolExpressionSource);
             }

@@ -5,23 +5,30 @@ using JetBrains.Annotations;
 using TMPro;
 #endif
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using UnityEngine.UI;
+
+#if VRC_CLIENT
+using ZLinq;
+#else
+using System.Linq;
+#endif
 
 namespace VRC.SDKBase.Validation
 {
     public static class WorldValidation
     {
-        private static readonly Lazy<int> _debugLevel = new Lazy<int>(InitializeLogging);
-        private static int DebugLevel => _debugLevel.Value;
+        private static readonly Lazy<string> _debugCategoryName = new Lazy<string>(InitializeLogging);
+        private static string DebugCategoryName => _debugCategoryName.Value;
 
-        private static int InitializeLogging()
+        private static string InitializeLogging()
         {
-            int hashCode = typeof(WorldValidation).GetHashCode();
-            VRC.Core.Logger.DescribeDebugLevel(hashCode, "WorldValidation", VRC.Core.Logger.Color.red);
-            VRC.Core.Logger.AddDebugLevel(hashCode);
-            return hashCode;
+            const string categoryName = "WorldValidation";
+            VRC.Core.Logger.DescribeCategory(categoryName, VRC.Core.Logger.Color.red);
+            VRC.Core.Logger.EnableCategory(categoryName);
+            return categoryName;
         }
 
         static string[] ComponentTypeWhiteList = null;
@@ -202,7 +209,11 @@ namespace VRC.SDKBase.Validation
             "UnityEngine.Animator",
             "UnityEngine.AI.NavMeshAgent",
             "UnityEngine.AI.NavMeshObstacle",
+            #if UNITY_6000_0_OR_NEWER
+            "Unity.AI.Navigation.NavMeshLink",
+            #else
             "UnityEngine.AI.OffMeshLink",
+            #endif
             "UnityEngine.Cloth",
             "UnityEngine.WheelCollider",
             "UnityEngine.Rigidbody",
@@ -424,9 +435,7 @@ namespace VRC.SDKBase.Validation
             "RenderHeads.Media.AVProVideo.MediaPlayer",
             "RenderHeads.Media.AVProVideo.SubtitlesUGUI",
             "AlphaButtonClickMask",
-            "EventSystemChecker",
-            "VirtualMarketplaceItem",
-            "SDK2UrlLauncher"
+            "EventSystemChecker"
         };
 
         static readonly string[] ComponentTypeWhiteListSdk3 = new string[]
@@ -456,8 +465,22 @@ namespace VRC.SDKBase.Validation
             "VRC.SDK3.Video.Components.AVPro.VRCAVProVideoSpeaker",
             "VRC.SDK3.Midi.VRCMidiListener",
             "VRC.SDK3.Midi.VRCMidiPlayer",
+            "VRC.SDK3.Components.VRCCameraDollyAnimation",
+            "VRC.SDK3.Components.VRCCameraDollyPath",
+            "VRC.SDK3.Components.VRCCameraDollyPathPoint",
             "VRC.Udon.UdonBehaviour",
             "VRC.Udon.AbstractUdonBehaviourEventProxy",
+            "VRC.SDK3.Dynamics.PhysBone.Components.VRCPhysBone",
+            "VRC.SDK3.Dynamics.PhysBone.Components.VRCPhysBoneCollider",
+            "VRC.SDK3.Dynamics.PhysBone.Components.VRCPhysBoneRoot",
+            "VRC.SDK3.Dynamics.Constraint.Components.VRCAimConstraint",
+            "VRC.SDK3.Dynamics.Constraint.Components.VRCLookAtConstraint",
+            "VRC.SDK3.Dynamics.Constraint.Components.VRCParentConstraint",
+            "VRC.SDK3.Dynamics.Constraint.Components.VRCPositionConstraint",
+            "VRC.SDK3.Dynamics.Constraint.Components.VRCRotationConstraint",
+            "VRC.SDK3.Dynamics.Constraint.Components.VRCScaleConstraint",
+            "VRC.SDK3.Dynamics.Contact.Components.VRCContactSender",
+            "VRC.SDK3.Dynamics.Contact.Components.VRCContactReceiver",
             "UnityEngine.Animations.AimConstraint",
             "UnityEngine.Animations.LookAtConstraint",
             "UnityEngine.Animations.ParentConstraint",
@@ -702,7 +725,7 @@ namespace VRC.SDKBase.Validation
             if(!(playableDirector.playableAsset is UnityEngine.Timeline.TimelineAsset timelineAsset))
                 return;
 
-            IEnumerable<TrackAsset> tracks = timelineAsset.GetOutputTracks();
+            var tracks = timelineAsset.GetOutputTracks().Concat(timelineAsset.GetRootTracks());
             foreach(TrackAsset track in tracks)
             {
                 if(!(track is ControlTrack))
@@ -714,8 +737,39 @@ namespace VRC.SDKBase.Validation
                     if(clip.asset is ControlPlayableAsset controlPlayableAsset && controlPlayableAsset.prefabGameObject != null)
                     {
                         UnityEngine.Object.Destroy(playableDirector);
-                        VRC.Core.Logger.LogWarning("PlayableDirector containing prefab removed", DebugLevel, playableDirector.gameObject);
+                        VRC.Core.Logger.LogWarning("PlayableDirector containing prefab removed", DebugCategoryName, playableDirector.gameObject);
+                        return;
                     }
+                }
+            }
+
+            
+            if (!playableDirector.playableGraph.IsValid()) 
+                return; 
+            
+            var audioOutputCount = playableDirector.playableGraph.GetOutputCountByType<AudioPlayableOutput>();
+            for (int i = 0; i < audioOutputCount; i++)
+            {
+                var output = (AudioPlayableOutput)playableDirector.playableGraph.GetOutputByType<AudioPlayableOutput>(i);
+                if (!output.IsOutputValid()) continue;
+                if (output.GetTarget() == null)
+                {
+                    // AudioPlayableOutput without a target source will bypass client volume controls.
+                    VRC.Core.Logger.LogWarning("Fixing up AudioPlayableOutput without a target source.", DebugCategoryName, playableDirector.gameObject);
+                    var addedObj = new GameObject("AudioSource_For_" + playableDirector.name);
+                    var addedSrc = addedObj.AddComponent<AudioSource>();
+                    addedSrc.spatialize = false;
+                    addedSrc.bypassEffects = true;
+                    addedSrc.bypassListenerEffects = true;
+                    addedSrc.bypassReverbZones = true;
+                    addedSrc.spatialBlend = 0.0f;
+                    addedSrc.dopplerLevel = 0.0f;
+                    addedSrc.rolloffMode = AudioRolloffMode.Custom;
+                    addedSrc.SetCustomCurve(AudioSourceCurveType.CustomRolloff, AnimationCurve.Constant(0, 1, 1));
+                    #if VRC_CLIENT
+                    addedSrc.outputAudioMixerGroup = VRCAudioManager.GetGameGroup();
+                    #endif
+                    output.SetTarget(addedSrc);
                 }
             }
         }

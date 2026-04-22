@@ -202,7 +202,9 @@ namespace VRC.SDK3.ClientSim
 
         public void Respawn()
         {
-            Teleport(_sceneManager.GetSpawnPoint(false), false);
+            Transform spawnPoint = _sceneManager.GetSpawnPoint(false);
+            Vector3 position = ClientSimPlayerSpawner.GetRandomPositionAroundSpawn(spawnPoint.position, _sceneManager.GetSpawnRadius());
+            Teleport(position, spawnPoint.rotation, false);
             _eventDispatcher.SendEvent(new ClientSimOnPlayerRespawnEvent { player = _playerApi.Player });
         }
 
@@ -215,7 +217,8 @@ namespace VRC.SDK3.ClientSim
                 this.LogError($"Spawn {index} not found. Spawning at spawn 0");
                 spawnPoint = _sceneManager.GetSpawnPoint(0);
             }
-            Teleport(spawnPoint, false);
+            Vector3 position = ClientSimPlayerSpawner.GetRandomPositionAroundSpawn(spawnPoint.position, _sceneManager.GetSpawnRadius());
+            Teleport(position, spawnPoint.rotation, false);
             _eventDispatcher.SendEvent(new ClientSimOnPlayerRespawnEvent { player =  _playerApi.Player });
         }
 
@@ -256,7 +259,8 @@ namespace VRC.SDK3.ClientSim
             if (!station.IsMobile())
             {
                 _characterController.enabled = false;
-                Teleport(station.EnterLocation(), false);
+                Transform spawn = station.EnterLocation();
+                Teleport(spawn, false);
             }
             // VRChatBug: Note that in the else case, the player is teleported to a location that is twice the distance
             // to the station, but since this appears to be a bug, it will not be implemented.
@@ -268,7 +272,8 @@ namespace VRC.SDK3.ClientSim
 
             if (!skipTeleport)
             {
-                Teleport(station.ExitLocation(), false);
+                Transform spawn = station.ExitLocation();
+                Teleport(spawn, false);
             }
             
             _jump = false;
@@ -388,10 +393,14 @@ namespace VRC.SDK3.ClientSim
 
         private void GetInput()
         {
+            GetMovementInput();
+            if (_menuIsOpen && Mathf.Max(_prevInput.x, _prevInput.y) > 0)
+            {
+                _input.SendToggleMenuEvent(true, HandType.RIGHT);
+            }
             // Only allow these input actions while the menu is closed
             if (!_menuIsOpen)
             {
-                GetMovementInput();
                 RotateView();
             }
         }

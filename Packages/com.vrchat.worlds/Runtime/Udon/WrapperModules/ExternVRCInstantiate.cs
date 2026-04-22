@@ -18,29 +18,29 @@ namespace VRC.Udon.Wrapper.Modules
     {
         public string Name => "VRCInstantiate";
 
-        private readonly Dictionary<string, int> _parameterCounts;
-        private readonly Dictionary<string, UdonExternDelegate> _functionDelegates;
-        private readonly IUdonSecurityBlacklist _blacklist;
+        private readonly Lazy<Dictionary<string, int>> _parameterCounts;
+        private readonly Lazy<Dictionary<string, UdonExternDelegate>> _functionDelegates;
+        private readonly IUdonSecurityFilter _filter;
 
         //Passing unused parameter for consistent construction
         // ReSharper disable once UnusedParameter.Local
-        public ExternVRCInstantiate(IUdonComponentGetter componentGetter, IUdonSecurityBlacklist blacklist)
+        public ExternVRCInstantiate(IUdonComponentGetter componentGetter, IUdonSecurityFilter filter)
         {
-            _blacklist = blacklist;
-            _parameterCounts = new Dictionary<string, int>
+            _filter = filter;
+            _parameterCounts = new Lazy<Dictionary<string, int>>(() => new Dictionary<string, int>
             {
                 {"__Instantiate__UnityEngineGameObject__UnityEngineGameObject", 2},
-            };
+            });
 
-            _functionDelegates = new Dictionary<string, UdonExternDelegate>
+            _functionDelegates = new Lazy<Dictionary<string, UdonExternDelegate>>(() => new Dictionary<string, UdonExternDelegate>()
             {
                 {"__Instantiate__UnityEngineGameObject__UnityEngineGameObject", __Instantiate__UnityEngineGameObject__UnityEngineGameObject}
-            };
+            });
         }
 
         public int GetExternFunctionParameterCount(string externFunctionSignature)
         {
-            if(_parameterCounts.TryGetValue(externFunctionSignature, out int numParameters))
+            if(_parameterCounts.Value.TryGetValue(externFunctionSignature, out int numParameters))
             {
                 return numParameters;
             }
@@ -50,7 +50,7 @@ namespace VRC.Udon.Wrapper.Modules
 
         public UdonExternDelegate GetExternFunctionDelegate(string externFunctionSignature)
         {
-            if(_functionDelegates.TryGetValue(externFunctionSignature, out UdonExternDelegate externDelegate))
+            if(_functionDelegates.Value.TryGetValue(externFunctionSignature, out UdonExternDelegate externDelegate))
             {
                 return externDelegate;
             }
@@ -62,7 +62,7 @@ namespace VRC.Udon.Wrapper.Modules
         {
             GameObject original = heap.GetHeapVariable<GameObject>(parameterAddresses[0]);
             #if !UDON_DISABLE_SECURITY
-            _blacklist.FilterBlacklisted(ref original);
+            _filter.ApplyFilter(ref original);
             #endif
 
             GameObject clone = Object.Instantiate(original);

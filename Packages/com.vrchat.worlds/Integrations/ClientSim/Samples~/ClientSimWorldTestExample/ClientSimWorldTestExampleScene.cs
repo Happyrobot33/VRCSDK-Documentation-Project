@@ -63,7 +63,7 @@ namespace ClientSimTest.Examples
 
             
             // Verify initial state of objects in the scene.
-            var testHelpers = Object.FindObjectOfType<ClientSimWorldTestObjectReferences>();
+            var testHelpers = Object.FindFirstObjectByType<ClientSimWorldTestObjectReferences>();
             Assert.IsNotNull(testHelpers, "Could not find Test helper reference.");
             
             // Assert that some objects are disabled. 

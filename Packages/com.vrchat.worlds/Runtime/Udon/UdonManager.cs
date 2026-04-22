@@ -8,17 +8,17 @@ using JetBrains.Annotations;
 using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using VRC.SDK3.Components;
 using VRC.Udon.ClientBindings;
 using VRC.Udon.ClientBindings.Interfaces;
 using VRC.Udon.Common;
 using VRC.Udon.Common.Enums;
 using VRC.Udon.Common.Interfaces;
+using VRC.Udon.Security;
+using VRC.Udon.Security.Interfaces;
 using VRC.Udon.Serialization.OdinSerializer;
 using VRC.Udon.Serialization.OdinSerializer.Utilities;
 using VRC.Udon.VM;
 using Logger = VRC.Core.Logger;
-using Object = UnityEngine.Object;
 
 #if VRC_CLIENT
 using VRC.Core;
@@ -33,7 +33,7 @@ using System.Threading.Tasks;
 namespace VRC.Udon
 {
     [AddComponentMenu("")]
-    public class UdonManager : MonoBehaviour, IUdonClientInterface
+    public class UdonManager : MonoBehaviour, IUdonClientInterface, IUdonSecurityBlacklist<UnityEngine.Object>, IUdonSignatureVerifier
     {
         public static event Action<IUdonProgram> OnUdonProgramLoaded;
         public static event Action OnUdonReady;
@@ -152,6 +152,26 @@ namespace VRC.Udon
         [PublicAPI]
         public const string UDON_EVENT_ONPRESERIALIZATION = "_onPreSerialization";
         
+        [PublicAPI]
+        public const string UDON_EVENT_ONPERSISTENCEUSAGEUPDATED = "_onPersistenceUsageUpdated";
+        
+        [PublicAPI]
+        public const string UDON_EVENT_ONPLAYERDATASTORAGEEXCEEDED = "_onPlayerDataStorageExceeded";
+        
+        [PublicAPI]
+        public const string UDON_EVENT_ONPLAYERDATASTORAGEWARNING = "_onPlayerDataStorageWarning";
+        
+        [PublicAPI]
+        public const string UDON_EVENT_ONPLAYEROBJECTSTORAGEEXCEEDED = "_onPlayerObjectStorageExceeded";
+        
+        [PublicAPI]
+        public const string UDON_EVENT_ONPLAYEROBJECTSTORAGEWARNING = "_onPlayerObjectStorageWarning";
+        
+        [PublicAPI]
+        public const string UDON_EVENT_ONINSTANCESTORAGEEXCEEDED = "_onInstanceStorageExceeded";
+        
+        [PublicAPI]
+        public const string UDON_EVENT_ONINSTANCESTORAGEWARNING = "_onInstanceStorageWarning";
 
         #region Input Actions and Axes
 
@@ -206,8 +226,9 @@ namespace VRC.Udon
         
         #endregion
 
-        private readonly IUdonClientInterface _udonClientInterface = new UdonClientInterface();
         private UdonTimeSource _udonTimeSource;
+        private IUdonSecurityBlacklist<UnityEngine.Object> _blacklist;
+        private IUdonClientInterface _udonClientInterface;
         private IUdonEventScheduler _udonEventScheduler;
 
         #region SDK Only Methods
@@ -253,15 +274,15 @@ namespace VRC.Udon
         private int _signatureVerificationSkipped;
         public int SignatureVerificationSkipped => _signatureVerificationSkipped;
 
-        public bool SignatureVerificationEnabled { get; private set; }
+        public bool WorldSignatureVerificationEnabled { get; private set; }
         private VRCFastCrypto_Client.VerifyKey _signatureVerificationKey;
 
         // used as thread-safe HashSet for signature holders, since we loop behaviours but verify programs
         private readonly ConcurrentDictionary<IUdonSignatureHolder, byte> _verificationCache = new();
 
-        public void ResetSignatureVerification()
+        public void ResetWorldSignatureVerification()
         {
-            SignatureVerificationEnabled = false;
+            WorldSignatureVerificationEnabled = false;
             _signatureVerificationKey = default;
             _signatureVerificationFailed = 0;
             _signatureVerificationSuccess = 0;
@@ -269,13 +290,64 @@ namespace VRC.Udon
             _verificationCache.Clear();
         }
 
-        public void EnableSignatureVerification(byte[] key)
+        public void EnableWorldSignatureVerification(ReadOnlyMemory<byte> key)
         {
-            SignatureVerificationEnabled = true;
-            _signatureVerificationKey = new VRCFastCrypto_Client.VerifyKey(key);
+            WorldSignatureVerificationEnabled = true;
+            _signatureVerificationKey = new VRCFastCrypto_Client.VerifyKey(key.ToArray());
         }
 
         #endif
+        #endregion
+        
+        #region Trigger Event Consumers
+        
+        private readonly List<IUdonTriggerEventConsumer> _triggerEventConsumers = new List<IUdonTriggerEventConsumer>();
+        
+        public void RegisterTriggerEventConsumer(IUdonTriggerEventConsumer consumer)
+        {
+            if (consumer == null || _triggerEventConsumers.Contains(consumer))
+                return;
+                
+            _triggerEventConsumers.Add(consumer);
+            _triggerEventConsumers.Sort((a, b) => a.Priority.CompareTo(b.Priority));
+        }
+        
+        public void UnregisterTriggerEventConsumer(IUdonTriggerEventConsumer consumer)
+        {
+            if (consumer != null)
+                _triggerEventConsumers.Remove(consumer);
+        }
+        
+        public bool TryNotifyOnTriggerEnterConsumers(UdonBehaviour udonBehaviour, Collider other)
+        {
+            foreach (var consumer in _triggerEventConsumers)
+            {
+                if (consumer.TryConsumeOnTriggerEnter(udonBehaviour, other))
+                    return true;
+            }
+            return false;
+        }
+        
+        public bool TryNotifyOnTriggerExitConsumers(UdonBehaviour udonBehaviour, Collider other)
+        {
+            foreach (var consumer in _triggerEventConsumers)
+            {
+                if (consumer.TryConsumeOnTriggerExit(udonBehaviour, other))
+                    return true;
+            }
+            return false;
+        }
+        
+        public bool TryNotifyOnTriggerStayConsumers(UdonBehaviour udonBehaviour, Collider other)
+        {
+            foreach (var consumer in _triggerEventConsumers)
+            {
+                if (consumer.TryConsumeOnTriggerStay(udonBehaviour, other))
+                    return true;
+            }
+            return false;
+        }
+        
         #endregion
 
         #region Unity Event Methods
@@ -286,8 +358,6 @@ namespace VRC.Udon
             {
                 _instance = this;
             }
-
-            DebugLogging = Application.isEditor;
 
             if(Instance != this)
             {
@@ -304,12 +374,19 @@ namespace VRC.Udon
             }
 
             _udonTimeSource = new UdonTimeSource();
+            _blacklist = new UnityEngineObjectSecurityBlacklist();
+            _udonClientInterface = new UdonClientInterface(null,null,_blacklist);
+            
+            DebugLogging = Application.isEditor;
+            
             _udonEventScheduler = new UdonEventScheduler(_udonTimeSource);
             _udonRunProgramDepth = new ThreadLocal<int>();
             _postLateUpdater = gameObject.AddComponent<PostLateUpdater>();
             _postLateUpdater.udonManager = this;
+            _udonEventScheduler.OnEventScheduled += HandleUdonEventScheduled;
             if(!Application.isPlaying)
             {
+                // ReSharper disable once RedundantJumpStatement
                 return;
             }
 
@@ -325,6 +402,8 @@ namespace VRC.Udon
             #endif
         }
 
+#if !VRC_CLIENT
+        // pi: in client CustomScenes calls OnSceneLoaded with the right timing
         private void OnEnable()
         {
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -336,6 +415,7 @@ namespace VRC.Udon
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
         }
+#endif
 
         private void Update()
         {
@@ -441,6 +521,8 @@ namespace VRC.Udon
             {
                 _fixedUpdateUdonBehaviours.RemoveWhere(o => o == null);
             }
+
+            _udonEventScheduler.RunScheduledEvents(EventTiming.FixedUpdate);
         }
 
         internal void PostLateUpdate()
@@ -469,17 +551,27 @@ namespace VRC.Udon
                     _postLateUpdateUdonBehaviours.Remove(udonBehaviour);
                 }
 
-                _postLateUpdater.enabled = _postLateUpdateUdonBehaviours.Count != 0;
             }
 
             if(anyNull)
             {
                 _postLateUpdateUdonBehaviours.RemoveWhere(o => o == null);
             }
+
+            _postLateUpdater.enabled =
+                _postLateUpdateUdonBehaviours.Count != 0 ||
+                _udonEventScheduler.HasAnyPendingScheduledEvents(EventTiming.PostLateUpdate);
+
+            _udonEventScheduler.RunScheduledEvents(EventTiming.PostLateUpdate);
         }
         
         private void OnDestroy()
         {
+            if (_udonEventScheduler != null)
+            {
+                _udonEventScheduler.OnEventScheduled -= HandleUdonEventScheduled;
+            }
+
             _udonRunProgramDepth?.Dispose();
             _udonRunProgramDepth = null;
         }
@@ -578,10 +670,13 @@ namespace VRC.Udon
         private ProfilerMarker _preloadProfilerMarker = new ProfilerMarker("UdonManager.OnSceneLoaded Preload");
         private ProfilerMarker _initializeProfilerMarker = new ProfilerMarker("UdonManager.OnSceneLoaded Initialize");
 
-        private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+        public bool IsSceneLoading { get; private set; } = false;
+
+        public void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {
             Stopwatch timer = new Stopwatch();
             timer.Start();
+            IsSceneLoading = true;
             try
             {
                 if(loadSceneMode == LoadSceneMode.Single)
@@ -656,6 +751,8 @@ namespace VRC.Udon
                 _inputUpdateUdonBehavioursRegistrationQueue.Clear();
                 _udonEventScheduler.ClearScheduledEvents();
 
+                Texture2DDefaultTextureHolder.ResetTextures();
+                
                 #if ENABLE_PARALLEL_PRELOAD
                 Parallel.ForEach(
                     sceneUdonBehaviourDirectory.Values,
@@ -669,7 +766,7 @@ namespace VRC.Udon
                         {
                             using(_preloadProfilerMarker.Auto())
                             {
-                                udonBehaviour.PreloadUdonProgram();
+                                udonBehaviour.PreloadUdonProgram(this);
                             }
                         }
                     });
@@ -680,7 +777,7 @@ namespace VRC.Udon
                     {
                         using(_preloadProfilerMarker.Auto())
                         {
-                            udonBehaviour.PreloadUdonProgram();
+                            udonBehaviour.PreloadUdonProgram(this);
                         }
                     }
                 }
@@ -705,27 +802,33 @@ namespace VRC.Udon
                 PurgeSerializationCaches();
                 Logger.Log($"UdonManager.OnSceneLoaded took '{timer.Elapsed.TotalSeconds:N3}'");
                 OnUdonReady?.Invoke();
+                IsSceneLoading = false;
             }
         }
 
-        internal void VerifySignature(IUdonSignatureHolder signatureHolder)
+        bool IUdonSignatureVerifier.VerifySignature(IUdonSignatureHolder signatureHolder)
         {
-#if VRC_CLIENT
-            if (SignatureVerificationEnabled && signatureHolder != null && !signatureHolder.IsInternallyValidated && _verificationCache.TryAdd(signatureHolder, 0))
+            #if VRC_CLIENT
+            if (WorldSignatureVerificationEnabled && signatureHolder is { IsInternallyValidated: false } && _verificationCache.TryAdd(signatureHolder, 0))
             {
                 var data = signatureHolder.SignedData;
                 var signature = signatureHolder.Signature;
                 var result = VRCFastCrypto_Client.VerifyMessage(_signatureVerificationKey, data, signature);
                 if (result is VRCFastCrypto_Client.LibResult.Success)
+                {
                     Interlocked.Increment(ref _signatureVerificationSuccess);
-                else
-                    Interlocked.Increment(ref _signatureVerificationFailed);
+                    return true;
+                }
+
+                Interlocked.Increment(ref _signatureVerificationFailed);
+                return false;
             }
-            else
-            {
-                Interlocked.Increment(ref _signatureVerificationSkipped);
-            }
-#endif
+
+            Interlocked.Increment(ref _signatureVerificationSkipped);
+            return true;
+            #else
+            return true;
+            #endif
         }
 
         [SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Global")]
@@ -782,6 +885,35 @@ namespace VRC.Udon
             return totalSize;
         }
 
+        public void GetLoadedBehavioursSyncTypes(out int syncNone, out int syncManual, out int syncContinuous, out int syncUnknown)
+        {
+            syncNone = syncManual = syncContinuous = syncUnknown = 0;
+            foreach(Dictionary<GameObject, HashSet<UdonBehaviour>> sceneUdonBehaviourDirectory in _sceneUdonBehaviourDirectories.Values)
+            {
+                foreach(HashSet<UdonBehaviour> udonBehaviourList in sceneUdonBehaviourDirectory.Values)
+                {
+                    foreach(UdonBehaviour udonBehaviour in udonBehaviourList)
+                    {
+                        switch (udonBehaviour.SyncMethod)
+                        {
+                            case SDKBase.Networking.SyncType.None:
+                                syncNone++;
+                                break;
+                            case SDKBase.Networking.SyncType.Manual:
+                                syncManual++;
+                                break;
+                            case SDKBase.Networking.SyncType.Continuous:
+                                syncContinuous++;
+                                break;
+                            default:
+                                syncUnknown++;
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region Update Registration Methods
@@ -812,6 +944,14 @@ namespace VRC.Udon
         [PublicAPI]
         public void ScheduleDelayedEvent(IUdonEventReceiver eventReceiver, string eventName, int delayFrames, EventTiming eventTiming) =>
             _udonEventScheduler.ScheduleDelayedFramesEvent(eventReceiver, eventName, delayFrames, eventTiming);
+
+        private void HandleUdonEventScheduled(EventTiming eventTiming)
+        {
+            if (eventTiming == EventTiming.PostLateUpdate)
+            {
+                _postLateUpdater.enabled = true;
+            }
+        }
 
         #endregion
 
@@ -865,40 +1005,47 @@ namespace VRC.Udon
             return !_isUdonEnabled ? null : _udonClientInterface.ConstructUdonVM();
         }
 
-        public void FilterBlacklisted<T>(ref T objectToFilter) where T : class
+        public void ApplyFilter<T>(ref T objectToFilter) where T : class
         {
-            _udonClientInterface.FilterBlacklisted(ref objectToFilter);
+            _udonClientInterface.ApplyFilter(ref objectToFilter);
         }
 
-        public void Blacklist(Object objectToBlacklist, bool includeParents = true)
+        public void Blacklist(UnityEngine.Object objectToBlacklist, bool includeParents = true)
         {
-            _udonClientInterface.Blacklist(objectToBlacklist, includeParents);
+            _blacklist.Blacklist(objectToBlacklist, includeParents);
         }
 
-        public void Blacklist(IEnumerable<Object> objectsToBlacklist, bool includeParents = true)
+        public void Blacklist(IEnumerable<UnityEngine.Object> objectsToBlacklist, bool includeParents = true)
         {
-            _udonClientInterface.Blacklist(objectsToBlacklist, includeParents);
+            _blacklist.Blacklist(objectsToBlacklist, includeParents);
         }
 
-        public void FilterBlacklisted(ref Object objectToFilter)
+        public void ApplyFilter(ref UnityEngine.Object objectToFilter)
         {
-            _udonClientInterface.FilterBlacklisted(ref objectToFilter);
+            _udonClientInterface.ApplyFilter(ref objectToFilter);
         }
 
         public void CleanBlacklist()
         {
-            _udonClientInterface.CleanBlacklist();
+            _blacklist.CleanBlacklist();
         }
 
-        public bool IsBlacklisted(Object objectToCheck)
+        public bool IsBlacklisted(UnityEngine.Object objectToCheck)
         {
-            return _udonClientInterface.IsBlacklisted(objectToCheck);
+            return _blacklist.IsBlacklisted(objectToCheck);
         }
 
         public bool IsBlacklisted<T>(T objectToCheck)
         {
-            return _udonClientInterface.IsBlacklisted(objectToCheck);
+            return _blacklist.IsBlacklisted(objectToCheck);
         }
+
+        public void ApplyLightCullingMaskFilter(ref int lightCullingMask)
+        {
+            _udonClientInterface.ApplyLightCullingMaskFilter(ref lightCullingMask);
+        }
+
+        public int LightReservedLayerMask { get => _blacklist.LightReservedLayerMask; set => _blacklist.LightReservedLayerMask = value; }
 
         public IUdonWrapper GetWrapper()
         {

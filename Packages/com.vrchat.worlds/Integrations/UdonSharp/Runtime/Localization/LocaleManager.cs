@@ -42,6 +42,7 @@ namespace UdonSharp.Localization
         CE_NodeNotSupported,
         CE_UdonMethodNotExposed,
         CE_InitializerListsNotSupported,
+        CE_UdonFieldNotExposed,
 
         Length,
     }

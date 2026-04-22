@@ -5,18 +5,22 @@ using System.Linq;
 using JetBrains.Annotations;
 using Unity.Profiling;
 using UnityEngine;
+using VRC.SDKBase;
 using VRC.SDK3;
 using VRC.SDK3.Components;
-using VRC.SDKBase;
+using VRC.SDK3.UdonNetworkCalling;
+using VRC.Udon.ClientBindings.Interfaces;
 using VRC.Udon.Common;
 using VRC.Udon.Common.Attributes;
 using VRC.Udon.Common.Enums;
 using VRC.Udon.Common.Interfaces;
+using VRC.Udon.Security;
 using VRC.Udon.Serialization.OdinSerializer;
 using VRC.Udon.VM;
 using Logger = VRC.Core.Logger;
 using Object = UnityEngine.Object;
 using SyncType = VRC.SDKBase.Networking.SyncType;
+
 
 #if VRC_CLIENT
 using VRC.Core;
@@ -30,7 +34,7 @@ namespace VRC.Udon
 {
     public sealed class UdonBehaviour : AbstractUdonBehaviour, ISerializationCallbackReceiver
 #if VRC_CLIENT
-        , INetworkReadyReceiver
+        , VRC.Core.Networking.INetworkReadyReceiver
 #endif
     {
         #region Odin Serialized Fields
@@ -65,7 +69,7 @@ namespace VRC.Udon
         [SerializeField]
         private SyncType _syncMethod = SyncType.Unknown;
 
-        public SyncType SyncMethod
+        public override SyncType SyncMethod
         {
             get 
             {
@@ -133,9 +137,6 @@ namespace VRC.Udon
                 
         [PublicAPI]
         public static Action<UdonBehaviour> RequestSerializationHook { get; set; } = null;
-
-        [PublicAPI]
-        public static Action<UdonBehaviour, NetworkEventTarget, string> SendCustomNetworkEventHook { get; set; } = LoopbackSendCustomNetworkEvent;
         
         [PublicAPI]
         public override bool DisableInteractive { get; set; }
@@ -171,7 +172,40 @@ namespace VRC.Udon
 
         public ulong ProgramSize => serializedProgramAsset != null ? serializedProgramAsset.GetSerializedProgramSize() : 0L;
 
+        public override NetworkCallingEntrypointMetadata[] GetNetworkCallingMetadata() =>
+            serializedProgramAsset != null ? serializedProgramAsset.GetNetworkCallingMetadata() : null;
+        public override NetworkCallingEntrypointMetadata GetNetworkCallingMetadata(string entrypoint) =>
+            serializedProgramAsset != null ? serializedProgramAsset.GetNetworkCallingMetadata(entrypoint) : null;
+
+        public override bool TryGetEntrypointNameFromHash(uint hash, out string entrypoint)
+        {
+            if (serializedProgramAsset == null)
+            {
+                entrypoint = null;
+                return false;
+            }
+            return serializedProgramAsset.TryGetEntrypointNameFromHash(hash, out entrypoint);
+        }
+        public override bool TryGetEntrypointHashFromName(string entrypoint, out uint hash)
+        {
+            if (serializedProgramAsset == null)
+            {
+                hash = 0;
+                return false;
+            }
+            return serializedProgramAsset.TryGetEntrypointHashFromName(entrypoint, out hash);
+        }
+
         public bool IsInitialized => _initialized;
+
+        // a component index that doesn't change at runtime so it can be used as an identifier
+        [NonSerialized] private int _componentIndexFixed = -1;
+        public override int GetComponentIndexFixed()
+        {
+            if (_componentIndexFixed == -1)
+                _componentIndexFixed = GetComponentIndex();
+            return _componentIndexFixed;
+        }
 
         #endregion
 
@@ -181,7 +215,7 @@ namespace VRC.Udon
         private IUdonProgram _program;
         private IUdonVM _udonVM;
         private bool _isReady;
-        private int _debugLevel;
+        private string _categoryName;
         private bool _hasError;
         private bool _hasDoneStart;
         private bool _initialized;
@@ -241,7 +275,7 @@ namespace VRC.Udon
 
         #region Private Methods
 
-        private bool LoadProgram()
+        private bool LoadProgram(IUdonSignatureVerifier signatureVerifier)
         {
             if (serializedProgramAsset == null)
             {
@@ -250,7 +284,13 @@ namespace VRC.Udon
 
             if(_program == null)
             {
-                _udonManager.VerifySignature(serializedProgramAsset as IUdonSignatureHolder);
+                bool verificationResult = signatureVerifier.VerifySignature(serializedProgramAsset as IUdonSignatureHolder);
+                if (!verificationResult)
+                {
+                    Logger.LogError($"Program signature verification failed for {name}", _categoryName, this);
+                    return false;
+                }
+
                 _program = serializedProgramAsset.RetrieveProgram();
             }
 
@@ -360,7 +400,9 @@ namespace VRC.Udon
             }
 
             if (_program.EntryPoints.HasExportedSymbol("_onTriggerStay") ||
-                _program.EntryPoints.HasExportedSymbol("_onPlayerTriggerStay"))
+                _program.EntryPoints.HasExportedSymbol("_onPlayerTriggerStay") ||
+                _program.EntryPoints.HasExportedSymbol("_onDroneTriggerStay")
+                )
             {
                 RegisterEventProxy<OnTriggerStayProxy>();
             }
@@ -517,7 +559,7 @@ namespace VRC.Udon
                     {
                         Logger.Log(
                             $"Unsupported GameObject/Component reference type: {udonBaseHeapReference.GetType().Name}. Only GameObject, Transform, and UdonBehaviour are supported.",
-                            _debugLevel,
+                            _categoryName,
                             this);
 
                         return false;
@@ -527,7 +569,7 @@ namespace VRC.Udon
                 {
                     Logger.Log(
                         $"Unknown heap reference type: {udonBaseHeapReference.GetType().Name}",
-                        _debugLevel,
+                        _categoryName,
                         this);
 
                     return false;
@@ -842,8 +884,25 @@ namespace VRC.Udon
             if (player != null)
             {
                 RunEvent("_onPlayerTriggerEnter", ("player", player));
+                return;
             }
-            else if (!UdonManager.Instance.IsBlacklisted(other))
+
+            if(VRCDroneApi.TryGetDroneFromGameObject(other.gameObject, out var drone))
+            {
+                RunEvent(
+                    "_onDroneTriggerEnter", 
+                    ("drone", drone)
+                );
+                return;
+            }
+            
+            // Try to process the event using registered consumers (e.g., VRCPropApi)
+            if (UdonManager.Instance.TryNotifyOnTriggerEnterConsumers(this, other))
+            {
+                return;
+            }
+            
+            if (!UdonManager.Instance.IsBlacklisted(other))
             {
                 RunEvent("_onTriggerEnter", ("other", other));
             }
@@ -863,8 +922,25 @@ namespace VRC.Udon
             if (player != null)
             {
                 RunEvent("_onPlayerTriggerExit", ("player", player));
+                return;
             }
-            else if (!UdonManager.Instance.IsBlacklisted(other))
+            
+            if(VRCDroneApi.TryGetDroneFromGameObject(other.gameObject, out var drone))
+            {
+                RunEvent(
+                    "_onDroneTriggerExit", 
+                    ("drone", drone)
+                );
+                return;
+            }
+            
+            // Try to process the event using registered consumers (e.g., VRCPropApi)
+            if (UdonManager.Instance.TryNotifyOnTriggerExitConsumers(this, other))
+            {
+                return;
+            }
+            
+            if (!UdonManager.Instance.IsBlacklisted(other))
             {
                 RunEvent("_onTriggerExit", ("other", other));
             }
@@ -884,8 +960,25 @@ namespace VRC.Udon
             if (player != null)
             {
                 RunEvent("_onPlayerTriggerStay", ("player", player));
+                return;
             }
-            else if (!UdonManager.Instance.IsBlacklisted(other))
+            
+            if(VRCDroneApi.TryGetDroneFromGameObject(other.gameObject, out var drone))
+            {
+                RunEvent(
+                    "_onDroneTriggerStay", 
+                    ("drone", drone)
+                );
+                return;
+            }
+            
+            // Try to process the event using registered consumers (e.g., VRCPropApi)
+            if (UdonManager.Instance.TryNotifyOnTriggerStayConsumers(this, other))
+            {
+                return;
+            }
+            
+            if (!UdonManager.Instance.IsBlacklisted(other))
             {
                 RunEvent("_onTriggerStay", ("other", other));
             }
@@ -1065,7 +1158,7 @@ namespace VRC.Udon
                 {
                     Logger.LogError(
                         $"Udon VM execution errored, this UdonBehaviour will be halted.",
-                        _debugLevel,
+                        _categoryName,
                         this);
 
                     _hasError = true;
@@ -1076,7 +1169,7 @@ namespace VRC.Udon
             {
                 Logger.LogError(
                     "An exception occurred during Udon execution, this UdonBehaviour will be halted.\n" + error,
-                    _debugLevel,
+                    _categoryName,
                     this);
 
                 _hasError = true;
@@ -1196,7 +1289,7 @@ namespace VRC.Udon
 #if VRC_CLIENT || UNITY_EDITOR
                 if (UdonManager.Instance.DebugLogging)
                 {
-                    Logger.Log($"{gameObject.name} not ready to respond to {eventName}: initialized={_initialized} enabled={enabled} hasStarted={_hasDoneStart}", _debugLevel);
+                    Logger.Log($"{gameObject.name} not ready to respond to {eventName}: initialized={_initialized} enabled={enabled} hasStarted={_hasDoneStart}", _categoryName);
                 }
 #endif
 
@@ -1209,7 +1302,7 @@ namespace VRC.Udon
 #if VRC_CLIENT || UNITY_EDITOR
                 if (UdonManager.Instance.DebugLogging)
                 {
-                    Logger.Log($"{gameObject.name} will not respond to {eventName}", _debugLevel);
+                    Logger.Log($"{gameObject.name} will not respond to {eventName}", _categoryName);
                 }
 #endif
 
@@ -1222,7 +1315,7 @@ namespace VRC.Udon
 #if VRC_CLIENT || UNITY_EDITOR
                 if (UdonManager.Instance.DebugLogging)
                 {
-                    Logger.LogError($"{gameObject.name} failed to respond to {eventName}", _debugLevel);
+                    Logger.LogError($"{gameObject.name} failed to respond to {eventName}", _categoryName);
                 }
 #endif
 
@@ -1234,7 +1327,8 @@ namespace VRC.Udon
             return true;
         }
 
-        public override bool RunEvent(string eventName)
+        public override bool RunEvent(string eventName) => RunEventAdvanced(eventName, canRunBeforeStart: false);
+        public override bool RunEventAdvanced(string eventName, bool canRunBeforeStart)
         {
             if(DisableEventProcessing)
             {
@@ -1246,7 +1340,7 @@ namespace VRC.Udon
                 return false;
             }
 
-            if(!_hasDoneStart)
+            if(!_hasDoneStart && !canRunBeforeStart)
             {
                 return false;
             }
@@ -1274,7 +1368,10 @@ namespace VRC.Udon
             return true;
         }
 
-        public override bool RunEvent<T0>(string eventName, (string symbolName, T0 value) parameter0)
+        #region RunEvent Parameter Overloads
+
+        public override bool RunEvent<T0>(string eventName, (string symbolName, T0 value) parameter0) => RunEventAdvanced<T0>(eventName, true, false, parameter0);
+        public override bool RunEventAdvanced<T0>(string eventName, bool mangleParameterNames, bool canRunBeforeStart, (string symbolName, T0 value) parameter0)
         {
             if(DisableEventProcessing)
             {
@@ -1286,7 +1383,7 @@ namespace VRC.Udon
                 return false;
             }
 
-            if(!_hasDoneStart)
+            if(!_hasDoneStart && !canRunBeforeStart)
             {
                 return false;
             }
@@ -1306,7 +1403,7 @@ namespace VRC.Udon
                 return false;
             }
 
-            SetEventVariable(eventName, parameter0.symbolName, parameter0.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter0.symbolName) : parameter0.symbolName, parameter0.value);
             foreach(uint entryPoint in entryPoints)
             {
                 RunProgram(entryPoint);
@@ -1315,7 +1412,8 @@ namespace VRC.Udon
             return true;
         }
 
-        public override bool RunEvent<T0, T1>(string eventName, (string symbolName, T0 value) parameter0, (string symbolName, T1 value) parameter1)
+        public override bool RunEvent<T0, T1>(string eventName, (string symbolName, T0 value) parameter0, (string symbolName, T1 value) parameter1) => RunEventAdvanced<T0, T1>(eventName, true, false, parameter0, parameter1);
+        public override bool RunEventAdvanced<T0, T1>(string eventName, bool mangleParameterNames, bool canRunBeforeStart, (string symbolName, T0 value) parameter0, (string symbolName, T1 value) parameter1)
         {
             if(DisableEventProcessing)
             {
@@ -1327,7 +1425,7 @@ namespace VRC.Udon
                 return false;
             }
 
-            if(!_hasDoneStart)
+            if(!_hasDoneStart && !canRunBeforeStart)
             {
                 return false;
             }
@@ -1347,8 +1445,8 @@ namespace VRC.Udon
                 return false;
             }
 
-            SetEventVariable(eventName, parameter0.symbolName, parameter0.value);
-            SetEventVariable(eventName, parameter1.symbolName, parameter1.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter0.symbolName) : parameter0.symbolName, parameter0.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter1.symbolName) : parameter1.symbolName, parameter1.value);
             foreach(uint entryPoint in entryPoints)
             {
                 RunProgram(entryPoint);
@@ -1358,7 +1456,9 @@ namespace VRC.Udon
         }
 
         public override bool RunEvent<T0, T1, T2>(string eventName, (string symbolName, T0 value) parameter0, (string symbolName, T1 value) parameter1,
-            (string symbolName, T2 value) parameter2)
+            (string symbolName, T2 value) parameter2) => RunEventAdvanced<T0, T1, T2>(eventName, true, false, parameter0, parameter1, parameter2);
+        public override bool RunEventAdvanced<T0, T1, T2>(string eventName, bool mangleParameterNames, bool canRunBeforeStart, (string symbolName, T0 value) parameter0,
+            (string symbolName, T1 value) parameter1, (string symbolName, T2 value) parameter2)
         {
             if(DisableEventProcessing)
             {
@@ -1370,7 +1470,7 @@ namespace VRC.Udon
                 return false;
             }
 
-            if(!_hasDoneStart)
+            if(!_hasDoneStart && !canRunBeforeStart)
             {
                 return false;
             }
@@ -1390,9 +1490,9 @@ namespace VRC.Udon
                 return false;
             }
 
-            SetEventVariable(eventName, parameter0.symbolName, parameter0.value);
-            SetEventVariable(eventName, parameter1.symbolName, parameter1.value);
-            SetEventVariable(eventName, parameter2.symbolName, parameter2.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter0.symbolName) : parameter0.symbolName, parameter0.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter1.symbolName) : parameter1.symbolName, parameter1.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter2.symbolName) : parameter2.symbolName, parameter2.value);
             foreach(uint entryPoint in entryPoints)
             {
                 RunProgram(entryPoint);
@@ -1401,7 +1501,10 @@ namespace VRC.Udon
             return true;
         }
 
-        public override bool RunEvent(string eventName, params (string symbolName, object value)[] programVariables)
+        public override bool RunEvent<T0, T1, T2, T3>(string eventName, (string symbolName, T0 value) parameter0, (string symbolName, T1 value) parameter1,
+            (string symbolName, T2 value) parameter2, (string symbolName, T3 value) parameter3) => RunEventAdvanced<T0, T1, T2, T3>(eventName, true, false, parameter0, parameter1, parameter2, parameter3);
+        public override bool RunEventAdvanced<T0, T1, T2, T3>(string eventName, bool mangleParameterNames, bool canRunBeforeStart, (string symbolName, T0 value) parameter0,
+            (string symbolName, T1 value) parameter1, (string symbolName, T2 value) parameter2, (string symbolName, T3 value) parameter3)
         {
             if(DisableEventProcessing)
             {
@@ -1413,7 +1516,260 @@ namespace VRC.Udon
                 return false;
             }
 
-            if (!_hasDoneStart)
+            if(!_hasDoneStart && !canRunBeforeStart)
+            {
+                return false;
+            }
+
+            if(_hasError)
+            {
+                return false;
+            }
+
+            if(_udonVM == null)
+            {
+                return false;
+            }
+
+            if(!_eventTable.TryGetValue(eventName, out List<uint> entryPoints))
+            {
+                return false;
+            }
+
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter0.symbolName) : parameter0.symbolName, parameter0.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter1.symbolName) : parameter1.symbolName, parameter1.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter2.symbolName) : parameter2.symbolName, parameter2.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter3.symbolName) : parameter3.symbolName, parameter3.value);
+            foreach(uint entryPoint in entryPoints)
+            {
+                RunProgram(entryPoint);
+            }
+
+            return true;
+        }
+
+        public override bool RunEvent<T0, T1, T2, T3, T4>(string eventName, (string symbolName, T0 value) parameter0, (string symbolName, T1 value) parameter1,
+            (string symbolName, T2 value) parameter2, (string symbolName, T3 value) parameter3, (string symbolName, T4 value) parameter4) => RunEventAdvanced<T0, T1, T2, T3, T4>(eventName, true, false, parameter0, parameter1, parameter2, parameter3, parameter4);
+        public override bool RunEventAdvanced<T0, T1, T2, T3, T4>(string eventName, bool mangleParameterNames, bool canRunBeforeStart, (string symbolName, T0 value) parameter0,
+            (string symbolName, T1 value) parameter1, (string symbolName, T2 value) parameter2, (string symbolName, T3 value) parameter3, (string symbolName, T4 value) parameter4)
+        {
+            if(DisableEventProcessing)
+            {
+                return false;
+            }
+
+            if(!_isReady)
+            {
+                return false;
+            }
+
+            if(!_hasDoneStart && !canRunBeforeStart)
+            {
+                return false;
+            }
+
+            if(_hasError)
+            {
+                return false;
+            }
+
+            if(_udonVM == null)
+            {
+                return false;
+            }
+
+            if(!_eventTable.TryGetValue(eventName, out List<uint> entryPoints))
+            {
+                return false;
+            }
+
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter0.symbolName) : parameter0.symbolName, parameter0.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter1.symbolName) : parameter1.symbolName, parameter1.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter2.symbolName) : parameter2.symbolName, parameter2.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter3.symbolName) : parameter3.symbolName, parameter3.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter4.symbolName) : parameter4.symbolName, parameter4.value);
+            foreach(uint entryPoint in entryPoints)
+            {
+                RunProgram(entryPoint);
+            }
+
+            return true;
+        }
+
+        public override bool RunEvent<T0, T1, T2, T3, T4, T5>(string eventName, (string symbolName, T0 value) parameter0, (string symbolName, T1 value) parameter1,
+            (string symbolName, T2 value) parameter2, (string symbolName, T3 value) parameter3, (string symbolName, T4 value) parameter4, (string symbolName, T5 value) parameter5) 
+            => RunEventAdvanced<T0, T1, T2, T3, T4, T5>(eventName, true, false, parameter0, parameter1, parameter2, parameter3, parameter4, parameter5);
+        public override bool RunEventAdvanced<T0, T1, T2, T3, T4, T5>(string eventName, bool mangleParameterNames, bool canRunBeforeStart, 
+            (string symbolName, T0 value) parameter0, (string symbolName, T1 value) parameter1, (string symbolName, T2 value) parameter2, 
+            (string symbolName, T3 value) parameter3, (string symbolName, T4 value) parameter4, (string symbolName, T5 value) parameter5)
+        {
+            if(DisableEventProcessing)
+            {
+                return false;
+            }
+
+            if(!_isReady)
+            {
+                return false;
+            }
+
+            if(!_hasDoneStart && !canRunBeforeStart)
+            {
+                return false;
+            }
+
+            if(_hasError)
+            {
+                return false;
+            }
+
+            if(_udonVM == null)
+            {
+                return false;
+            }
+
+            if(!_eventTable.TryGetValue(eventName, out List<uint> entryPoints))
+            {
+                return false;
+            }
+
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter0.symbolName) : parameter0.symbolName, parameter0.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter1.symbolName) : parameter1.symbolName, parameter1.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter2.symbolName) : parameter2.symbolName, parameter2.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter3.symbolName) : parameter3.symbolName, parameter3.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter4.symbolName) : parameter4.symbolName, parameter4.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter5.symbolName) : parameter5.symbolName, parameter5.value);
+            foreach(uint entryPoint in entryPoints)
+            {
+                RunProgram(entryPoint);
+            }
+
+            return true;
+        }
+
+        public override bool RunEvent<T0, T1, T2, T3, T4, T5, T6>(string eventName, (string symbolName, T0 value) parameter0, (string symbolName, T1 value) parameter1,
+            (string symbolName, T2 value) parameter2, (string symbolName, T3 value) parameter3, (string symbolName, T4 value) parameter4, 
+            (string symbolName, T5 value) parameter5, (string symbolName, T6 value) parameter6) 
+            => RunEventAdvanced<T0, T1, T2, T3, T4, T5, T6>(eventName, true, false, parameter0, parameter1, parameter2, parameter3, parameter4, parameter5, parameter6);
+        public override bool RunEventAdvanced<T0, T1, T2, T3, T4, T5, T6>(string eventName, bool mangleParameterNames, bool canRunBeforeStart, 
+            (string symbolName, T0 value) parameter0, (string symbolName, T1 value) parameter1, (string symbolName, T2 value) parameter2, 
+            (string symbolName, T3 value) parameter3, (string symbolName, T4 value) parameter4, (string symbolName, T5 value) parameter5, 
+            (string symbolName, T6 value) parameter6)
+        {
+            if(DisableEventProcessing)
+            {
+                return false;
+            }
+
+            if(!_isReady)
+            {
+                return false;
+            }
+
+            if(!_hasDoneStart && !canRunBeforeStart)
+            {
+                return false;
+            }
+
+            if(_hasError)
+            {
+                return false;
+            }
+
+            if(_udonVM == null)
+            {
+                return false;
+            }
+
+            if(!_eventTable.TryGetValue(eventName, out List<uint> entryPoints))
+            {
+                return false;
+            }
+
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter0.symbolName) : parameter0.symbolName, parameter0.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter1.symbolName) : parameter1.symbolName, parameter1.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter2.symbolName) : parameter2.symbolName, parameter2.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter3.symbolName) : parameter3.symbolName, parameter3.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter4.symbolName) : parameter4.symbolName, parameter4.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter5.symbolName) : parameter5.symbolName, parameter5.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter6.symbolName) : parameter6.symbolName, parameter6.value);
+            foreach(uint entryPoint in entryPoints)
+            {
+                RunProgram(entryPoint);
+            }
+
+            return true;
+        }
+
+        public override bool RunEvent<T0, T1, T2, T3, T4, T5, T6, T7>(string eventName, (string symbolName, T0 value) parameter0, (string symbolName, T1 value) parameter1,
+            (string symbolName, T2 value) parameter2, (string symbolName, T3 value) parameter3, (string symbolName, T4 value) parameter4, 
+            (string symbolName, T5 value) parameter5, (string symbolName, T6 value) parameter6, (string symbolName, T7 value) parameter7) 
+            => RunEventAdvanced<T0, T1, T2, T3, T4, T5, T6, T7>(eventName, true, false, parameter0, parameter1, parameter2, parameter3, parameter4, parameter5, parameter6, parameter7);
+        public override bool RunEventAdvanced<T0, T1, T2, T3, T4, T5, T6, T7>(string eventName, bool mangleParameterNames, bool canRunBeforeStart, 
+            (string symbolName, T0 value) parameter0, (string symbolName, T1 value) parameter1, (string symbolName, T2 value) parameter2, 
+            (string symbolName, T3 value) parameter3, (string symbolName, T4 value) parameter4, (string symbolName, T5 value) parameter5, 
+            (string symbolName, T6 value) parameter6, (string symbolName, T7 value) parameter7)
+        {
+            if(DisableEventProcessing)
+            {
+                return false;
+            }
+
+            if(!_isReady)
+            {
+                return false;
+            }
+
+            if(!_hasDoneStart && !canRunBeforeStart)
+            {
+                return false;
+            }
+
+            if(_hasError)
+            {
+                return false;
+            }
+
+            if(_udonVM == null)
+            {
+                return false;
+            }
+
+            if(!_eventTable.TryGetValue(eventName, out List<uint> entryPoints))
+            {
+                return false;
+            }
+
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter0.symbolName) : parameter0.symbolName, parameter0.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter1.symbolName) : parameter1.symbolName, parameter1.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter2.symbolName) : parameter2.symbolName, parameter2.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter3.symbolName) : parameter3.symbolName, parameter3.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter4.symbolName) : parameter4.symbolName, parameter4.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter5.symbolName) : parameter5.symbolName, parameter5.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter6.symbolName) : parameter6.symbolName, parameter6.value);
+            SetProgramVariable(mangleParameterNames ? GetEventParameterName(eventName, parameter7.symbolName) : parameter7.symbolName, parameter7.value);
+            foreach(uint entryPoint in entryPoints)
+            {
+                RunProgram(entryPoint);
+            }
+
+            return true;
+        }
+
+        public override bool RunEvent(string eventName, params (string symbolName, object value)[] programVariables) => RunEventAdvanced(eventName, true, false, programVariables);
+        public override bool RunEventAdvanced(string eventName, bool mangleParameterNames, bool canRunBeforeStart, params (string symbolName, object value)[] programVariables)
+        {
+            if(DisableEventProcessing)
+            {
+                return false;
+            }
+
+            if(!_isReady)
+            {
+                return false;
+            }
+
+            if (!_hasDoneStart && !canRunBeforeStart)
             {
                 return false;
             }
@@ -1436,7 +1792,8 @@ namespace VRC.Udon
             //TODO: Replace with a non-boxing interface before exposing to users
             foreach ((string symbolName, object value) in programVariables)
             {
-                SetEventVariable(eventName, symbolName, value);
+                var newSymbolName = mangleParameterNames ? GetEventParameterName(eventName, symbolName) : symbolName;
+                SetProgramVariable(newSymbolName, value);
             }
 
             foreach (uint entryPoint in entryPoints)
@@ -1446,6 +1803,8 @@ namespace VRC.Udon
 
             return true;
         }
+
+        #endregion
 
         public override void RunInputEvent(string eventName, UdonInputEventArgs args)
         {
@@ -1468,19 +1827,19 @@ namespace VRC.Udon
             switch (args.eventType)
             {
                 case UdonInputEventType.AXIS:
-                    SetEventVariable(eventName, "floatValue", args.floatValue);
+                    SetProgramVariable(GetEventParameterName(eventName, "floatValue"), args.floatValue);
                     break;
                 case UdonInputEventType.BUTTON:
-                    SetEventVariable(eventName, "boolValue", args.boolValue);
+                    SetProgramVariable(GetEventParameterName(eventName, "boolValue"), args.boolValue);
                     break;
             }
 
             // Set event args
-            SetEventVariable(eventName, "args", args);
+            SetProgramVariable(GetEventParameterName(eventName, "args"), args);
             RunProgram(eventName);
         }
 
-        private void SetEventVariable<T>(string eventName, string symbolName, T value)
+        private string GetEventParameterName(string eventName, string symbolName)
         {
             if (!_symbolNameCache.TryGetValue((eventName, symbolName), out string newSymbolName))
             {
@@ -1488,12 +1847,12 @@ namespace VRC.Udon
                 _symbolNameCache.Add((eventName, symbolName), newSymbolName);
             }
 
-            SetProgramVariable(newSymbolName, value);
+            return newSymbolName;
         }
 
         private ProfilerMarker _preloadUdonProgramProfilerMarker = new ProfilerMarker("UdonBehaviour.PreloadUdonProgram");
 
-        public void PreloadUdonProgram()
+        public void PreloadUdonProgram(IUdonSignatureVerifier signatureVerifier)
         {
             using(_preloadUdonProgramProfilerMarker.Auto())
             {
@@ -1502,15 +1861,28 @@ namespace VRC.Udon
                     return;
                 }
 
-                if(_program == null)
+                if(_program != null)
                 {
-                    UdonManager.Instance.VerifySignature(serializedProgramAsset as IUdonSignatureHolder);
-                    _program = serializedProgramAsset.RetrieveProgram();
+                    return;
                 }
+
+                signatureVerifier.VerifySignature(serializedProgramAsset as IUdonSignatureHolder);
+                _program = serializedProgramAsset.RetrieveProgram();
             }
         }
 
         private ProfilerMarker _initializeUdonContentProfilerMarker = new ProfilerMarker("UdonBehaviour.InitializeUdonContent");
+
+        private T SearchUdonInterface<T>() where T : class
+        {
+            // while a scene is loading we do not allow searching the hierarchy
+            if (_udonManager.IsSceneLoading)
+                return _udonManager as T;
+            var foundInParent = GetComponentInParent<T>();
+            if (foundInParent == null || (foundInParent as Component) == null)
+                return _udonManager as T;
+            return foundInParent;
+        }
 
         public override void InitializeUdonContent()
         {
@@ -1529,18 +1901,19 @@ namespace VRC.Udon
                     enabled = false;
                     Logger.LogError(
                         $"Could not find the UdonManager; the UdonBehaviour on '{gameObject.name}' will not run.",
-                        _debugLevel,
+                        _categoryName,
                         this);
 
                     return;
                 }
 
-                if(!LoadProgram())
+                IUdonSignatureVerifier signatureVerifier = SearchUdonInterface<IUdonSignatureVerifier>();
+                if(!LoadProgram(signatureVerifier))
                 {
                     enabled = false;
                     Logger.Log(
                         $"Could not load the program; the UdonBehaviour on '{gameObject.name}' will not run.",
-                        _debugLevel,
+                        _categoryName,
                         this);
 
                     return;
@@ -1556,7 +1929,7 @@ namespace VRC.Udon
                     enabled = false;
                     Logger.Log(
                         $"Invalid program; the UdonBehaviour on '{gameObject.name}' will not run.",
-                        _debugLevel,
+                        _categoryName,
                         this);
 
                     return;
@@ -1567,20 +1940,21 @@ namespace VRC.Udon
                     enabled = false;
                     Logger.Log(
                         $"Failed to resolve a GameObject/Component Reference; the UdonBehaviour on '{gameObject.name}' will not run.",
-                        _debugLevel,
+                        _categoryName,
                         this);
 
                     return;
                 }
 
-                _udonVM = _udonManager.ConstructUdonVM();
+                IUdonClientInterface clientInterface = SearchUdonInterface<IUdonClientInterface>();
+                _udonVM = clientInterface.ConstructUdonVM();
 
                 if(_udonVM == null)
                 {
                     enabled = false;
                     Logger.LogError(
                         $"No UdonVM; the UdonBehaviour on '{gameObject.name}' will not run.",
-                        _debugLevel,
+                        _categoryName,
                         this);
 
                     return;
@@ -1622,7 +1996,7 @@ namespace VRC.Udon
                 enabled = false;
                 Logger.LogError(
                     $"An exception '{exception.Message}' occurred during initialization; the UdonBehaviour on '{gameObject.name}' will not run. Exception:\n{exception}",
-                    _debugLevel,
+                    _categoryName,
                     this
                 );
             }
@@ -1709,24 +2083,23 @@ namespace VRC.Udon
         }
 
         public override void SendCustomNetworkEvent(NetworkEventTarget target, string eventName)
-        {
-            SendCustomNetworkEventHook?.Invoke(this, target, eventName);
-        }
-
-        private static void LoopbackSendCustomNetworkEvent(UdonBehaviour target, NetworkEventTarget netTarget,
-            string eventName)
-        {
-            if(target == null || target.SyncMethod == SyncType.None || string.IsNullOrEmpty(eventName))
-                return;
-
-            if(eventName[0] == '_')
-            {
-                Debug.LogWarning($"Can't send event '{eventName}' as an RPC because it begins with an underscore.");
-                return;
-            }
-
-            target.SendCustomEvent(eventName);
-        }
+            => NetworkCalling.SendCustomNetworkEvent(this, target, eventName);
+        public override void SendCustomNetworkEvent(NetworkEventTarget target, string eventName, object parameter0)
+            => NetworkCalling.SendCustomNetworkEvent(this, target, eventName, parameter0);
+        public override void SendCustomNetworkEvent(NetworkEventTarget target, string eventName, object parameter0, object parameter1)
+            => NetworkCalling.SendCustomNetworkEvent(this, target, eventName, parameter0, parameter1);
+        public override void SendCustomNetworkEvent(NetworkEventTarget target, string eventName, object parameter0, object parameter1, object parameter2)
+            => NetworkCalling.SendCustomNetworkEvent(this, target, eventName, parameter0, parameter1, parameter2);
+        public override void SendCustomNetworkEvent(NetworkEventTarget target, string eventName, object parameter0, object parameter1, object parameter2, object parameter3)
+            => NetworkCalling.SendCustomNetworkEvent(this, target, eventName, parameter0, parameter1, parameter2, parameter3);
+        public override void SendCustomNetworkEvent(NetworkEventTarget target, string eventName, object parameter0, object parameter1, object parameter2, object parameter3, object parameter4)
+            => NetworkCalling.SendCustomNetworkEvent(this, target, eventName, parameter0, parameter1, parameter2, parameter3, parameter4);
+        public override void SendCustomNetworkEvent(NetworkEventTarget target, string eventName, object parameter0, object parameter1, object parameter2, object parameter3, object parameter4, object parameter5)
+            => NetworkCalling.SendCustomNetworkEvent(this, target, eventName, parameter0, parameter1, parameter2, parameter3, parameter4, parameter5);
+        public override void SendCustomNetworkEvent(NetworkEventTarget target, string eventName, object parameter0, object parameter1, object parameter2, object parameter3, object parameter4, object parameter5, object parameter6)
+            => NetworkCalling.SendCustomNetworkEvent(this, target, eventName, parameter0, parameter1, parameter2, parameter3, parameter4, parameter5, parameter6);
+        public override void SendCustomNetworkEvent(NetworkEventTarget target, string eventName, object parameter0, object parameter1, object parameter2, object parameter3, object parameter4, object parameter5, object parameter6, object parameter7)
+            => NetworkCalling.SendCustomNetworkEvent(this, target, eventName, parameter0, parameter1, parameter2, parameter3, parameter4, parameter5, parameter6, parameter7);
 
         public override void RequestSerialization()
         {
@@ -1855,7 +2228,7 @@ namespace VRC.Udon
             if (!_program.SymbolTable.TryGetAddressFromSymbol(symbolName, out uint symbolAddress))
             {
 #if UNITY_EDITOR
-                Logger.LogError($"Could not find symbol {symbolName}; available: [{string.Join(",", _program.SymbolTable.GetSymbols())}]", _debugLevel);
+                Logger.LogError($"Could not find symbol {symbolName}; available: [{string.Join(",", _program.SymbolTable.GetSymbols())}]", _categoryName);
 #endif
                 return null;
             }
@@ -1905,14 +2278,14 @@ namespace VRC.Udon
 
         private void SetupLogging()
         {
-            _debugLevel = GetType().GetHashCode();
-            if (Logger.DebugLevelIsDescribed(_debugLevel))
+            _categoryName = "UdonBehaviour";
+            if (Logger.CategoryIsDescribed(_categoryName))
             {
                 return;
             }
 
-            Logger.DescribeDebugLevel(_debugLevel, "UdonBehaviour");
-            Logger.AddDebugLevel(_debugLevel);
+            Logger.DescribeCategory(_categoryName);
+            Logger.EnableCategory(_categoryName);
         }
 
         #endregion

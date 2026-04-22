@@ -98,7 +98,7 @@ namespace VRCSDK2
             releasePublic.gameObject.SetActive(false);
 
             System.Action<string> onError = (err) => {
-                VRC.Core.Logger.LogError("Could not authenticate - " + err, DebugLevel.Always);
+                VRC.Core.Logger.LogError("Could not authenticate - " + err);
                 blueprintPanel.SetActive(false);
                 errorPanel.SetActive(true);
             };
@@ -131,14 +131,14 @@ namespace VRCSDK2
             model.Fetch(null,
                 (c) =>
                 {
-                    VRC.Core.Logger.Log("<color=magenta>Updating an existing world.</color>", DebugLevel.All);
+                    VRC.Core.Logger.Log("<color=magenta>Updating an existing world.</color>", API.LOG_CATEGORY);
                     worldRecord = c.Model as ApiWorld;
                     pipelineManager.completedSDKPipeline = !string.IsNullOrEmpty(worldRecord.authorId);
                     GetUserUploadInformationAndSetupUI(model.id);
                 },
                 (c) =>
                 {
-                    VRC.Core.Logger.Log("<color=magenta>World record not found, creating a new world.</color>", DebugLevel.All);
+                    VRC.Core.Logger.Log("<color=magenta>World record not found, creating a new world.</color>", API.LOG_CATEGORY);
                     worldRecord = new ApiWorld { capacity = 16 };
                     pipelineManager.completedSDKPipeline = false;
                     worldRecord.id = pipelineManager.blueprintId;
@@ -377,7 +377,7 @@ namespace VRCSDK2
 
             if (string.IsNullOrEmpty(worldRecord.id))
             {
-                pipelineManager.AssignId();
+                pipelineManager.AssignId(PipelineManager.ContentType.world);
                 worldRecord.id = pipelineManager.blueprintId;
             }
 
@@ -387,7 +387,7 @@ namespace VRCSDK2
 
             if (!string.IsNullOrEmpty(unityPackagePath) && System.IO.File.Exists(unityPackagePath))
             {
-                VRC.Core.Logger.Log("Found unity package path. Preparing to upload!", DebugLevel.All);
+                VRC.Core.Logger.Log("Found unity package path. Preparing to upload!", API.LOG_CATEGORY);
                 PrepareUnityPackageForS3(unityPackagePath, blueprintId, version, ApiWorld.VERSION);
             }
 
@@ -412,7 +412,7 @@ namespace VRCSDK2
             if (caughtInvalidInput)
                 yield break;
 
-            VRC.Core.Logger.Log("Starting upload", DebugLevel.Always);
+            VRC.Core.Logger.Log("Starting upload");
 
             // upload unity package
             if (!string.IsNullOrEmpty(uploadUnityPackagePath))
@@ -596,7 +596,7 @@ namespace VRCSDK2
                     ApiWorld savedBP = (ApiWorld)c.Model;
                     pipelineManager.blueprintId = savedBP.id;
                     UnityEditor.EditorPrefs.SetString("blueprintID-" + pipelineManager.GetInstanceID().ToString(), savedBP.id);
-                    VRC.Core.Logger.Log("Setting blueprintID on pipeline manager and editor prefs", DebugLevel.All);
+                    VRC.Core.Logger.Log("Setting blueprintID on pipeline manager and editor prefs", API.LOG_CATEGORY);
                     doneUploading = true;
                 },
                 (c) => { doneUploading = true; Debug.LogError(c.Error); });

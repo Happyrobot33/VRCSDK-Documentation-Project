@@ -100,13 +100,14 @@ namespace VRC.SDK3.ClientSim
             }
 
 #if VRC_ENABLE_PLAYER_PERSISTENCE 
-            clientSimPlayer.SetupPlayerPersistence(
-                ClientSimMain.GetInstance().GetEventDispatcher(),
-                ClientSimMain.GetInstance().GetUdonEventSender(), 
-                ClientSimMain.GetInstance().GetBlacklistManager(),
-                ClientSimMain.GetInstance().GetUdonManager(),
-                ClientSimMain.GetInstance().GetSyncedObjectManager(),
-                ClientSimMain.GetInstance().GetPlayerManager()
+            if (ClientSimMain.TryGetInstance(out var instance)) 
+                clientSimPlayer.SetupPlayerPersistence(
+                    instance.GetEventDispatcher(),
+                    instance.GetUdonEventSender(), 
+                    instance.GetBlacklistManager(),
+                instance.GetUdonManager(),
+                    instance.GetSyncedObjectManager(),
+                    instance.GetPlayerManager()
             );
 #endif
             
@@ -268,6 +269,11 @@ namespace VRC.SDK3.ClientSim
         {
             return player.GetClientSimPlayer().isSuspended;
         }
+
+        public bool IsVRCPlus(VRCPlayerApi player)
+        {
+            return player.GetClientSimPlayer().isVRCPlus;
+        }
         
         public VRCPlayerApi GetOwner(GameObject obj)
         {
@@ -401,6 +407,42 @@ namespace VRC.SDK3.ClientSim
                 return player.Player;
             }
             return null;
+        }
+
+        public static List<VRCPlayerApi> GetAllPlayersWithinRange(Vector3 pos, float radius, int limit = -1)
+        {
+            List<VRCPlayerApi> resultList = new List<VRCPlayerApi>(VRCPlayerApi.AllPlayers.Count);
+
+            if (limit != 0)
+            {
+                float radiusSqr = radius * radius;
+
+                foreach (VRCPlayerApi player in VRCPlayerApi.AllPlayers)
+                {
+                    Vector3 playerPosition = player.GetPosition();
+                    Vector3 delta = pos - playerPosition;
+                    if (delta.sqrMagnitude <= radiusSqr)
+                    {
+                        resultList.Add(player);
+
+                        if (limit > 0 && limit <= resultList.Count)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                resultList.Sort(ComparePlayersByDistance);
+            }
+
+            return resultList;
+
+            int ComparePlayersByDistance(VRCPlayerApi a, VRCPlayerApi b)
+            {
+                float aDistSqr = (pos - a.GetPosition()).sqrMagnitude;
+                float bDistSqr = (pos - b.GetPosition()).sqrMagnitude;
+                return aDistSqr.CompareTo(bDistSqr);
+            }
         }
 
         public static VRC_Pickup GetPickupInHand(VRCPlayerApi player, VRC_Pickup.PickupHand hand)

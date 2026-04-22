@@ -92,23 +92,31 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                     };
                     eventButton.AddToClassList("udonEvent");
                     var eventName = e.fullName.Replace("Event_", "");
+                    if (eventName.StartsWithCached("Custom"))
+                    {
+                        var customName =  e.nodeValues[0].Deserialize() as string;
+                        if (!string.IsNullOrEmpty(customName))
+                        {
+                            eventButton.text = e.nodeValues[0].Deserialize() as string;
+                        }
+                        else
+                        {
+                            eventButton.text = "Custom Event";
+                        }
+
+                        // append arity
+                        var parameters = e.nodeValues.Length - 2;
+                        if (parameters > 0)
+                        {
+                            eventButton.text += $" ({parameters})";
+                        }
+
+                        eventButton.AddToClassList("customEvent");
+                        _list.Insert(0, eventButton);
+                        continue;
+                    }
                     switch (eventName)
                     {
-                        case "Custom":
-                        {
-                            var customName =  e.nodeValues[0].Deserialize() as string;
-                            if (!string.IsNullOrEmpty(customName))
-                            {
-                                eventButton.text = e.nodeValues[0].Deserialize() as string;
-                            }
-                            else
-                            {
-                                eventButton.text = "Custom Event";
-                            }
-                            eventButton.AddToClassList("customEvent");
-                            _list.Insert(0, eventButton);
-                            break;
-                        }
                         case "OnVariableChange":
                             eventButton.text = $"{_graph.GetVariableName(e.nodeValues[0].Deserialize() as string)} Change";
                             eventButton.AddToClassList("variableChange");

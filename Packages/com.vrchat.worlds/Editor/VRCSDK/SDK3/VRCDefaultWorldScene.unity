@@ -498,6 +498,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawns:
   - {fileID: 3480278762663400089}
+  spawnRadius: 0.2
   spawnOrder: 2
   spawnOrientation: 0
   ReferenceCamera: {fileID: 1069902874}

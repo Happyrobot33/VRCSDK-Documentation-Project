@@ -58,7 +58,7 @@ namespace VRCSDK2
 
         void LoginErrorCallback(string obj)
         {
-            VRC.Core.Logger.LogError("Could not log in - " + obj, DebugLevel.Always);
+            VRC.Core.Logger.LogError("Could not log in - " + obj);
             blueprintPanel.SetActive(false);
             errorPanel.SetActive(true);
         }
@@ -77,14 +77,14 @@ namespace VRCSDK2
                         av.Get(false,
                             (c2) =>
                             {
-                                VRC.Core.Logger.Log("<color=magenta>Updating an existing avatar.</color>", DebugLevel.API);
+                                VRC.Core.Logger.Log("<color=magenta>Updating an existing avatar.</color>", API.LOG_CATEGORY);
                                 apiAvatar = c2.Model as ApiAvatar;
                                 pipelineManager.completedSDKPipeline = !string.IsNullOrEmpty(apiAvatar.authorId);
                                 SetupUI();
                             },
                             (c2) =>
                             {
-                                VRC.Core.Logger.Log("<color=magenta>Creating a new avatar.</color>", DebugLevel.API);
+                                VRC.Core.Logger.Log("<color=magenta>Creating a new avatar.</color>", API.LOG_CATEGORY);
                                 apiAvatar = new ApiAvatar();
                                 apiAvatar.id = pipelineManager.blueprintId;
                                 pipelineManager.completedSDKPipeline = !string.IsNullOrEmpty(apiAvatar.authorId);
@@ -233,7 +233,7 @@ namespace VRCSDK2
 
             if (string.IsNullOrEmpty(apiAvatar.id))
             {
-                pipelineManager.AssignId();
+                pipelineManager.AssignId(PipelineManager.ContentType.avatar);
                 apiAvatar.id = pipelineManager.blueprintId;
             }
 
@@ -243,7 +243,7 @@ namespace VRCSDK2
 
             if (!string.IsNullOrEmpty(unityPackagePath) && System.IO.File.Exists(unityPackagePath))
             {
-                VRC.Core.Logger.Log("Found unity package path. Preparing to upload!", DebugLevel.All);
+                VRC.Core.Logger.Log("Found unity package path. Preparing to upload!", API.LOG_CATEGORY);
                 PrepareUnityPackageForS3(unityPackagePath, avatarId, version, ApiAvatar.VERSION);
             }
 
@@ -259,12 +259,12 @@ namespace VRCSDK2
             if (caughtInvalidInput)
                 yield break;
 
-            VRC.Core.Logger.Log("Starting upload", DebugLevel.Always);
+            VRC.Core.Logger.Log("Starting upload");
 
             // upload unity package
             if (!string.IsNullOrEmpty(uploadUnityPackagePath))
             {
-                yield return StartCoroutine(UploadFile(uploadUnityPackagePath, isUpdate ? apiAvatar.unityPackageUrl : "", GetFriendlyAvatarFileName("Unity package"), "Unity package",
+                yield return StartCoroutine(UploadFile(uploadUnityPackagePath, "", GetFriendlyAvatarFileName("Unity package"), "Unity package",
                     delegate (string fileUrl)
                     {
                         cloudFrontUnityPackageUrl = fileUrl;
@@ -335,7 +335,6 @@ namespace VRCSDK2
                 assetUrl = cloudFrontAssetUrl,
                 description = blueprintDescription.text,
                 tags = BuildTags(),
-                unityPackageUrl = cloudFrontUnityPackageUrl,
                 releaseStatus = sharePublic.isOn ? "public" : "private"
             };
 
@@ -375,7 +374,6 @@ namespace VRCSDK2
             apiAvatar.assetUrl = cloudFrontAssetUrl;
             apiAvatar.releaseStatus = sharePublic.isOn ? "public" : "private";
             apiAvatar.tags = BuildTags();
-            apiAvatar.unityPackageUrl = cloudFrontUnityPackageUrl;
 
             if (shouldUpdateImageToggle.isOn)
             {

@@ -1,4 +1,4 @@
-﻿.tags-row {
+﻿#tags-row {
     flex-direction: row;
     align-items: flex-start;
     flex-wrap: wrap;
@@ -6,29 +6,28 @@
 
 .tag {
     padding: 2px 3px 2px 7px;
-    margin: 3px 5px 2px 0;
-    border-radius: 3px;
-    /*background-color: rgb(40, 40, 40);*/
     flex-direction: row;
     align-items: center;
     -unity-text-align: middle-center;
-    border-width: 1px;
+    flex-shrink: 0;
+    min-height: 22px;
 }
+
+.dark #add-tag-block {
+    background-color: hsl(0, 0%, 19%);
+}
+
+.light #add-tag-block {
+    background-color: hsl(0, 0%, 39%);
+}
+
 
 .light .tag {
     background-color: rgb(228, 228, 228);
-    border-left-color: #B2B2B2;
-    border-top-color: #B2B2B2;
-    border-right-color: #B2B2B2;
-    border-bottom-color: #939393;
 }
 
 .dark .tag {
-    background-color: rgb(93, 93, 93);
-    border-left-color: #303030;
-    border-top-color: #303030;
-    border-right-color: #303030;
-    border-bottom-color: #242424;
+    background-color: hsl(0, 0%, 18%);
 }
 
 .tag Button.tag-remove-button {
@@ -36,7 +35,9 @@
     margin: 0;
     border-width: 0;
     background-color: rgba(0,0,0,0);
-    padding-left: 12px;
+    padding-left: 18px;
+    width: 18px;
+    height: 18px;
     opacity: 0.5;
     cursor: link;
 }
@@ -53,33 +54,29 @@
     opacity: 1;
 }
 
-.add-tag-button {
-    padding: 2px 7px 2px 7px;
-    margin: 3px 5px 2px 0;
-    flex-direction: row;
-    align-items: center;
-    -unity-text-align: middle-center;
-    border-width: 0;
-}
-
-.row {
-    flex-direction: row;
-    align-items: flex-start;
-}
-
-.col {
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.d-none {
-    display: none;
-}
-
 #tags-label {
     min-width: 135px;
 }
 
-#add-tag-block Button {
-    margin-top: 0;
+TagsFieldButton {
+    -unity-text-align: middle-left;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+TagsFieldButton VisualElement {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    flex-direction: row;
+}
+
+TagsFieldButton #spacer {
+    flex-grow: 1;
+}
+
+TagsFieldButton #edit {
+    background-image: resource("vrcTagEditIcon");
+    width: 12px;
+    height: 12px;
+    align-self: center;
 }

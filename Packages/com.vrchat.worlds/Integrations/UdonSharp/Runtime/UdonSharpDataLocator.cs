@@ -13,8 +13,17 @@ namespace UdonSharp.Updater
     internal class UdonSharpDataLocator : ScriptableObject
     {
         private const string DEFAULT_DATA_PATH = "Assets/UdonSharp/UdonSharpDataLocator.asset";
+        private const string PROJECT_LOADED_KEY = "UdonSharpDataLocator_HasPostProcessedAssets";
 
         private static string _cachedDataLocation;
+
+#if UNITY_EDITOR
+        internal static bool HasEverPostProcessedAssets
+        {
+            get => SessionState.GetBool(PROJECT_LOADED_KEY, false);
+            set => SessionState.SetBool(PROJECT_LOADED_KEY, value);
+        }
+#endif
 
         public static string DataPath
         {
@@ -41,7 +50,17 @@ namespace UdonSharp.Updater
                         "Multiple UdonSharp data locators found, make sure you do not have multiple installations of UdonSharp and have not duplicated any UdonSharp directories");
 
                 if (foundLocators.Count == 0)
+                {
+                    if (!HasEverPostProcessedAssets)
+                    {
+                        // We can't trust this result, the asset database may be invalid if the Library folder was cleared.
+                        // This may be running too early.
+                        // Best effort, give back the default path without caching.
+                        return Path.GetDirectoryName(DEFAULT_DATA_PATH);
+                    }
+
                     foundLocators.Add(InitializeUdonSharpData());
+                }
 
                 _cachedDataLocation = Path.GetDirectoryName(AssetDatabase.GetAssetPath(foundLocators[0]));
                 return _cachedDataLocation;
@@ -116,6 +135,8 @@ namespace UdonSharp.Updater
     {
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
+            UdonSharpDataLocator.HasEverPostProcessedAssets = true;
+            
             if (importedAssets.Length <= 0) return;
             
             try

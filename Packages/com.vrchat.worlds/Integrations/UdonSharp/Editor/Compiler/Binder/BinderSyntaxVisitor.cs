@@ -621,8 +621,22 @@ namespace UdonSharp.Compiler.Binder
                 return BoundInvocationExpression.CreateBoundInvocation(Context, node, operatorSymbol, null,
                     new[] { assignmentTarget, ConvertExpression(node, rhsExpression, operatorSymbol.Parameters[1].Type) });
             }
+            else
+            {
+                // FieldSymbol or PropertySymbol
+                Symbol operatorSymbol = GetSymbol(node.Left);
 
-            return new BoundAssignmentExpression(node, assignmentTarget, VisitExpression(node.Right, assignmentTarget.ValueType));
+                BoundExpression lhsExpression;
+                // Map to the left type this is actually being invoked on (most derived)
+                if (node.Left is MemberAccessExpressionSyntax accessExpressionSyntax)
+                    lhsExpression = VisitExpression(accessExpressionSyntax.Expression);
+                else
+                    lhsExpression = VisitExpression(node.Left);
+
+                BoundExpression rhsExpression = VisitExpression(node.Right, assignmentTarget.ValueType);
+
+                return new BoundAssignmentExpression(node, Context, operatorSymbol, assignmentTarget, lhsExpression, rhsExpression);
+            }
         }
 
         public override BoundNode VisitConditionalExpression(ConditionalExpressionSyntax node)

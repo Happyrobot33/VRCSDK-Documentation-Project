@@ -15,7 +15,8 @@ namespace VRC.SDK3.ClientSim.Editor
 
         public void OnEnable()
         {
-            _eventDispatcher = ClientSimMain.GetInstance().GetEventDispatcher();
+            if (!ClientSimMain.TryGetInstance(out var instance)) return;
+            _eventDispatcher = instance.GetEventDispatcher();
             _eventDispatcher.Subscribe<ClientSimOnPlayerObjectUpdatedEvent>(OnPlayerObjectUpdated);
         }
 

@@ -50,5 +50,7 @@ namespace VRC.SDK3.ClientSim
 
         public void SubscribeInputChangedEvent(Action<VRCInputMethod> handler);
         public void UnsubscribeInputChangedEvent(Action<VRCInputMethod> handler);
+        
+        public void SendToggleMenuEvent(bool value, HandType hand);
     }
 }

@@ -17,10 +17,9 @@ namespace VRC.SDK3.ClientSim.Editor
         private readonly GUIContent _deleteEditorOnlyToggleGuiContent = new GUIContent("Remove \"EditorOnly\"", "Enabling this setting will ensure that all objects with the tag \"EditorOnly\" are deleted when in playmode. This can be helpful in finding objects that will not be uploaded with your world. Enable console logging to see which objects are deleted.");
         private readonly GUIContent _startupDelayGuiContent = new GUIContent("Startup Delay", "The duration that the Client Sim will wait to simulate the VRChat client loading before spawning the player and initializing Udon. This is useful to test when Unity components behave differently at startup compared to VRChat.");
         private readonly GUIContent _stopOnScriptChangesToggleGuiContent = new GUIContent("Stop On Script Changes", "If enabled, the editor will stop if script changes are detected while in play mode. This will override the Unity Editor setting 'Preferences > General > Script Changes While Playing'.");
-
+        private readonly GUIContent _hideMenuOnLaunchToggleGuiContent = new GUIContent("Hide Menu On Launch", "Enabling this setting will prevent the ClientSim menu from being displayed when initially entering play mode.");
         private readonly GUIContent _setTargetFrameRateGuiContent = new GUIContent("Set Target FrameRate", "Should ClientSim set the target framerate on startup? This will automatically set the physics delta time to match expected framerate. Disabling this setting is useful when profiling.");
         private readonly GUIContent _targetFrameRateGuiContent = new GUIContent("Target FrameRate", "The target framerate unity should aim for. Default is 90 fps.");
-        
         
         // Player Controller content
         private readonly GUIContent _playerControllerFoldoutGuiContent = new GUIContent("Player Controller Settings", "");
@@ -38,6 +37,7 @@ namespace VRC.SDK3.ClientSim.Editor
         private readonly GUIContent _currentLanguageGuiContent = new GUIContent("Current Language", "The language the player is currently using.");
         private readonly GUIContent _isMasterGuiContent = new GUIContent("Local Player Is Master", "Set whether the local player starts off as the master of the instance. Setting this to false and starting Client Sim will spawn a remote player before the local player.");
         private readonly GUIContent _isInstanceOwnerGuiContent = new GUIContent("Is Instance Owner", "Set whether the local player is considered the instance owner");
+        private readonly GUIContent _isVRCPlusGuiContent = new GUIContent("Is VRC+", "Set whether the local player has an active VRC+ subscription");
         private readonly GUIContent _remotePlayerCustomNameGuiContent = new GUIContent("Remote Player Name", "Set a custom name for the next spawned remote player. Useful for testing udon script name detection");
         
         private const int WARNING_ICON_SIZE = 60;
@@ -325,7 +325,7 @@ namespace VRC.SDK3.ClientSim.Editor
             {
                 AddIndent();
                 
-                if (_settings.enableClientSim && FindObjectOfType<VRC_SceneDescriptor>() == null)
+                if (_settings.enableClientSim && FindFirstObjectByType<VRC_SceneDescriptor>() == null)
                 {
                     EditorGUILayout.HelpBox("No VRC_SceneDescriptor in scene. Please add one to enable ClientSim.", MessageType.Warning);
                 }
@@ -347,7 +347,7 @@ namespace VRC.SDK3.ClientSim.Editor
                 EditorGUI.BeginDisabledGroup(Application.isPlaying);
                 
                 _settings.deleteEditorOnly = EditorGUILayout.Toggle(_deleteEditorOnlyToggleGuiContent, _settings.deleteEditorOnly);
-                
+                _settings.hideMenuOnLaunch = EditorGUILayout.Toggle(_hideMenuOnLaunchToggleGuiContent, _settings.hideMenuOnLaunch);
                 _settings.setTargetFrameRate = EditorGUILayout.Toggle(_setTargetFrameRateGuiContent, _settings.setTargetFrameRate);
                 
                 EditorGUI.BeginDisabledGroup(!_settings.setTargetFrameRate);
@@ -357,7 +357,7 @@ namespace VRC.SDK3.ClientSim.Editor
                 
                 _settings.initializationDelay = EditorGUILayout.FloatField(_startupDelayGuiContent, _settings.initializationDelay);
                 _settings.initializationDelay = Mathf.Max(0, _settings.initializationDelay);
-                
+
                 EditorGUI.EndDisabledGroup();
 
                 RemoveIndent();
@@ -412,7 +412,8 @@ namespace VRC.SDK3.ClientSim.Editor
                 _settings.currentLanguage = _settings.GetLanguage(selectedLanguageIndex);
                 _settings.localPlayerIsMaster = EditorGUILayout.Toggle(_isMasterGuiContent, _settings.localPlayerIsMaster);
                 _settings.isInstanceOwner = EditorGUILayout.Toggle(_isInstanceOwnerGuiContent, _settings.isInstanceOwner);
-                
+                _settings.isVRCPlus = EditorGUILayout.Toggle(_isVRCPlusGuiContent, _settings.isVRCPlus);
+
                 // TODO display desktop/vr option here
                 
                 EditorGUI.EndDisabledGroup();

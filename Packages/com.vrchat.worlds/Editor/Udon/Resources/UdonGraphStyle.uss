@@ -740,3 +740,9 @@ UdonVariablesBlackboard.blackboard > .mainContainer > #content > #header {
 	position: absolute;
 	background-color: rgba(255,255,255,0);
 }
+
+.input > .portFieldCustomEvent {
+	margin-left: 0;
+	margin-right: 0;
+	width: 100%;
+}

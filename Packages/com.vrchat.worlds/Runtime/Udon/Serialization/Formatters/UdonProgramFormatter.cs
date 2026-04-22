@@ -4,7 +4,10 @@ using VRC.Udon.Serialization.OdinSerializer;
 using VRC.Udon.Serialization.Formatters;
 
 [assembly: RegisterFormatter(typeof(UdonProgramFormatter))]
-
+#if UNITY_6000_0_OR_NEWER
+[assembly: BindTypeNameToType("UnityEngine.PhysicMaterialCombine, UnityEngine.PhysicsModule", typeof(UnityEngine.PhysicsMaterialCombine))]
+[assembly: BindTypeNameToType("UnityEngine.PhysicMaterial, UnityEngine.PhysicsModule", typeof(UnityEngine.PhysicsMaterial))]
+#endif
 namespace VRC.Udon.Serialization.Formatters
 {
     public sealed class UdonProgramFormatter : BaseFormatter<UdonProgram>

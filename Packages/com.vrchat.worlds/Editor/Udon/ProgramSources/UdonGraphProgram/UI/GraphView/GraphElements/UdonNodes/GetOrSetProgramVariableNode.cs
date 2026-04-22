@@ -18,7 +18,7 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView.UdonNodes
         {
             base.Initialize();
             _programVariablePopup =
-                this.GetProgramPopup(UdonNodeExtensions.ProgramPopupType.Variables, _programVariablePopup);
+                this.GetProgramPopup(UdonNodeExtensions.ProgramPopupType.Variables, _programVariablePopup, true);
         }
     }
 }

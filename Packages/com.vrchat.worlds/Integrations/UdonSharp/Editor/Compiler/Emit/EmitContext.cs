@@ -44,6 +44,7 @@ namespace UdonSharp.Compiler.Emit
         internal MethodSymbol CurrentEmitMethod { get; private set; }
 
         public ImmutableArray<FieldSymbol> DeclaredFields { get; private set; }
+        public ImmutableArray<MethodSymbol> DeclaredRootMethods { get; private set; }
         public AssemblyDebugInfo DebugInfo { get; }
 
         private Dictionary<BoundExpression, Dictionary<string, Value.CowValue[]>> _expressionCowValueTracker =
@@ -173,6 +174,7 @@ namespace UdonSharp.Compiler.Emit
             }
 
             DeclaredFields = userFields.ToImmutableArray();
+            DeclaredRootMethods = rootMethods.ToImmutableArray();
             InitConstFields();
 
             HashSet<MethodSymbol> emittedSet = new HashSet<MethodSymbol>();

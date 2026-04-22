@@ -46,6 +46,11 @@ namespace VRC.SDK3.ClientSim.Persistence
         private const float _updateInterval = 1 / 4f;
         
         private bool hadUpdate = false;
+
+        public int Size =>
+            VRCJson.TrySerializeToJson(_persistentObjectData, JsonExportType.Beautify, out DataToken json)
+                ? System.Text.Encoding.UTF8.GetByteCount(json.String)
+                : 0;
         
         public void Init(VRCPlayerApi player, IClientSimUdonEventSender udonEventSender, IClientSimEventDispatcher eventDispatcher)
         {
@@ -86,7 +91,7 @@ namespace VRC.SDK3.ClientSim.Persistence
         
         public void RequestSerializationHook(UdonBehaviour udonBehaviour)
         {
-            ClientSimNetworkEventSending.Instance.QueueRequest(udonBehaviour, this);
+            ClientSimPersistenceEventSending.Instance.QueueRequest(udonBehaviour, this);
         }
 
         private void OnPlayerJoined(ClientSimOnPlayerJoinedEvent payload)
@@ -164,6 +169,7 @@ namespace VRC.SDK3.ClientSim.Persistence
             _eventDispatcher.SendEvent(new ClientSimOnPlayerObjectsDecodedEvent { player = _player });
         }
 
+        private float lastCheckTime = 0;
         public void LateUpdate()
         {
             if (hadUpdate)
@@ -173,6 +179,18 @@ namespace VRC.SDK3.ClientSim.Persistence
                 
                 VRCJson.TrySerializeToJson(_persistentObjectData, JsonExportType.Beautify, out DataToken json);
                 SaveToFile(json.String).Forget();
+            }
+
+            if (Time.realtimeSinceStartup - lastCheckTime > 30f)
+            {
+                lastCheckTime = Time.realtimeSinceStartup;
+                float objLimit = ClientSimMain.TryGetInstance(out var instance) ? instance.GetPlayerObjectsUsageLimit() : 0;
+                float sz = Size;
+                
+                if (sz >= objLimit)
+                    UdonManager.Instance.RunEvent(UdonManager.UDON_EVENT_ONPLAYEROBJECTSTORAGEEXCEEDED, ("player", _player));
+                else if (sz >= objLimit * 0.7f)
+                    UdonManager.Instance.RunEvent(UdonManager.UDON_EVENT_ONPLAYERDATASTORAGEWARNING, ("player", _player));
             }
         }
 #endif

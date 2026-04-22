@@ -106,7 +106,7 @@ namespace VRC.SDK3.ClientSim
             // TODO properly pass in the camera provider instead of using this method.
             _playerCamera = VRC_UiShape.GetEventCamera?.Invoke(this.gameObject);
 
-            foreach (var canvas in FindObjectsOfType<Canvas>())
+            foreach (var canvas in FindObjectsByType<Canvas>(FindObjectsSortMode.None))
             {
                 if ((canvas.renderMode == RenderMode.WorldSpace) && (canvas.worldCamera == null))
                     canvas.worldCamera = _playerCamera;

@@ -26,7 +26,9 @@ public static class VRCCachedWebRequest
                 continue;
             }
 
+#pragma warning disable RS0030 // Banned APIs
             Debug.Log($"Deleting {fileName}");
+#pragma warning restore RS0030
             File.Delete(fileName);
         }
     }

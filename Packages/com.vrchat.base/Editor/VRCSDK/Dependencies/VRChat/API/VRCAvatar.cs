@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using VRC.Core;
 
@@ -11,6 +12,12 @@ namespace VRC.SDKBase.Editor.Api
         {
             Standard,
             Impostor
+        }
+
+        public struct AvatarStyles
+        {
+            public string Primary { get; set; }
+            public string Secondary { get; set; }
         }
         
         [JsonProperty("id")]
@@ -26,6 +33,12 @@ namespace VRC.SDKBase.Editor.Api
         public string ThumbnailImageUrl { get; set; }
         
         public string ReleaseStatus { get; set; }
+        
+        public AvatarStyles Styles { get; set; }
+        public bool Lock { get; set; }
+        public string ActiveAssetReviewId { get; set; }
+        
+        public bool PendingUpload { get; set; }
 
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }
@@ -67,6 +80,19 @@ namespace VRC.SDKBase.Editor.Api
         {
             return GetLatestAssetUrlForPlatform(Tools.Platform);
         }
+
+        /// <summary>
+        /// Checks if user-editable data is equal between avatar records
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        public bool ContentInfoEqual(VRCAvatar target)
+        {
+            return target.Name.Equals(Name) &&
+                target.Description.Equals(Description) &&
+                target.Tags.SequenceEqual(Tags) &&
+                target.ReleaseStatus.Equals(ReleaseStatus);
+        }
     }
     
     // Only a subset of fields is allowed to be changed through the SDK
@@ -75,5 +101,9 @@ namespace VRC.SDKBase.Editor.Api
         public string Description { get; set; }
         public List<string> Tags { get; set; }
         public string ReleaseStatus { get; set; }
+        
+        // Styles should be submitted via style ID and not the style Name
+        public string PrimaryStyle { get; set; }
+        public string SecondaryStyle { get; set; }
     }
 }

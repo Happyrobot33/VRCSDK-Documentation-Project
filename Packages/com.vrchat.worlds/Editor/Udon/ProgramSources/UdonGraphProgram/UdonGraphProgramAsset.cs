@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
+using VRC.SDK3.UdonNetworkCalling;
 using VRC.Udon.Common.Interfaces;
+using VRC.Udon.Compiler.Compilers;
 using VRC.Udon.Editor.ProgramSources.Attributes;
 using VRC.Udon.Editor.ProgramSources.UdonGraphProgram;
 using VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView;
@@ -35,6 +38,9 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram
         [NonSerialized, OdinSerialize]
         private Dictionary<string, (object value, Type type)> heapDefaultValues = new Dictionary<string, (object value, Type type)>();
 
+        [NonSerialized]
+        private IReadOnlyList<UdonGraphCompiler.NetworkEventMetadataContainer> lastNetworkEventMetadata;
+
         protected override void DrawProgramSourceGUI(UdonBehaviour udonBehaviour, ref bool dirty)
         {
             if (GUILayout.Button("Open Udon Graph", "LargeButton"))
@@ -61,6 +67,24 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram
             ApplyDefaultValuesToHeap();
         }
 
+        protected override NetworkCallingEntrypointMetadata[] GetLastNetworkCallingMetadata()
+        {
+            if (lastNetworkEventMetadata == null || lastNetworkEventMetadata.Count == 0)
+            {
+                return null;
+            }
+
+            // convert to proper format for storing in serialized asset
+            return lastNetworkEventMetadata.Select(container => new NetworkCallingEntrypointMetadata(
+                container.eventName,
+                new NetworkCallableAttribute(container.maxEventsPerSecond),
+                Enumerable.Range(0, container.parameterNames.Length).Select(i => new NetworkCallingParameterMetadata(
+                    container.parameterNames[i],
+                    container.parameterTypes[i]
+                )).ToArray()
+            )).ToArray();
+        }
+
         protected override void DrawAssemblyTextArea(bool allowEditing, ref bool dirty)
         {
             EditorGUI.BeginChangeCheck();
@@ -84,7 +108,7 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram
         [PublicAPI]
         protected void CompileGraph()
         {
-            udonAssembly = UdonEditorManager.Instance.CompileGraph(graphData, null, out Dictionary<string, (string uid, string fullName, int index)> _, out heapDefaultValues);
+            udonAssembly = UdonEditorManager.Instance.CompileGraph(graphData, null, out Dictionary<string, (string uid, string fullName, int index)> _, out heapDefaultValues, out lastNetworkEventMetadata);
         }
 
         [PublicAPI]

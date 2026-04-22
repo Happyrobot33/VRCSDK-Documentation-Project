@@ -34,14 +34,6 @@ namespace VRC.SDK3.ClientSim.Editor
         private static int CountPerPage = 10;
         private static string HelpTextEnterPlayMode = "Enter Play Mode to view PlayerObjects";
         
-        private enum SortingMode
-        {
-            Alphabetical,
-            LastModified
-        }
-        
-        private SortingMode _sortingMode = SortingMode.Alphabetical;
-        
         [MenuItem("VRChat SDK/ClientSim PlayerObjects", false, 1500)]
         public static void Init()
         {
@@ -73,9 +65,6 @@ namespace VRC.SDK3.ClientSim.Editor
                 "Last modified"
             };
             Sort.SetValueWithoutNotify("Alphabetical");
-            
-            Sort.RegisterValueChangedCallback(OnChangeSortingMode);
-            _sortingMode = SortingMode.Alphabetical;
             
             searchField = root.Q<TextField>("Search");
             searchField.RegisterValueChangedCallback((evt) =>
@@ -128,9 +117,11 @@ namespace VRC.SDK3.ClientSim.Editor
         
         private void OnPlayModeStateChanged(PlayModeStateChange state)
         {
+            if (!ClientSimMain.TryGetInstance(out var instance)) return;
+
             if (state == PlayModeStateChange.EnteredPlayMode)
             {
-                eventDispatcher = ClientSimMain.GetInstance().GetEventDispatcher();
+                eventDispatcher = instance.GetEventDispatcher();
                 eventDispatcher.Subscribe<ClientSimOnPlayerObjectUpdatedEvent>(OnPlayerObjectUpdated);
                 eventDispatcher.Subscribe<ClientSimOnPlayerObjectUpdateEndedEvent>(UpdateCurrentPage);
                 eventDispatcher.Subscribe<ClientSimOnPlayerJoinedEvent>(OnPlayerJoined);
@@ -158,20 +149,6 @@ namespace VRC.SDK3.ClientSim.Editor
                 eventDispatcher?.Unsubscribe<ClientSimOnPlayerJoinedEvent>(OnPlayerJoined);
                 eventDispatcher?.Unsubscribe<ClientSimOnPlayerLeftEvent>(OnPlayerLeft);
                 eventDispatcher = null;
-            }
-        }
-
-        private void OnChangeSortingMode(ChangeEvent<string> evt)
-        {
-            if (evt.newValue == "Alphabetical")
-            {
-                playerObjects[CurrentSelectedPlayerID].Sort( (x, y) => string.Compare(x.Name, y.Name) );
-                _sortingMode = SortingMode.Alphabetical;
-            }
-            else if (evt.newValue == "Last modified")
-            {
-                _sortingMode = SortingMode.LastModified;
-                playerObjects[CurrentSelectedPlayerID].Sort( (x, y) => x.lastModified.CompareTo(y.lastModified) );
             }
         }
         

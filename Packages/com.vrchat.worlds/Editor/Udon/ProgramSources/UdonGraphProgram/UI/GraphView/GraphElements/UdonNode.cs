@@ -71,6 +71,23 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             {"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEventDelayedSeconds__SystemString_SystemSingle_VRCUdonCommonEnumsEventTiming__SystemVoid", typeof(SendCustomEventNode)},
             {"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEventDelayedFrames__SystemString_SystemInt32_VRCUdonCommonEnumsEventTiming__SystemVoid", typeof(SendCustomEventNode)},
             {"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomNetworkEvent__VRCUdonCommonInterfacesNetworkEventTarget_SystemString__SystemVoid", typeof(SendCustomEventNode)},
+            {"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomNetworkEvent__VRCUdonCommonInterfacesNetworkEventTarget_SystemString_SystemObject__SystemVoid", typeof(SendCustomEventNode)},
+            {"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomNetworkEvent__VRCUdonCommonInterfacesNetworkEventTarget_SystemString_SystemObject_SystemObject__SystemVoid", typeof(SendCustomEventNode)},
+            {"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomNetworkEvent__VRCUdonCommonInterfacesNetworkEventTarget_SystemString_SystemObject_SystemObject_SystemObject__SystemVoid", typeof(SendCustomEventNode)},
+            {"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomNetworkEvent__VRCUdonCommonInterfacesNetworkEventTarget_SystemString_SystemObject_SystemObject_SystemObject_SystemObject__SystemVoid", typeof(SendCustomEventNode)},
+            {"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomNetworkEvent__VRCUdonCommonInterfacesNetworkEventTarget_SystemString_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject__SystemVoid", typeof(SendCustomEventNode)},
+            {"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomNetworkEvent__VRCUdonCommonInterfacesNetworkEventTarget_SystemString_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject__SystemVoid", typeof(SendCustomEventNode)},
+            {"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomNetworkEvent__VRCUdonCommonInterfacesNetworkEventTarget_SystemString_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject__SystemVoid", typeof(SendCustomEventNode)},
+            {"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomNetworkEvent__VRCUdonCommonInterfacesNetworkEventTarget_SystemString_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject__SystemVoid", typeof(SendCustomEventNode)},
+            {"VRCSDK3UdonNetworkCallingNetworkCalling.__SendCustomNetworkEvent__VRCUdonCommonInterfacesIUdonEventReceiver_VRCUdonCommonInterfacesNetworkEventTarget_SystemString__SystemVoid", typeof(SendCustomEventNode)},
+            {"VRCSDK3UdonNetworkCallingNetworkCalling.__SendCustomNetworkEvent__VRCUdonCommonInterfacesIUdonEventReceiver_VRCUdonCommonInterfacesNetworkEventTarget_SystemString_SystemObject__SystemVoid", typeof(SendCustomEventNode)},
+            {"VRCSDK3UdonNetworkCallingNetworkCalling.__SendCustomNetworkEvent__VRCUdonCommonInterfacesIUdonEventReceiver_VRCUdonCommonInterfacesNetworkEventTarget_SystemString_SystemObject_SystemObject__SystemVoid", typeof(SendCustomEventNode)},
+            {"VRCSDK3UdonNetworkCallingNetworkCalling.__SendCustomNetworkEvent__VRCUdonCommonInterfacesIUdonEventReceiver_VRCUdonCommonInterfacesNetworkEventTarget_SystemString_SystemObject_SystemObject_SystemObject__SystemVoid", typeof(SendCustomEventNode)},
+            {"VRCSDK3UdonNetworkCallingNetworkCalling.__SendCustomNetworkEvent__VRCUdonCommonInterfacesIUdonEventReceiver_VRCUdonCommonInterfacesNetworkEventTarget_SystemString_SystemObject_SystemObject_SystemObject_SystemObject__SystemVoid", typeof(SendCustomEventNode)},
+            {"VRCSDK3UdonNetworkCallingNetworkCalling.__SendCustomNetworkEvent__VRCUdonCommonInterfacesIUdonEventReceiver_VRCUdonCommonInterfacesNetworkEventTarget_SystemString_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject__SystemVoid", typeof(SendCustomEventNode)},
+            {"VRCSDK3UdonNetworkCallingNetworkCalling.__SendCustomNetworkEvent__VRCUdonCommonInterfacesIUdonEventReceiver_VRCUdonCommonInterfacesNetworkEventTarget_SystemString_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject__SystemVoid", typeof(SendCustomEventNode)},
+            {"VRCSDK3UdonNetworkCallingNetworkCalling.__SendCustomNetworkEvent__VRCUdonCommonInterfacesIUdonEventReceiver_VRCUdonCommonInterfacesNetworkEventTarget_SystemString_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject__SystemVoid", typeof(SendCustomEventNode)},
+            {"VRCSDK3UdonNetworkCallingNetworkCalling.__SendCustomNetworkEvent__VRCUdonCommonInterfacesIUdonEventReceiver_VRCUdonCommonInterfacesNetworkEventTarget_SystemString_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject_SystemObject__SystemVoid", typeof(SendCustomEventNode)},
             {"Set_ReturnValue", typeof(SetReturnValueNode)},
             {"Set_Variable", typeof(SetVariableNode)}
         };
@@ -373,11 +390,21 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                 UdonNodeDefinition nodeDefinition = overloadDefinitions.ElementAt(i);
                 if (!_optionNameCache.TryGetValue(nodeDefinition, out string optionName))
                 {
-                    optionName = nodeDefinition.fullName;
+                    if (nodeDefinition.fullName.StartsWith("Event_Custom"))
+                        optionName = nodeDefinition.name;
+                    else
+                        optionName = nodeDefinition.fullName;
+
                     // don't add overload types that take pointers, not supported
                     string[] splitOptionName = optionName.Split(new[] { "__" }, StringSplitOptions.None);
-                    if (splitOptionName.Length >= 3)
+                    if (splitOptionName.Length == 3)
                     {
+                        // This is an overload taking no parameters.
+                        optionName = "()";
+                    }
+                    else if (splitOptionName.Length >= 3)
+                    {
+                        // List off all parameters.
                         optionName = $"({splitOptionName[2].Replace("_", ", ")})";
                     }
 
@@ -417,8 +444,44 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             data.fullName = newFullName;
             definition = UdonEditorManager.Instance.GetNodeDefinition(data.fullName);
             data.Resize(definition.Inputs.Count);
+            ClearNodeDataAfterCustomEventOverloadSwitch();
             // Todo: see if we can get rid of this reload. Tried ValidateNodeData,LayoutPorts,RestoreConnections but noodles were left hanging
             this.Reload();
+        }
+
+        private void ClearNodeDataAfterCustomEventOverloadSwitch()
+        {
+            // pi: if we reduced the amount of outputs on a custom event, we need clear out the node data to avoid clobbering the metadata
+            // also manually disconnect any noodles that would be left hanging
+            if (definition.fullName.StartsWith("Event_Custom") && definition.Inputs.Count < data.nodeValues.Length)
+            {
+                for (int i = definition.Outputs.Count; i < portsOut.Count; i++)
+                {
+                    DisconnectUdonPort(portsOut[i]);
+                }
+
+                data.Resize(definition.Inputs.Count, allowShrink: true);
+            }
+        }
+
+        public void DisconnectUdonPort(UdonPort port)
+        {
+            var edgesToDisconnect = port.connections.ToArray();
+            foreach (var edge in edgesToDisconnect)
+            {
+                // get the other end of the noodle
+                var otherEnd = edge.input;
+                if (otherEnd == null || otherEnd.node == this)
+                {
+                    otherEnd = edge.output;
+                }
+                if (otherEnd != null && otherEnd.node is UdonNode otherNode)
+                {
+                    otherNode.data.ClearReferencesToNode(data);
+                    Graph.RemoveElement(edge);
+                }
+                Graph.RemoveElement(edge);
+            }
         }
 
         private List<UdonNodeDefinition> CacheOverloads()
@@ -443,6 +506,11 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             if (baseIdentifier.StartsWithCached("Variable_"))
             {
                 baseIdentifier = "Variable_";
+            }
+
+            if (baseIdentifier.StartsWithCached("Event_Custom"))
+            {
+                baseIdentifier = "Event_Custom";
             }
 
             // This used to be cached on graph instead of calculated per-node
@@ -827,6 +895,12 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                 Type type = _variableNodeType == VariableNodeType.Get || _variableNodeType == VariableNodeType.Change
                     ? GetTypeForDefinition(definition)
                     : UdonGraphExtensions.SlotTypeConverter(item.type, definition.fullName);
+
+                // For custom events with parameters (note the underscore!) we need to make the UdonPort the user-selected type
+                if (definition.fullName.StartsWithCached("Event_Custom_"))
+                {
+                    type = data.nodeValues[i + 2].Deserialize() as Type ?? typeof(string);
+                }
 
                 string label = UdonGraphExtensions.FriendlyTypeName(type).FriendlyNameify();
                 if (label == "IUdonEventReceiver")

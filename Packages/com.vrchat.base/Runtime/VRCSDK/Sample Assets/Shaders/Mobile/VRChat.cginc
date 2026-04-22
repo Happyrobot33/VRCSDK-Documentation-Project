@@ -1,6 +1,7 @@
 #ifndef VRCHAT_INCLUDED
 #define VRCHAT_INCLUDED
 
+#include "UnityCG.cginc"
 #include "UnityPBSLighting.cginc"
 
 #if defined(UNITY_SHOULD_SAMPLE_SH) || defined(LIGHTMAP_ON) || defined(DYNAMICLIGHTMAP_ON)
@@ -29,7 +30,7 @@
     #define FLOAT_MIN 1e-6
 #endif
 
-#ifdef _BICUBIC
+#if defined(_BICUBIC)
     float BakeryBicubic_w0(float a)
     {
         return (1.0f/6.0f)*(a*(a*(-a + 3.0f) - 3.0f) + 1.0f);
@@ -154,7 +155,6 @@ inline half shEvaluateDiffuseL1Normalized(half L0, half3 L1, half3 n)
     return shEvaluateDiffuseL1Geomerics(1, L1 / L0, n);
 }
 
-#if _ENABLE_GEOMETRIC_SPECULAR_AA
 float PerceptualSmoothnessToRoughness(float perceptualSmoothness)
 {
     float perceptualRoughness = SmoothnessToPerceptualRoughness(perceptualSmoothness);
@@ -198,7 +198,6 @@ float ProjectedSpaceGeometricNormalFiltering(float perceptualSmoothness, float3 
     float variance = GeometricNormalVariance(geometricNormalWS, screenSpaceVariance);
     return ProjectedSpaceNormalFiltering(perceptualSmoothness, variance, threshold);
 }
-#endif
 
 //#define OLD_GGX_TERM
 #if !defined (OLD_GGX_TERM)
@@ -247,7 +246,7 @@ inline half ComputeSpecularGGX(half3 nL1, half3 viewDir, half3 normalWorld, half
 }
 #endif
 
-#ifdef _MONOSH
+#if defined(_MONOSH)
 // MonoSH by Bakery Lightmapper https://assetstore.unity.com/packages/tools/level-design/bakery-gpu-lightmapper-122218
 inline void BakeryMonoSH(out half3 diffuseColor, out half3 specularContrib, float2 lmUV, half3 normalWorld, half3 viewDir, half smoothness, half occlusion)
 {
@@ -267,7 +266,7 @@ inline void BakeryMonoSH(out half3 diffuseColor, out half3 specularContrib, floa
 
     diffuseColor = max(sh, 0.0);
 
-    #ifdef _LMSPEC
+    #if defined(_LMSPEC)
         half L1len = length(mul(L1, half3(1, 1, 1)));
         half focus = L1len / (length(L0) + L1len);
         half specularTerm = ComputeSpecularGGX(nL1, viewDir, normalWorld, smoothness * focus); 
@@ -301,23 +300,39 @@ inline UnityGI UnityGI_BaseVRC(UnityGIInput data, half occlusion, half3 normalWo
     o_gi.light.color *= data.atten;
 
     #if defined(LIGHTMAP_ON)
-        #ifdef _MONOSH
+        #if defined(_MONOSH)
             BakeryMonoSH(o_gi.indirect.diffuse, o_gi.indirect.specular, data.lightmapUV.xy, normalWorld, eyeVec, smoothness, occlusion);
         #else
             // Baked lightmaps
-            half4 bakedColorTex = UNITY_SAMPLE_TEX2D(unity_Lightmap, data.lightmapUV.xy);
-            half3 bakedColor = DecodeLightmap(bakedColorTex);
 
-            #ifdef DIRLIGHTMAP_COMBINED
+            half3 bakedColor = half3(1.0, 1.0, 1.0);
+            half4 bakedColorTex = UNITY_SAMPLE_TEX2D(unity_Lightmap, data.lightmapUV.xy);
+            #if defined(FORCE_UNITY_DLDR_LIGHTMAP_ENCODING)
+            bakedColor = DecodeLightmapDoubleLDR(bakedColorTex, unity_Lightmap_HDR);
+            #elif defined(FORCE_UNITY_RGBM_LIGHTMAP_ENCODING)
+            bakedColor = DecodeLightmapRGBM(bakedColorTex, unity_Lightmap_HDR);
+            #elif defined(FORCE_UNITY_LIGHTMAP_FULL_HDR_ENCODING)
+            bakedColor = bakedColorTex;
+            #else
+            bakedColor = DecodeLightmap(bakedColorTex);
+            #endif
+
+            // Can be set if the renderer has a valid lightmap but the shader doesn't use it
+            #if !defined(UNITY_LIGHTMAP_NONE)
+                #if defined(DIRLIGHTMAP_COMBINED)
                 fixed4 bakedDirTex = UNITY_SAMPLE_TEX2D_SAMPLER(unity_LightmapInd, unity_Lightmap, data.lightmapUV.xy);
                 o_gi.indirect.diffuse = DecodeDirectionalLightmap(bakedColor, bakedDirTex, normalWorld);
-            #else // not directional lightmap
+                #else // not directional lightmap
                 o_gi.indirect.diffuse = bakedColor;
+                #endif
+            #else
+            o_gi.indirect.diffuse = 1;
             #endif
+
             o_gi.indirect.specular = 0;
         #endif
         o_gi.indirect.diffuse *= occlusion;
-    #elif UNITY_SHOULD_SAMPLE_SH
+    #elif defined(UNITY_SHOULD_SAMPLE_SH)
         o_gi.indirect.diffuse.r = shEvaluateDiffuseL1Geomerics(unity_SHAr.w, unity_SHAr.xyz, normalWorld);
         o_gi.indirect.diffuse.g = shEvaluateDiffuseL1Geomerics(unity_SHAg.w, unity_SHAg.xyz, normalWorld);
         o_gi.indirect.diffuse.b = shEvaluateDiffuseL1Geomerics(unity_SHAb.w, unity_SHAb.xyz, normalWorld);
@@ -384,11 +399,11 @@ struct SurfaceOutputStandardVRC
     // Everywhere in the code you meet smoothness it is perceptual smoothness
     half Smoothness;    // 0=rough, 1=smooth
     half Occlusion;
-#if _ENABLE_GEOMETRIC_SPECULAR_AA
+    bool SpecularAA;
     half SpecularAAVariance;
     half SpecularAAThreshold;
-#endif
     fixed Alpha;        // alpha for transparencies
+    half MinimumBrightness; // minimum brightness regardless of lighting
 };
 
 struct SurfaceOutputVRC 
@@ -455,14 +470,20 @@ half4 BRDF2_VRC_PBS (half3 diffColor, half3 specColor, half oneMinusReflectivity
 inline half4 LightingStandardVRC(SurfaceOutputStandardVRC s, float3 viewDir, UnityGI gi)
 {
     s.Normal = normalize(s.Normal);
-#if _ENABLE_GEOMETRIC_SPECULAR_AA
-    s.Smoothness = ProjectedSpaceGeometricNormalFiltering(s.Smoothness, s.Normal, s.SpecularAAVariance, s.SpecularAAThreshold);
-#endif
+    UNITY_BRANCH if (s.SpecularAA)
+        s.Smoothness = ProjectedSpaceGeometricNormalFiltering(s.Smoothness, s.Normal, s.SpecularAAVariance, s.SpecularAAThreshold);
     half3 specularColor;
     half oneMinusReflectivity;
     s.Albedo = DiffuseAndSpecularFromMetallic(s.Albedo, s.Metallic, /*out*/ specularColor, /*out*/ oneMinusReflectivity);
 
+    // shader relies on pre-multiply alpha-blend (_SrcBlend = One, _DstBlend = OneMinusSrcAlpha)
+    // this is necessary to handle transparency in physically correct way - only diffuse component gets affected by alpha
+    half outputAlpha;
+    s.Albedo = PreMultiplyAlpha (s.Albedo, s.Alpha, oneMinusReflectivity, /*out*/ outputAlpha);
+
     half4 c = VRC_BRDF_PBS(s.Albedo, specularColor, oneMinusReflectivity, s.Smoothness, s.Normal, viewDir, gi.light, gi.indirect);
+    c.a = outputAlpha;
+
     #ifndef _DEBUG_VRC
         return c;
     #else
@@ -501,18 +522,18 @@ inline half3 UnityGI_IndirectSpecularVRC(UnityGIInput data, half occlusion, Unit
 {
     half3 specular;
 
-    #ifdef _GLOSSYREFLECTIONS_OFF
+    #if defined(_GLOSSYREFLECTIONS_OFF)
         specular = unity_IndirectSpecColor.rgb;
         hasReflProbe = 0;
     #else
-        #ifdef UNITY_SPECCUBE_BOX_PROJECTION
+        #if defined(UNITY_SPECCUBE_BOX_PROJECTION)
             // we will tweak reflUVW in glossIn directly (as we pass it to Unity_GlossyEnvironment twice for probe0 and probe1), so keep original to pass into BoxProjectedCubemapDirection
             half3 originalReflUVW = glossIn.reflUVW;
             glossIn.reflUVW = BoxProjectedCubemapDirection (originalReflUVW, data.worldPos, data.probePosition[0], data.boxMin[0], data.boxMax[0]);
         #endif
 
         half3 env0 = VRC_GlossyEnvironment (UNITY_PASS_TEXCUBE(unity_SpecCube0), data.probeHDR[0], glossIn, hasReflProbe);
-        #ifdef UNITY_SPECCUBE_BLENDING
+        #if defined(UNITY_SPECCUBE_BLENDING)
             const float kBlendFactor = 0.99999;
             float blendLerp = data.boxMin[0].w;
             UNITY_BRANCH
@@ -534,6 +555,11 @@ inline half3 UnityGI_IndirectSpecularVRC(UnityGIInput data, half occlusion, Unit
     return specular * occlusion;
 }
 
+inline void VRC_ApplyMinBrightness(inout UnityGI gi, half minBright)
+{
+    gi.indirect.diffuse = max(gi.indirect.diffuse, minBright);
+}
+
 // executed first
 inline void LightingStandardVRC_GI(SurfaceOutputStandardVRC s, UnityGIInput data, inout UnityGI gi)
 {
@@ -541,6 +567,7 @@ inline void LightingStandardVRC_GI(SurfaceOutputStandardVRC s, UnityGIInput data
     half hasReflProbe = 0;
     half3 indirectSpecular = UnityGI_IndirectSpecularVRC(data, s.Occlusion, g, /* out */ hasReflProbe);
     gi = UnityGI_BaseVRC(data, s.Occlusion, s.Normal, -data.worldViewDir, s.Smoothness, hasReflProbe);
+    VRC_ApplyMinBrightness(gi, s.MinimumBrightness);
     gi.indirect.specular += indirectSpecular;
 }
 
@@ -559,7 +586,7 @@ inline fixed4 LightingLambertVRC (SurfaceOutputVRC s, UnityGI gi)
     fixed4 c;
     c = UnityLambertVRCLight (s, gi.light);
 
-    #ifdef UNITY_LIGHT_FUNCTION_APPLY_INDIRECT
+    #if defined(UNITY_LIGHT_FUNCTION_APPLY_INDIRECT)
         c.rgb += s.Albedo * gi.indirect.diffuse;
     #endif
 

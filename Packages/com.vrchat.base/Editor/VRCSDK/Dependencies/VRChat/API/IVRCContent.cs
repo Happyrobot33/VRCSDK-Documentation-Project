@@ -2,6 +2,7 @@
 {
     public interface IVRCContent
     {
+        string ID { get; set; }
         string Name { get; set; }
     }
 }

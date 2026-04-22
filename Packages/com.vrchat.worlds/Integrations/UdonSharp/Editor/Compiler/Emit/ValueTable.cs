@@ -236,7 +236,7 @@ namespace UdonSharp.Compiler.Emit
             }
 
             if (_nameCollisionCheckSet.Contains(uniqueName))
-                throw new InvalidOperationException("Cannot allocate a symbol with the same name twice");
+                throw new InvalidOperationException($"Cannot allocate a symbol with the same name twice: {uniqueName}");
 
             _nameCollisionCheckSet.Add(uniqueName);
 

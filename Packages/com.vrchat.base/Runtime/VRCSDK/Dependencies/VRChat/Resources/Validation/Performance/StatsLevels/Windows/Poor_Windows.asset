@@ -35,11 +35,6 @@ MonoBehaviour:
   physicsRigidbodyCount: 8
   audioSourceCount: 8
   textureMegabytes: 150
-  dynamicBone:
-    componentCount: 32
-    transformCount: 256
-    colliderCount: 32
-    collisionCheckCount: 256
   physBone:
     componentCount: 32
     transformCount: 256
@@ -48,3 +43,4 @@ MonoBehaviour:
   contactCount: 32
   constraintsCount: 350
   constraintDepth: 100
+  raycastCount: 15

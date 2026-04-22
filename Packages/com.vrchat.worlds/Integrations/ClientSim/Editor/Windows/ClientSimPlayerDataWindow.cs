@@ -349,9 +349,11 @@ namespace VRC.SDK3.ClientSim.Editor
 
         private void OnPlayModeStateChanged(PlayModeStateChange state)
         {
+            if (!ClientSimMain.TryGetInstance(out var instance)) return;
+
             if (state == PlayModeStateChange.EnteredPlayMode)
             {
-                eventDispatcher = ClientSimMain.GetInstance().GetEventDispatcher();
+                eventDispatcher = instance.GetEventDispatcher();
                 eventDispatcher.Subscribe<ClientSimOnPlayerRestoredEvent>(OnPlayerRestored);
                 eventDispatcher.Subscribe<ClientSimOnPlayerDataUpdatedEvent>(OnPlayerDataUpdated);
                 eventDispatcher.Subscribe<ClientSimOnPlayerJoinedEvent>(OnPlayerJoined);

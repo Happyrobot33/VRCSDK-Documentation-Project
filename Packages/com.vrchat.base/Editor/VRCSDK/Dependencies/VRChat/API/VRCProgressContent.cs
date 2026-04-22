@@ -34,7 +34,7 @@ namespace VRC.SDKBase.Editor.Api
 
                     totalBytesRead += bytesRead;
                     _onProgress((float)totalBytesRead / totalBytes);
-                    Core.Logger.Log($"Sent {totalBytesRead} out of {totalBytes}", DebugLevel.API);
+                    Core.Logger.Log($"Sent {totalBytesRead} out of {totalBytes}", API.LOG_CATEGORY);
                 }
             }
         }

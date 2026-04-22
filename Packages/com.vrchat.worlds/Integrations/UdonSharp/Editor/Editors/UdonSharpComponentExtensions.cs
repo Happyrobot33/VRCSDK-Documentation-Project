@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using UdonSharp;
 using UnityEditor;
 using UnityEngine;
+using VRC.Udon;
 
 namespace UdonSharpEditor
 {

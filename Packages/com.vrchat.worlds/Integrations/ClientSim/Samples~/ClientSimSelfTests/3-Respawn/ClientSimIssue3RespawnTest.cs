@@ -65,7 +65,7 @@ namespace ClientSimTest.Tests.WorldTests
             yield return WaitForClientSimStartup();
             
             // Verify initial state of objects in the scene.
-            var testHelpers = Object.FindObjectOfType<ClientSimIssue3RespawnTestObjectReferences>();
+            var testHelpers = Object.FindFirstObjectByType<ClientSimIssue3RespawnTestObjectReferences>();
             Assert.IsNotNull(testHelpers, "Could not find Test helper reference.");
 
             // Listen for OnPlayerRespawn event through dispatcher
@@ -107,7 +107,7 @@ namespace ClientSimTest.Tests.WorldTests
             yield return WaitForClientSimStartup();
             
             // Verify initial state of objects in the scene.
-            var testHelpers = Object.FindObjectOfType<ClientSimIssue3RespawnTestObjectReferences>();
+            var testHelpers = Object.FindFirstObjectByType<ClientSimIssue3RespawnTestObjectReferences>();
             Assert.IsNotNull(testHelpers, "Could not find Test helper reference.");
             
             // Listen for OnPlayerRespawn event through dispatcher
@@ -148,7 +148,7 @@ namespace ClientSimTest.Tests.WorldTests
             yield return WaitForClientSimStartup();
             
             // Verify initial state of objects in the scene.
-            var testHelpers = Object.FindObjectOfType<ClientSimIssue3RespawnTestObjectReferences>();
+            var testHelpers = Object.FindFirstObjectByType<ClientSimIssue3RespawnTestObjectReferences>();
             Assert.IsNotNull(testHelpers, "Could not find Test helper reference.");
             
             // Listen for OnPlayerRespawn event through dispatcher

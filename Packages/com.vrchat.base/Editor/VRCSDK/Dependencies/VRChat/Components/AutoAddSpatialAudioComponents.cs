@@ -94,7 +94,7 @@ public class AutoAddSpatialAudioComponents
 
     public static void TryToAddSpatializationToAllAudioSources(bool newAudioSourcesOnly, bool includeInactive)
     {
-        AudioSource[] allAudioSources = includeInactive ? Resources.FindObjectsOfTypeAll<AudioSource>() : Object.FindObjectsOfType<AudioSource>();
+        AudioSource[] allAudioSources = includeInactive ? Resources.FindObjectsOfTypeAll<AudioSource>() : Object.FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
         foreach (AudioSource src in allAudioSources)
         {
             if (src == null || src.gameObject == null || src.gameObject.scene != UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene())

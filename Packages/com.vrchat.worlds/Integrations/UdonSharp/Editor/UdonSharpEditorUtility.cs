@@ -577,7 +577,7 @@ namespace UdonSharpEditor
                 }
                 catch (Exception e)
                 {
-                    UdonSharpUtils.LogError($"Encountered exception while upgrading prefab {prefabRootPath}, report exception to Merlin: {e}");
+                    UdonSharpUtils.LogError($"Encountered exception while upgrading prefab {prefabRootPath}: {e}");
                 }
                 finally
                 {
@@ -625,7 +625,7 @@ namespace UdonSharpEditor
                 }
                 catch (Exception e)
                 {
-                    UdonSharpUtils.LogError($"Encountered exception while upgrading prefab {prefabRootPath}, report exception to Merlin: {e}");
+                    UdonSharpUtils.LogError($"Encountered exception while upgrading prefab {prefabRootPath}: {e}");
                 }
                 finally
                 {

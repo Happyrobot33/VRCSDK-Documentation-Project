@@ -136,7 +136,17 @@ namespace VRC.SDK3.ClientSim
             // Fallback to first spawn point
             return _descriptor.spawns[index];
         }
-        
+
+        public float GetSpawnRadius()
+        {
+            if (!HasSceneDescriptor())
+            {
+                throw new ClientSimException("Cannot get spawn radius when there is no scene descriptor.");
+            }
+            
+            return _descriptor.spawnRadius;
+        }
+
         private void CopyCameraValues(Camera refCamera, Camera camera)
         {
             if (refCamera == null)

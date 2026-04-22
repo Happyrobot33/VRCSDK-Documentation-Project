@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 using UdonSharp;
 using UdonSharp.Compiler;
 using UnityEditor;
@@ -142,7 +143,7 @@ namespace UdonSharpEditor
             }
         }
 
-        private const string MATCH_STR = "\\n\\n\\r\\n\\d{4}.\\d{2}.\\d{2} \\d{2}:\\d{2}:\\d{2} ";
+        private const string MATCH_STR = "\\r\\n\\d{4}.\\d{2}.\\d{2} \\d{2}:\\d{2}:\\d{2} ";
         private static Regex _lineMatch;
 
         private static void OnEditorUpdate()
@@ -214,10 +215,7 @@ namespace UdonSharpEditor
                                             logState.playerName = username;
 
                                             // Use the log path as well since Build & Test can have multiple of the same display named users
-                                            Random random = new Random((username + logPath).GetHashCode());
-
-                                            Color randomUserColor = Color.HSVToRGB((float)random.NextDouble(), 1.00f, EditorGUIUtility.isProSkin ? 0.9f : 0.6f);
-                                            string colorStr = ColorUtility.ToHtmlStringRGB(randomUserColor);
+                                            string colorStr = GetRandomColorStrFromName(username + logPath);
 
                                             logState.nameColor = colorStr;
                                         }
@@ -264,61 +262,98 @@ namespace UdonSharpEditor
                 // Log forwarding
                 if (udonSharpSettings.watcherMode != UdonSharpSettings.LogWatcherMode.Disabled)
                 {
-                    Match match = null;
-
-                    do
-                    {
-                        int currentIdx = (match?.Index ?? -1);
-
-                        match = _lineMatch.Match(contents, currentIdx + 1);
-
-                        string logStr = null;
-
-                        if (currentIdx == -1)
-                        {
-                            if (match.Success)
-                            {
-                                Match nextMatch = _lineMatch.Match(contents, match.Index + 1);
-
-                                if (nextMatch.Success)
-                                    logStr = contents.Substring(0, nextMatch.Index);
-                                else
-                                    logStr = contents;
-
-                                match = nextMatch;
-                            }
-                        }
-                        else if (match.Success)
-                        {
-                            logStr = contents.Substring(currentIdx < 0 ? 0 : currentIdx, match.Index - currentIdx);
-                        }
-                        else if (currentIdx != -1)
-                        {
-                            logStr = contents.Substring(currentIdx < 0 ? 0 : currentIdx, contents.Length - currentIdx);
-                        }
-
-                        if (logStr != null)
-                        {
-                            logStr = logStr.Trim('\n', '\r');
-
-                            HandleForwardedLog(logStr, state, udonSharpSettings);
-                        }
-                    } while (match.Success);
+                    ParseLogText(contents, state, udonSharpSettings);
                 }
 
                 if (udonSharpSettings.listenForVRCExceptions)
                 {
                     // Exception handling
-                    const string errorMatchStr = "[UdonBehaviour] An exception occurred during Udon execution, this UdonBehaviour will be halted.";
+                    ParseLogErrors(contents, state);
+                }
+            }
+        }
 
-                    int currentErrorIndex = contents.IndexOf(errorMatchStr, StringComparison.Ordinal);
-                    while (currentErrorIndex != -1)
+        private static string GetRandomColorStrFromName(string name)
+        {
+            Random random = new Random((name).GetHashCode());
+
+            Color randomUserColor = Color.HSVToRGB((float)random.NextDouble(),  EditorGUIUtility.isProSkin ? 0.6f : 1.00f, EditorGUIUtility.isProSkin ? 0.9f : 0.6f);
+            string colorStr = ColorUtility.ToHtmlStringRGB(randomUserColor);
+            return colorStr;
+        }
+
+        [PublicAPI]
+        public static void ParseLogText(string contents, string name)
+        {
+            if (string.IsNullOrWhiteSpace(contents))
+                return;
+
+            LogFileState state = new LogFileState();
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                state.playerName = name;
+                state.nameColor = GetRandomColorStrFromName(name);
+            }
+
+            ParseLogText(contents, state, UdonSharpSettings.GetSettings());
+            ParseLogErrors(contents, state);
+        }
+
+        private static void ParseLogText(string contents, LogFileState state, UdonSharpSettings settings)
+        {
+            Match match = null;
+
+            do
+            {
+                int currentIdx = (match?.Index ?? -1);
+
+                match = _lineMatch.Match(contents, currentIdx + 1);
+
+                string logStr = null;
+
+                if (currentIdx == -1)
+                {
+                    if (match.Success)
                     {
-                        HandleLogError(contents.Substring(currentErrorIndex, contents.Length - currentErrorIndex), $"VRChat client runtime Udon exception detected!", $"{ state.playerName ?? "Unknown"}");
+                        Match nextMatch = _lineMatch.Match(contents, match.Index + 1);
 
-                        currentErrorIndex = contents.IndexOf(errorMatchStr, currentErrorIndex + errorMatchStr.Length, StringComparison.Ordinal);
+                        if (nextMatch.Success)
+                            logStr = contents.Substring(0, nextMatch.Index);
+                        else
+                            logStr = contents;
+
+                        match = nextMatch;
                     }
                 }
+                else if (match.Success)
+                {
+                    logStr = contents.Substring(currentIdx < 0 ? 0 : currentIdx, match.Index - currentIdx);
+                }
+                else
+                {
+                    logStr = contents.Substring(currentIdx < 0 ? 0 : currentIdx, contents.Length - currentIdx);
+                }
+
+                if (logStr != null)
+                {
+                    logStr = logStr.Trim('\n', '\r');
+
+                    HandleForwardedLog(logStr, state, settings);
+                }
+            } while (match.Success);
+        }
+
+        private static void ParseLogErrors(string contents, LogFileState state)
+        {
+            const string errorMatchStr = "[UdonBehaviour] An exception occurred during Udon execution, this UdonBehaviour will be halted.";
+
+            int currentErrorIndex = contents.IndexOf(errorMatchStr, StringComparison.Ordinal);
+            while (currentErrorIndex != -1)
+            {
+                HandleLogError(contents.Substring(currentErrorIndex, contents.Length - currentErrorIndex), $"VRChat client runtime Udon exception detected!", $"{ state.playerName ?? "Unknown"}");
+
+                currentErrorIndex = contents.IndexOf(errorMatchStr, currentErrorIndex + errorMatchStr.Length, StringComparison.Ordinal);
             }
         }
 
@@ -380,7 +415,7 @@ namespace UdonSharpEditor
 
             string playerName = state.playerName ?? "Unknown";
 
-            if (trimmedStr.StartsWith("Log"))
+            if (trimmedStr.StartsWith("Debug"))
                 Debug.Log($"[<color=#{state.nameColor}>{playerName}</color>]{message}");
             else if (trimmedStr.StartsWith("Warning"))
                 Debug.LogWarning($"[<color=#{state.nameColor}>{playerName}</color>]{message}");
@@ -466,7 +501,7 @@ namespace UdonSharpEditor
 
             debugInfo.GetPositionFromProgramCounter(programCounter, out string filePath, out string methodName, out int line, out int lineChar);
 
-            UdonSharpUtils.LogRuntimeError($"{logPrefix}\n{errorMessage}", prePrefix != null ? $"[<color=#575ff2>{prePrefix}</color>]" : "", filePath, line, lineChar + 1);
+            UdonSharpUtils.LogRuntimeError($"{logPrefix}\n{errorMessage}", prePrefix != null ? $"[<color=#{GetRandomColorStrFromName(prePrefix)}>{prePrefix}</color>]" : "", filePath, line, lineChar + 1);
         }
     }
 }

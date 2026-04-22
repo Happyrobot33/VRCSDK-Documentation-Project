@@ -17,6 +17,10 @@
     font-size: 18px;
 }
 
+.thumbnail:disabled .thumbnail-underlay #thumbnail-placeholder-text {
+    opacity: 0;
+}
+
 #thumbnail-image {
     width: 100%;
     height: 100%;
